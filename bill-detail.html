@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bill Detail — Illinois AI Ecosystem Map</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a href="index.html" class="site-brand">
+        <img src="logo.svg" alt="Technê AI" style="height:28px;width:auto;">
+        <span class="site-brand-sub">IL AI Ecosystem Map</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="site-nav">
+    <div class="site-nav-inner">
+      <a href="index.html">Dashboard</a>
+      <a href="bills.html" class="active">Bill Tracker</a>
+      <a href="enacted.html">Enacted Laws</a>
+      <a href="vectors.html">Regulatory Vectors</a>
+      <a href="timeline.html">Timeline</a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main>
+    <div class="container page-section">
+      <!-- Back Link -->
+      <div style="margin-bottom: 32px;">
+        <a href="bills.html" style="display: inline-flex; align-items: center; gap: 6px; color: var(--purple); font-weight: 600;">
+          ← Back to Bill Tracker
+        </a>
+      </div>
+
+      <!-- Detail Panel -->
+      <div class="detail-panel">
+        <!-- Header with Bill ID and Status -->
+        <div class="detail-header">
+          <div>
+            <span class="detail-bill-id" id="billId">—</span>
+            <h1 class="detail-title" id="billName">Bill Name</h1>
+            <div id="statusBadge" style="margin-top: 8px;"></div>
+          </div>
+        </div>
+
+        <!-- Metadata Grid -->
+        <div class="detail-meta">
+          <div class="detail-meta-item">
+            <label>Sponsor</label>
+            <span id="sponsor">—</span>
+          </div>
+          <div class="detail-meta-item">
+            <label>Committee</label>
+            <span id="committee">—</span>
+          </div>
+          <div class="detail-meta-item">
+            <label>Chamber</label>
+            <span id="chamber">—</span>
+          </div>
+          <div class="detail-meta-item">
+            <label>Status</label>
+            <span id="status">—</span>
+          </div>
+          <div class="detail-meta-item">
+            <label>Last Action Date</label>
+            <span id="lastActionDate">—</span>
+          </div>
+          <div class="detail-meta-item">
+            <label>Last Action</label>
+            <span id="lastActionText">—</span>
+          </div>
+          <div class="detail-meta-item" id="effectiveDateRow" style="display: none;">
+            <label>Effective Date</label>
+            <span id="effectiveDate">—</span>
+          </div>
+          <div class="detail-meta-item">
+            <label>Penalties</label>
+            <span id="penalties">—</span>
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div style="margin-bottom: 28px;">
+          <h2 style="font-family: var(--font-display); font-size: 1.1rem; font-weight: 500; color: var(--darkest); margin-bottom: 12px;">Summary</h2>
+          <p id="summary" style="color: var(--text-secondary); line-height: 1.7;">Loading summary...</p>
+        </div>
+
+        <!-- Regulatory Vectors -->
+        <div id="vectorsSection" style="margin-bottom: 28px; display: none;">
+          <h2 style="font-family: var(--font-display); font-size: 1.1rem; font-weight: 500; color: var(--darkest); margin-bottom: 14px;">Regulatory Vector(s)</h2>
+          <div id="vectorCards" style="display: flex; flex-wrap: wrap; gap: 12px;"></div>
+        </div>
+
+        <!-- ILGA Link -->
+        <div style="margin-bottom: 28px;">
+          <a id="ilgaLink" href="#" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; color: var(--purple); font-weight: 600; padding: 10px 16px; border: 1px solid var(--border); border-radius: 8px; transition: all 0.2s;" onmouseover="this.style.backgroundColor='var(--purple-glow)'" onmouseout="this.style.backgroundColor='transparent'">
+            → View on Illinois General Assembly
+          </a>
+        </div>
+      </div>
+
+      <!-- Related Bills Section -->
+      <div style="margin-top: 48px;">
+        <h2 style="font-family: var(--font-display); font-size: 1.3rem; font-weight: 500; color: var(--darkest); margin-bottom: 20px;">Related Bills</h2>
+        <div id="relatedBillsContainer">
+          <p style="color: var(--text-secondary);">Loading related bills...</p>
+        </div>
+      </div>
+
+      <!-- Error State -->
+      <div id="errorState" style="display: none;">
+        <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 32px; text-align: center;">
+          <h2 style="font-family: var(--font-display); font-size: 1.4rem; font-weight: 500; color: var(--darkest); margin-bottom: 12px;">Bill Not Found</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 20px;">The bill you're looking for doesn't exist in our database. Check the bill ID and try again.</p>
+          <a href="bills.html" style="display: inline-block; padding: 10px 20px; background: var(--purple); color: var(--white); border-radius: 8px; font-weight: 600; text-decoration: none;">Back to Bill Tracker</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>Illinois AI Ecosystem Map — Last updated <strong id="lastUpdated">March 2026</strong></p>
+    <p style="margin-top: 8px; font-size: 0.75rem;">Data sourced from <strong>Illinois General Assembly (ilga.gov)</strong></p>
+  </footer>
+
+  <script>
+    // ════════════════════════════════════════════════════════════════════════════════
+    // Bill Detail Page — Dynamic Loader
+    // ════════════════════════════════════════════════════════════════════════════════
+
+    async function loadBillDetail() {
+      try {
+        // Get bill ID from URL params
+        const params = new URLSearchParams(window.location.search);
+        const billId = params.get('id');
+
+        if (!billId) {
+          showError();
+          return;
+        }
+
+        // Fetch bills data
+        const response = await fetch('data/bills.json');
+        if (!response.ok) throw new Error('Failed to load bills data');
+        const data = await response.json();
+
+        // Find bill in enacted or pending arrays
+        let bill = null;
+        let billType = null;
+
+        // Search in enacted
+        bill = data.enacted.find(b => b.id === billId);
+        if (bill) billType = 'enacted';
+
+        // Search in pending
+        if (!bill) {
+          bill = data.pending.find(b => b.id === billId);
+          if (bill) billType = 'pending';
+        }
+
+        if (!bill) {
+          showError();
+          return;
+        }
+
+        // Populate bill detail
+        populateBillDetail(bill, billType, data);
+
+        // Find and display related bills
+        displayRelatedBills(bill, data);
+
+      } catch (error) {
+        console.error('Error loading bill detail:', error);
+        showError();
+      }
+    }
+
+    function populateBillDetail(bill, billType, data) {
+      // Bill ID
+      document.getElementById('billId').textContent = bill.bill;
+
+      // Bill name
+      document.getElementById('billName').textContent = bill.name;
+
+      // Status badge
+      const statusBadgeEl = document.getElementById('statusBadge');
+      if (bill.statusClass) {
+        const statusClasses = {
+          'enacted': 'badge-enacted',
+          'pending': 'badge-pending',
+          'committee': 'badge-committee',
+          'stalled': 'badge-stalled',
+          '2nd-reading': 'badge-2nd-reading'
+        };
+        const badgeClass = statusClasses[bill.statusClass] || 'badge-pending';
+        statusBadgeEl.innerHTML = `<span class="badge ${badgeClass}">${bill.status}</span>`;
+      }
+
+      // Metadata
+      document.getElementById('sponsor').textContent = bill.sponsor || '—';
+      document.getElementById('committee').textContent = bill.committee || '—';
+
+      // Determine chamber from bill ID
+      const chamber = bill.id.startsWith('S') || bill.id.startsWith('PA') ? 'Senate' : 'House';
+      document.getElementById('chamber').textContent = chamber;
+
+      document.getElementById('status').textContent = bill.status || '—';
+      document.getElementById('lastActionDate').textContent = bill.lastAction ? formatDate(bill.lastAction) : '—';
+      document.getElementById('lastActionText').textContent = bill.lastActionText || '—';
+
+      // Effective date (only for enacted bills or if effectiveIfPassed is set)
+      const effectiveDateRow = document.getElementById('effectiveDateRow');
+      if (bill.effectiveDate) {
+        effectiveDateRow.style.display = 'block';
+        document.getElementById('effectiveDate').textContent = bill.effectiveDateDisplay || formatDate(bill.effectiveDate);
+      } else if (bill.effectiveIfPassed) {
+        effectiveDateRow.style.display = 'block';
+        document.getElementById('effectiveDate').textContent = bill.effectiveIfPassed;
+      }
+
+      document.getElementById('penalties').textContent = bill.penalties || 'N/A';
+
+      // Summary
+      document.getElementById('summary').textContent = bill.summary;
+
+      // Regulatory vectors (for pending bills)
+      if (bill.vectorIds && bill.vectorIds.length > 0) {
+        const vectorsSection = document.getElementById('vectorsSection');
+        vectorsSection.style.display = 'block';
+
+        const vectorCards = document.getElementById('vectorCards');
+        vectorCards.innerHTML = '';
+
+        bill.vectorIds.forEach(vectorId => {
+          const vector = data.vectors.find(v => v.id === vectorId);
+          if (vector) {
+            const card = createVectorCard(vector);
+            vectorCards.appendChild(card);
+          }
+        });
+      }
+
+      // ILGA Link
+      document.getElementById('ilgaLink').href = bill.ilgaUrl;
+
+      // Update last updated date
+      document.getElementById('lastUpdated').textContent = data.meta.lastUpdated ? formatDate(data.meta.lastUpdated) : 'March 2026';
+    }
+
+    function createVectorCard(vector) {
+      const card = document.createElement('a');
+      card.href = `vectors.html#${vector.id}`;
+      card.style.cssText = `
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-left: 4px solid ${vector.color};
+        border-radius: 8px;
+        text-decoration: none;
+        color: var(--text);
+        transition: all 0.2s;
+        cursor: pointer;
+      `;
+      card.onmouseover = () => {
+        card.style.boxShadow = '0 4px 16px rgba(39,13,55,0.12)';
+        card.style.transform = 'translateY(-2px)';
+      };
+      card.onmouseout = () => {
+        card.style.boxShadow = 'none';
+        card.style.transform = 'translateY(0)';
+      };
+
+      const colorDot = document.createElement('div');
+      colorDot.style.cssText = `
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: ${vector.color};
+        flex-shrink: 0;
+      `;
+
+      const text = document.createElement('span');
+      text.style.cssText = `
+        font-weight: 500;
+        font-size: 0.9rem;
+      `;
+      text.textContent = vector.shortName;
+
+      card.appendChild(colorDot);
+      card.appendChild(text);
+
+      return card;
+    }
+
+    function displayRelatedBills(currentBill, data) {
+      const relatedContainer = document.getElementById('relatedBillsContainer');
+      relatedContainer.innerHTML = '';
+
+      if (!currentBill.vectorIds || currentBill.vectorIds.length === 0) {
+        relatedContainer.innerHTML = '<p style="color: var(--text-secondary);">No related bills in tracked vectors.</p>';
+        return;
+      }
+
+      // Collect all bills in the same vectors
+      const relatedBillIds = new Set();
+      currentBill.vectorIds.forEach(vectorId => {
+        const vector = data.vectors.find(v => v.id === vectorId);
+        if (vector) {
+          vector.billIds.forEach(billId => {
+            if (billId !== currentBill.id) {
+              relatedBillIds.add(billId);
+            }
+          });
+        }
+      });
+
+      if (relatedBillIds.size === 0) {
+        relatedContainer.innerHTML = '<p style="color: var(--text-secondary);">No other bills in these vectors.</p>';
+        return;
+      }
+
+      // Build related bills list
+      const relatedBills = [];
+      relatedBillIds.forEach(billId => {
+        let bill = data.enacted.find(b => b.id === billId);
+        if (!bill) bill = data.pending.find(b => b.id === billId);
+        if (bill) relatedBills.push(bill);
+      });
+
+      // Sort by bill ID
+      relatedBills.sort((a, b) => a.bill.localeCompare(b.bill));
+
+      // Render as compact list
+      const list = document.createElement('div');
+      list.style.cssText = `
+        display: grid;
+        gap: 12px;
+      `;
+
+      relatedBills.forEach(bill => {
+        const item = document.createElement('div');
+        item.style.cssText = `
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 12px 16px;
+          background: var(--surface);
+          border: 1px solid var(--border);
+          border-radius: 8px;
+          transition: all 0.2s;
+        `;
+        item.onmouseover = () => {
+          item.style.boxShadow = '0 4px 16px rgba(39,13,55,0.08)';
+        };
+        item.onmouseout = () => {
+          item.style.boxShadow = 'none';
+        };
+
+        const billInfo = document.createElement('div');
+        billInfo.style.cssText = `
+          flex: 1;
+        `;
+
+        const billLink = document.createElement('a');
+        billLink.href = `bill-detail.html?id=${bill.id}`;
+        billLink.style.cssText = `
+          font-weight: 600;
+          color: var(--purple);
+          text-decoration: none;
+          margin-right: 12px;
+        `;
+        billLink.textContent = bill.bill;
+
+        const billNameSpan = document.createElement('span');
+        billNameSpan.style.cssText = `
+          color: var(--text-secondary);
+          font-size: 0.9rem;
+        `;
+        billNameSpan.textContent = bill.name;
+
+        billInfo.appendChild(billLink);
+        billInfo.appendChild(billNameSpan);
+
+        // Status badge
+        const statusBadge = document.createElement('span');
+        if (bill.statusClass) {
+          const statusClasses = {
+            'enacted': 'badge-enacted',
+            'pending': 'badge-pending',
+            'committee': 'badge-committee',
+            'stalled': 'badge-stalled',
+            '2nd-reading': 'badge-2nd-reading'
+          };
+          const badgeClass = statusClasses[bill.statusClass] || 'badge-pending';
+          statusBadge.className = `badge ${badgeClass}`;
+          statusBadge.textContent = bill.status;
+        }
+
+        item.appendChild(billInfo);
+        item.appendChild(statusBadge);
+
+        list.appendChild(item);
+      });
+
+      relatedContainer.appendChild(list);
+    }
+
+    function showError() {
+      document.querySelector('.detail-panel').style.display = 'none';
+      document.querySelector('[style*="margin-top: 48px"]').style.display = 'none';
+      document.getElementById('errorState').style.display = 'block';
+    }
+
+    function formatDate(dateString) {
+      if (!dateString) return '—';
+      const date = new Date(dateString);
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return date.toLocaleDateString('en-US', options);
+    }
+
+    // Load on page load
+    document.addEventListener('DOMContentLoaded', loadBillDetail);
+  </script>
+</body>
+</html>

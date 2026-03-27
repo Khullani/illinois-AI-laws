@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Illinois AI Ecosystem Map — Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- SITE HEADER -->
+<header class="site-header">
+  <div class="site-header-inner">
+    <a href="index.html" class="site-brand">
+      <img src="logo.svg" alt="Technê AI" style="height:28px;width:auto;">
+      <span class="site-brand-sub">IL AI Ecosystem Map</span>
+    </a>
+  </div>
+</header>
+
+<!-- NAVIGATION -->
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="index.html" class="active">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+      </svg>
+      Dashboard
+    </a>
+    <a href="bills.html">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"></path>
+        <line x1="9" y1="9" x2="15" y2="9"></line>
+        <line x1="9" y1="15" x2="15" y2="15"></line>
+      </svg>
+      Bill Tracker
+    </a>
+    <a href="enacted.html">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      Enacted Laws
+    </a>
+    <a href="vectors.html">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="2" x2="12" y2="12" stroke-linecap="round"></line>
+        <line x1="12" y1="12" x2="18" y2="18" stroke-linecap="round"></line>
+      </svg>
+      Regulatory Vectors
+    </a>
+    <a href="timeline.html">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="1"></circle>
+        <circle cx="12" cy="5" r="1"></circle>
+        <circle cx="12" cy="19" r="1"></circle>
+      </svg>
+      Timeline
+    </a>
+  </div>
+</nav>
+
+<!-- HERO SECTION -->
+<section class="page-hero">
+  <div class="hero-inner">
+    <span class="hero-badge">104th General Assembly — Active Session</span>
+    <h1 class="hero-title">Illinois AI Legislative <em>Ecosystem</em></h1>
+    <p class="hero-sub">A comprehensive view of all AI-related bills, enacted statutes, regulatory vectors, and timelines shaping Illinois' AI policy landscape.</p>
+    <div class="hero-meta">
+      <span><strong>Updated:</strong> <span id="meta-updated">March 27, 2026</span></span>
+      <span><strong>Enacted:</strong> <span id="meta-enacted">7 Statutes</span></span>
+      <span><strong>Pending:</strong> <span id="meta-pending">29 Bills</span></span>
+      <span><strong>Committee Deadline:</strong> <span id="meta-deadline">Apr 24, 2026</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- AT A GLANCE STATS -->
+<section class="page-section">
+  <div class="container">
+    <div class="section-eyebrow">OVERVIEW</div>
+    <h2 class="section-title">At a Glance</h2>
+    <div class="stat-grid">
+      <div class="stat-card accent">
+        <div class="stat-number" id="stat-enacted">7</div>
+        <div class="stat-label">Enacted Statutes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="stat-pending">29</div>
+        <div class="stat-label">Pending Bills</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="stat-vectors">6</div>
+        <div class="stat-label">Regulatory Vectors</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">Apr 24</div>
+        <div class="stat-label">Committee Deadline</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">$10K</div>
+        <div class="stat-label">Max Penalty</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHARTS SECTION -->
+<section class="page-section">
+  <div class="container">
+    <div class="section-eyebrow">ANALYTICS</div>
+    <h2 class="section-title">Bills Overview</h2>
+    <div class="chart-grid">
+      <div class="chart-container">
+        <h3 class="chart-title">Bills by Status</h3>
+        <canvas id="chart-status" height="250"></canvas>
+      </div>
+      <div class="chart-container">
+        <h3 class="chart-title">Bills by Regulatory Vector</h3>
+        <canvas id="chart-vectors" height="250"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KEY BILLS TO WATCH -->
+<section class="page-section">
+  <div class="container">
+    <div class="section-eyebrow">PRIORITIZE</div>
+    <h2 class="section-title">Key Bills to Watch</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Bill</th>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Vector</th>
+            <th>Last Action</th>
+          </tr>
+        </thead>
+        <tbody id="bills-table">
+          <!-- Populated by JavaScript -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- REGULATORY VECTORS OVERVIEW -->
+<section class="page-section">
+  <div class="container">
+    <div class="section-eyebrow">FRAMEWORK</div>
+    <h2 class="section-title">Regulatory Vectors</h2>
+    <p class="section-desc">Six major policy vectors organize the Illinois AI ecosystem. Click any vector for detailed bill tracking.</p>
+    <div class="vector-grid" id="vectors-grid">
+      <!-- Populated by JavaScript -->
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <p><strong>Illinois AI Legislative Ecosystem</strong> — Powered by Technê AI</p>
+  <p>This dashboard aggregates data from <a href="https://ilga.gov" target="_blank">ilga.gov</a>. Updated: March 27, 2026. All bill information subject to change. Not legal advice.</p>
+</footer>
+
+<script>
+// Load bills.json and initialize dashboard
+let billsData = {};
+
+fetch('data/bills.json')
+  .then(response => response.json())
+  .then(data => {
+    billsData = data;
+    initDashboard();
+  })
+  .catch(error => console.error('Error loading bills.json:', error));
+
+function initDashboard() {
+  // Populate meta information
+  document.getElementById('meta-updated').textContent = billsData.meta.lastUpdated;
+  document.getElementById('meta-enacted').textContent = billsData.stats.enacted + ' Statutes';
+  document.getElementById('meta-pending').textContent = billsData.stats.pending + ' Bills';
+  document.getElementById('meta-deadline').textContent = billsData.stats.committeeDeadline;
+
+  // Populate stats
+  document.getElementById('stat-enacted').textContent = billsData.stats.enacted;
+  document.getElementById('stat-pending').textContent = billsData.stats.pending;
+  document.getElementById('stat-vectors').textContent = billsData.stats.vectors;
+
+  // Initialize charts
+  initStatusChart();
+  initVectorChart();
+
+  // Populate key bills table
+  populateKeyBills();
+
+  // Populate vectors grid
+  populateVectorGrid();
+}
+
+function initStatusChart() {
+  const statusCounts = {
+    'Enacted': billsData.enacted.length,
+    'In Committee': billsData.pending.filter(b => b.status === 'In Committee').length,
+    '2nd Reading': billsData.pending.filter(b => b.status === '2nd Reading').length,
+    'Re-referred/Stalled': billsData.pending.filter(b => b.status === 'Re-referred').length
+  };
+
+  const ctx = document.getElementById('chart-status').getContext('2d');
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: Object.keys(statusCounts),
+      datasets: [{
+        data: Object.values(statusCounts),
+        backgroundColor: ['#bd47e6', '#431558', '#2563eb', '#c0392b'],
+        borderColor: '#ffffff',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            font: { family: "Inter, sans-serif", size: 12 },
+            color: '#5a5a72',
+            padding: 16
+          }
+        }
+      }
+    }
+  });
+}
+
+function initVectorChart() {
+  const vectorNames = billsData.vectors.map(v => v.shortName);
+  const vectorCounts = billsData.vectors.map(v => v.billIds.length);
+  const vectorColors = billsData.vectors.map(v => v.color);
+
+  const ctx = document.getElementById('chart-vectors').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: vectorNames,
+      datasets: [{
+        label: 'Bills',
+        data: vectorCounts,
+        backgroundColor: vectorColors,
+        borderColor: vectorColors,
+        borderWidth: 1
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          max: Math.max(...vectorCounts) + 2,
+          ticks: {
+            font: { family: "Inter, sans-serif", size: 11 }
+          }
+        },
+        y: {
+          ticks: {
+            font: { family: "Inter, sans-serif", size: 11 }
+          }
+        }
+      }
+    }
+  });
+}
+
+function populateKeyBills() {
+  const keyBillIds = ['SB3312', 'HB4980', 'SB3262', 'SB3261', 'SB3263', 'SB3364'];
+  const tbody = document.getElementById('bills-table');
+  tbody.innerHTML = '';
+
+  keyBillIds.forEach(billId => {
+    const bill = billsData.pending.find(b => b.id === billId);
+    if (bill) {
+      const vectorName = bill.vectorIds[0]
+        ? billsData.vectors.find(v => v.id === bill.vectorIds[0])?.shortName
+        : 'N/A';
+
+      const statusBadgeClass = `badge-${bill.statusClass}`;
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td><a href="bill-detail.html?id=${bill.id}">${bill.bill}</a></td>
+        <td>${bill.name}</td>
+        <td><span class="badge ${statusBadgeClass}">${bill.status}</span></td>
+        <td><span class="bill-tag">${vectorName}</span></td>
+        <td>${bill.lastActionText}</td>
+      `;
+      tbody.appendChild(row);
+    }
+  });
+}
+
+function populateVectorGrid() {
+  const grid = document.getElementById('vectors-grid');
+  grid.innerHTML = '';
+
+  billsData.vectors.forEach(vector => {
+    const card = document.createElement('a');
+    card.href = `vectors.html#${vector.id}`;
+    card.className = 'vector-card';
+    card.style.setProperty('--vector-color', vector.color);
+
+    // Dynamically set the top border color
+    const style = document.createElement('style');
+    style.textContent = `.vector-card[style*="--vector-color: ${vector.color}"]::before { background: ${vector.color}; }`;
+    document.head.appendChild(style);
+
+    const billTags = vector.billIds
+      .map(billId => `<span class="bill-tag">${billId}</span>`)
+      .join('');
+
+    card.innerHTML = `
+      <div class="vector-num">Vector ${vector.number}</div>
+      <h3>${vector.name}</h3>
+      <p>${vector.description}</p>
+      <div class="vector-bills">${billTags}</div>
+    `;
+
+    grid.appendChild(card);
+  });
+}
+</script>
+
+</body>
+</html>

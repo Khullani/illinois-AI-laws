@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 60" fill="none">
+  <style>
+    .logo-text { font-family: 'Lora', Georgia, serif; font-weight: 700; font-size: 42px; fill: #ffffff; letter-spacing: 0.08em; }
+    .logo-ai { font-family: 'Lora', Georgia, serif; font-weight: 700; font-size: 42px; fill: #bd47e6; letter-spacing: 0.08em; }
+  </style>
+  <!-- TEXHNE in geometric Greek-inspired style -->
+  <g transform="translate(0, 46)">
+    <!-- T -->
+    <path d="M0 -36 L30 -36 L30 -30 L18 -30 L18 0 L12 0 L12 -30 L0 -30 Z" fill="#e4e4e4"/>
+    <!-- E -->
+    <path d="M36 -36 L60 -36 L60 -30 L42 -30 L42 -21 L57 -21 L57 -15 L42 -15 L42 -6 L60 -6 L60 0 L36 0 Z" fill="#e4e4e4"/>
+    <!-- X -->
+    <path d="M66 -36 L74 -36 L83 -21 L92 -36 L100 -36 L88 -18 L101 0 L93 0 L83 -15 L73 0 L65 0 L78 -18 Z" fill="#e4e4e4"/>
+    <!-- H -->
+    <path d="M106 -36 L112 -36 L112 -21 L130 -21 L130 -36 L136 -36 L136 0 L130 0 L130 -15 L112 -15 L112 0 L106 0 Z" fill="#e4e4e4"/>
+    <!-- N -->
+    <path d="M144 -36 L150 -36 L170 -10 L170 -36 L176 -36 L176 0 L170 0 L150 -26 L150 0 L144 0 Z" fill="#e4e4e4"/>
+    <!-- E -->
+    <path d="M184 -36 L208 -36 L208 -30 L190 -30 L190 -21 L205 -21 L205 -15 L190 -15 L190 -6 L208 -6 L208 0 L184 0 Z" fill="#e4e4e4"/>
+    <!-- Spacer -->
+    <!-- A -->
+    <path d="M230 -36 L238 -36 L254 0 L248 0 L244 -9 L224 -9 L220 0 L214 0 Z M234 -28 L226 -15 L242 -15 Z" fill="#bd47e6"/>
+    <!-- I -->
+    <path d="M260 -36 L266 -36 L266 0 L260 0 Z" fill="#bd47e6"/>
+  </g>
+</svg>

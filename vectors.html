@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Regulatory Vectors — Illinois AI Ecosystem Map</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* D3 Network Graph Styles */
+    .node {
+      stroke: var(--white);
+      stroke-width: 2px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .node:hover {
+      stroke-width: 3px;
+      filter: drop-shadow(0 0 6px rgba(189,71,230,0.4));
+    }
+    .node.dimmed {
+      opacity: 0.2;
+    }
+    .node-label {
+      pointer-events: none;
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 600;
+      fill: var(--text);
+    }
+    .node-label.dimmed {
+      opacity: 0.3;
+    }
+    .link {
+      stroke: var(--gray-300);
+      stroke-opacity: 0.6;
+      stroke-width: 1px;
+    }
+    .link.dimmed {
+      opacity: 0.1;
+    }
+    .link.highlight {
+      stroke: var(--purple);
+      stroke-width: 2px;
+      opacity: 1;
+      stroke-opacity: 0.8;
+    }
+    #network-graph svg {
+      background: var(--surface);
+    }
+
+    /* Bill Tooltip */
+    .bill-tooltip {
+      position: absolute;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      z-index: 1000;
+      min-width: 280px;
+      pointer-events: none;
+    }
+    .tooltip-bill-id {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--purple);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .tooltip-bill-name {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--darkest);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+    .tooltip-status {
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+    .tooltip-link {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 6px 12px;
+      background: var(--purple);
+      color: var(--white);
+      border-radius: 4px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .tooltip-link:hover {
+      background: var(--deep-purple);
+    }
+
+    /* Network Legend */
+    .network-legend {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 36px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 24px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .legend-circle {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 2px;
+      border: 2px solid var(--white);
+      box-shadow: 0 0 0 1px var(--border);
+    }
+    .legend-text {
+      flex: 1;
+    }
+    .legend-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--darkest);
+      display: block;
+      margin-bottom: 2px;
+    }
+    .legend-desc {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    /* Vector Detail Cards */
+    .vector-detail-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 24px;
+      margin-bottom: 28px;
+      scroll-margin-top: 100px;
+    }
+    .vector-detail-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      border-radius: 12px 0 0 12px;
+    }
+    .vector-detail-card {
+      position: relative;
+      overflow: hidden;
+    }
+    .vector-detail-header {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .vector-detail-number {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .vector-detail-name {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: var(--darkest);
+      line-height: 1.2;
+    }
+    .vector-detail-description {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+    .vector-bills-table {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .vector-bills-table table {
+      font-size: 0.85rem;
+    }
+    .vector-bills-table tbody tr:hover {
+      background: var(--gray-100);
+    }
+
+    /* Cross-Cutting Section */
+    .cross-cutting {
+      background: linear-gradient(135deg, rgba(189,71,230,0.05) 0%, rgba(103,36,125,0.05) 100%);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 24px;
+      margin-bottom: 36px;
+    }
+    .cross-cutting h3 {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: var(--darkest);
+      margin-bottom: 16px;
+    }
+    .cross-cutting p {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+    .cross-cutting-bills {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .cross-bill {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      transition: all 0.2s;
+    }
+    .cross-bill:hover {
+      box-shadow: 0 4px 16px rgba(39,13,55,0.08);
+      transform: translateY(-2px);
+    }
+    .cross-bill-id {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--purple);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+    }
+    .cross-bill-name {
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: var(--darkest);
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+    .cross-bill-vectors {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .vector-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .network-legend {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .cross-cutting-bills {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Site Header -->
+<header class="site-header">
+  <div class="site-header-inner">
+    <a href="index.html" class="site-brand">
+      <img src="logo.svg" alt="Technê AI" style="height:28px;width:auto;">
+      <span class="site-brand-sub">IL AI Ecosystem Map</span>
+    </a>
+  </div>
+</header>
+
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="index.html">Dashboard</a>
+    <a href="bills.html">Bill Tracker</a>
+    <a href="enacted.html">Enacted Laws</a>
+    <a href="vectors.html" class="active">Regulatory Vectors</a>
+    <a href="timeline.html">Timeline</a>
+  </div>
+</nav>
+
+<!-- Page Hero -->
+<section class="page-hero">
+  <div class="hero-inner">
+    <span class="hero-badge">Policy Dimensions</span>
+    <h1 class="hero-title">Regulatory Vectors</h1>
+    <p class="hero-sub">Six interconnected policy dimensions shape Illinois AI governance. Explore how legislative bills cluster around shared themes, cross-cutting concerns, and regulatory approaches.</p>
+  </div>
+</section>
+
+<!-- Main Content -->
+<main class="container">
+
+  <!-- Interactive Network Graph Section -->
+  <section class="page-section">
+    <h2 class="section-title">Network Relationships</h2>
+    <p class="section-desc">Interactive force-directed graph showing how bills relate to regulatory vectors, sponsors, and committees. Drag nodes to explore, hover to highlight connections.</p>
+
+    <!-- Network Legend -->
+    <div class="network-legend">
+      <div class="legend-item">
+        <div class="legend-circle" style="background: #bd47e6;"></div>
+        <div class="legend-text">
+          <span class="legend-label">Vector Node</span>
+          <span class="legend-desc">Policy dimension (large)</span>
+        </div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-circle" style="background: #d4940a;"></div>
+        <div class="legend-text">
+          <span class="legend-label">Bill Node</span>
+          <span class="legend-desc">Colored by primary vector</span>
+        </div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-circle" style="background: #969696;"></div>
+        <div class="legend-text">
+          <span class="legend-label">Sponsor Node</span>
+          <span class="legend-desc">Bill sponsor (small)</span>
+        </div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-circle" style="background: #7d7d7d;"></div>
+        <div class="legend-text">
+          <span class="legend-label">Committee Node</span>
+          <span class="legend-desc">Committee assignment</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Network Graph Container -->
+    <div id="network-graph"></div>
+  </section>
+
+  <!-- Vector Detail Cards Section -->
+  <section class="page-section">
+    <h2 class="section-title">Vector Details</h2>
+    <p class="section-desc">Complete breakdown of each regulatory vector with associated bills and their current status.</p>
+
+    <!-- V1: Frontier Risk -->
+    <div class="vector-detail-card" id="v1">
+      <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #bd47e6; border-radius: 12px 0 0 12px;"></div>
+      <div style="margin-left: 12px;">
+        <div class="vector-detail-header">
+          <span class="vector-detail-number">Vector 01</span>
+          <h3 class="vector-detail-name">Frontier Model & Systemic Risk</h3>
+        </div>
+        <p class="vector-detail-description">Two competing frameworks target the developers of the largest AI models: one offers a conditional safe harbor tied to EU AI Act compliance; the other mandates incident reporting to the Attorney General with civil penalties.</p>
+        <div class="vector-bills-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Bill ID</th>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Sponsor</th>
+              </tr>
+            </thead>
+            <tbody id="v1-bills"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- V2: Discrimination -->
+    <div class="vector-detail-card" id="v2">
+      <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #270d37; border-radius: 12px 0 0 12px;"></div>
+      <div style="margin-left: 12px;">
+        <div class="vector-detail-header">
+          <span class="vector-detail-number">Vector 02</span>
+          <h3 class="vector-detail-name">Algorithmic Discrimination & Consumer Civil Rights</h3>
+        </div>
+        <p class="vector-detail-description">Extends anti-discrimination protections beyond employment into housing, credit, and public accommodations. Bans surveillance-based dynamic pricing and algorithmic wage discrimination.</p>
+        <div class="vector-bills-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Bill ID</th>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Sponsor</th>
+              </tr>
+            </thead>
+            <tbody id="v2-bills"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- V3: Transparency -->
+    <div class="vector-detail-card" id="v3">
+      <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #431558; border-radius: 12px 0 0 12px;"></div>
+      <div style="margin-left: 12px;">
+        <div class="vector-detail-header">
+          <span class="vector-detail-number">Vector 03</span>
+          <h3 class="vector-detail-name">Transparency, Provenance & Disclosure</h3>
+        </div>
+        <p class="vector-detail-description">Mandates digital watermarking on all AI-generated media, professional disclosure requirements, and strict synthetic content labels in political advertising.</p>
+        <div class="vector-bills-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Bill ID</th>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Sponsor</th>
+              </tr>
+            </thead>
+            <tbody id="v3-bills"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- V4: Youth Safety -->
+    <div class="vector-detail-card" id="v4">
+      <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #67247d; border-radius: 12px 0 0 12px;"></div>
+      <div style="margin-left: 12px;">
+        <div class="vector-detail-header">
+          <span class="vector-detail-number">Vector 04</span>
+          <h3 class="vector-detail-name">Companion AI & Minor Protection</h3>
+        </div>
+        <p class="vector-detail-description">First-of-its-kind regulation of emotionally adaptive AI companions. Requires crisis intervention protocols, persistent machine-disclosure, and parental consent for minors.</p>
+        <div class="vector-bills-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Bill ID</th>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Sponsor</th>
+              </tr>
+            </thead>
+            <tbody id="v4-bills"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- V5: Data Privacy -->
+    <div class="vector-detail-card" id="v5">
+      <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #969696; border-radius: 12px 0 0 12px;"></div>
+      <div style="margin-left: 12px;">
+        <div class="vector-detail-header">
+          <span class="vector-detail-number">Vector 05</span>
+          <h3 class="vector-detail-name">Data Privacy, Neuro-Data & Model Training</h3>
+        </div>
+        <p class="vector-detail-description">Institutes default opt-out for AI model training on user data. Creates comprehensive data broker registry. Extends privacy protections to neural and biometric data from consumer devices.</p>
+        <div class="vector-bills-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Bill ID</th>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Sponsor</th>
+              </tr>
+            </thead>
+            <tbody id="v5-bills"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- V6: Public Sector -->
+    <div class="vector-detail-card" id="v6">
+      <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #7d7d7d; border-radius: 12px 0 0 12px;"></div>
+      <div style="margin-left: 12px;">
+        <div class="vector-detail-header">
+          <span class="vector-detail-number">Vector 06</span>
+          <h3 class="vector-detail-name">Public Sector & Human-in-the-Loop</h3>
+        </div>
+        <p class="vector-detail-description">Prohibits public agencies from deploying automated decision systems without meaningful human review. Bans AI in teacher evaluations. Creates state AI governance task force.</p>
+        <div class="vector-bills-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Bill ID</th>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Sponsor</th>
+              </tr>
+            </thead>
+            <tbody id="v6-bills"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cross-Cutting Analysis -->
+  <section class="page-section">
+    <div class="cross-cutting">
+      <h3>Cross-Cutting Bills & Policy Interconnections</h3>
+      <p>Some bills span multiple regulatory vectors, creating policy bridges between different governance domains. These cross-cutting bills are critical for understanding how Illinois AI regulation creates systemic safeguards.</p>
+      <p><strong>Two bills appear in multiple vectors:</strong></p>
+      <div class="cross-cutting-bills" id="cross-cutting-bills"></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Site Footer -->
+<footer class="site-footer">
+  <strong>Illinois AI Legislative Ecosystem</strong> — 104th General Assembly (2025–2026) | Last updated March 27, 2026<br>
+  <a href="https://www.ilga.gov/">Source: Illinois General Assembly (ILGA)</a>
+</footer>
+
+<!-- D3.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+
+<script>
+  // Color mapping for vectors
+  const vectorColors = {
+    v1: '#bd47e6',
+    v2: '#270d37',
+    v3: '#431558',
+    v4: '#67247d',
+    v5: '#969696',
+    v6: '#7d7d7d'
+  };
+
+  // Status badge colors
+  const statusColors = {
+    enacted: '#2d8a56',
+    pending: '#d4940a',
+    committee: '#431558',
+    stalled: '#c0392b',
+    '2nd-reading': '#2563eb'
+  };
+
+  let billsData = null;
+  let simulation = null;
+  let nodes = [];
+  let links = [];
+  let nodeMap = {};
+
+  // Fetch and process data
+  async function initializeVectors() {
+    try {
+      const response = await fetch('data/bills.json');
+      billsData = await response.json();
+
+      // Populate vector detail cards
+      populateVectorCards();
+
+      // Populate cross-cutting analysis
+      populateCrossCutting();
+
+      // Initialize network graph
+      initializeNetworkGraph();
+    } catch (error) {
+      console.error('Error loading bills data:', error);
+    }
+  }
+
+  function populateVectorCards() {
+    billsData.vectors.forEach(vector => {
+      const tbody = document.getElementById(`${vector.id}-bills`);
+      if (!tbody) return;
+
+      vector.billIds.forEach(billId => {
+        const bill = billsData.pending.find(b => b.id === billId);
+        if (!bill) return;
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td><a href="bill-detail.html?id=${bill.id}">${bill.bill}</a></td>
+          <td><a href="bill-detail.html?id=${bill.id}">${bill.name}</a></td>
+          <td><span class="badge badge-${bill.statusClass}">${bill.status}</span></td>
+          <td>${bill.sponsor}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    });
+  }
+
+  function populateCrossCutting() {
+    const container = document.getElementById('cross-cutting-bills');
+    const crossCuttingBills = billsData.pending.filter(bill => bill.vectorIds && bill.vectorIds.length > 1);
+
+    crossCuttingBills.forEach(bill => {
+      const vectorNames = bill.vectorIds.map(vid => {
+        const vector = billsData.vectors.find(v => v.id === vid);
+        return vector ? vector.shortName : '';
+      }).filter(Boolean);
+
+      const div = document.createElement('div');
+      div.className = 'cross-bill';
+      div.innerHTML = `
+        <div class="cross-bill-id">${bill.bill}</div>
+        <div class="cross-bill-name">${bill.name}</div>
+        <div class="cross-bill-vectors">
+          ${bill.vectorIds.map(vid => {
+            const vector = billsData.vectors.find(v => v.id === vid);
+            return `<span class="vector-badge" style="background-color: ${vector.color};">${vector.shortName}</span>`;
+          }).join('')}
+        </div>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  function initializeNetworkGraph() {
+    // Build nodes and links
+    nodes = [];
+    links = [];
+    nodeMap = {};
+
+    // Add vector nodes (large)
+    billsData.vectors.forEach(vector => {
+      const nodeId = `v-${vector.id}`;
+      nodes.push({
+        id: nodeId,
+        type: 'vector',
+        label: vector.shortName,
+        color: vector.color,
+        radius: 28
+      });
+      nodeMap[nodeId] = { id: nodeId, type: 'vector' };
+    });
+
+    // Add bill nodes (medium) and create bill->vector links
+    billsData.pending.forEach(bill => {
+      const nodeId = `b-${bill.id}`;
+      const primaryVector = bill.vectorIds[0];
+      const primaryVectorColor = billsData.vectors.find(v => v.id === primaryVector)?.color || '#d4940a';
+
+      nodes.push({
+        id: nodeId,
+        type: 'bill',
+        label: bill.bill,
+        billName: bill.name,
+        status: bill.status,
+        statusClass: bill.statusClass,
+        color: primaryVectorColor,
+        radius: 16,
+        billId: bill.id
+      });
+      nodeMap[nodeId] = { id: nodeId, type: 'bill', bill: bill };
+
+      // Create links to all vectors this bill belongs to
+      bill.vectorIds.forEach(vectorId => {
+        links.push({
+          source: nodeId,
+          target: `v-${vectorId}`,
+          type: 'bill-vector'
+        });
+      });
+
+      // Create link to sponsor
+      const sponsorNodeId = `s-${bill.sponsor.replace(/\s+/g, '-')}`;
+      if (!nodeMap[sponsorNodeId]) {
+        nodes.push({
+          id: sponsorNodeId,
+          type: 'sponsor',
+          label: bill.sponsor,
+          color: '#969696',
+          radius: 10
+        });
+        nodeMap[sponsorNodeId] = { id: sponsorNodeId, type: 'sponsor' };
+      }
+      links.push({
+        source: nodeId,
+        target: sponsorNodeId,
+        type: 'bill-sponsor'
+      });
+
+      // Create link to committee
+      const committeeNodeId = `c-${bill.committee.replace(/\s+/g, '-')}`;
+      if (!nodeMap[committeeNodeId]) {
+        nodes.push({
+          id: committeeNodeId,
+          type: 'committee',
+          label: bill.committee,
+          color: '#7d7d7d',
+          radius: 10
+        });
+        nodeMap[committeeNodeId] = { id: committeeNodeId, type: 'committee' };
+      }
+      links.push({
+        source: nodeId,
+        target: committeeNodeId,
+        type: 'bill-committee'
+      });
+    });
+
+    // Create SVG
+    const container = document.getElementById('network-graph');
+    const width = container.clientWidth;
+    const height = 560;
+
+    const svg = d3.select('#network-graph').append('svg')
+      .attr('width', width)
+      .attr('height', height);
+
+    // Add arrows for directed links
+    svg.append('defs').append('marker')
+      .attr('id', 'arrowhead')
+      .attr('markerWidth', 10)
+      .attr('markerHeight', 10)
+      .attr('refX', 20)
+      .attr('refY', 3)
+      .attr('orient', 'auto')
+      .append('polygon')
+      .attr('points', '0 0, 10 3, 0 6')
+      .attr('fill', 'var(--gray-300)');
+
+    // Create force simulation
+    simulation = d3.forceSimulation(nodes)
+      .force('link', d3.forceLink(links)
+        .id(d => d.id)
+        .distance(d => {
+          if (d.type === 'bill-vector') return 80;
+          if (d.type === 'bill-sponsor') return 60;
+          if (d.type === 'bill-committee') return 60;
+          return 100;
+        })
+        .strength(0.4)
+      )
+      .force('charge', d3.forceManyBody().strength(-200))
+      .force('center', d3.forceCenter(width / 2, height / 2))
+      .force('collision', d3.forceCollide()
+        .radius(d => d.radius + 8)
+      );
+
+    // Render links
+    const link = svg.selectAll('.link')
+      .data(links)
+      .enter()
+      .append('line')
+      .attr('class', 'link')
+      .attr('stroke-width', d => d.type === 'bill-vector' ? 1.5 : 1);
+
+    // Render nodes
+    const node = svg.selectAll('.node')
+      .data(nodes)
+      .enter()
+      .append('circle')
+      .attr('class', 'node')
+      .attr('r', d => d.radius)
+      .attr('fill', d => d.color)
+      .call(d3.drag()
+        .on('start', dragstarted)
+        .on('drag', dragged)
+        .on('end', dragended)
+      )
+      .on('mouseenter', function(event, d) {
+        // Highlight connected nodes and links
+        const connectedNodeIds = new Set();
+        connectedNodeIds.add(d.id);
+
+        links.forEach(link => {
+          if (link.source.id === d.id || link.target.id === d.id) {
+            connectedNodeIds.add(link.source.id);
+            connectedNodeIds.add(link.target.id);
+          }
+        });
+
+        node.classed('dimmed', n => !connectedNodeIds.has(n.id));
+        svg.selectAll('.node-label').classed('dimmed', n => !connectedNodeIds.has(n.id));
+        link.classed('dimmed', l => !(connectedNodeIds.has(l.source.id) && connectedNodeIds.has(l.target.id)));
+
+        // Show tooltip for bill nodes
+        if (d.type === 'bill') {
+          const tooltip = document.createElement('div');
+          tooltip.className = 'bill-tooltip';
+          tooltip.innerHTML = `
+            <div class="tooltip-bill-id">${d.label}</div>
+            <div class="tooltip-bill-name">${d.billName}</div>
+            <div class="tooltip-status"><span class="badge badge-${d.statusClass}">${d.status}</span></div>
+            <a href="bill-detail.html?id=${d.billId}" class="tooltip-link">View Details</a>
+          `;
+          document.body.appendChild(tooltip);
+
+          const rect = this.getBoundingClientRect();
+          tooltip.style.left = (rect.right + 10) + 'px';
+          tooltip.style.top = (rect.top - 20) + 'px';
+
+          this._tooltip = tooltip;
+        }
+      })
+      .on('mouseleave', function(event, d) {
+        node.classed('dimmed', false);
+        svg.selectAll('.node-label').classed('dimmed', false);
+        link.classed('dimmed', false);
+
+        if (this._tooltip) {
+          this._tooltip.remove();
+          this._tooltip = null;
+        }
+      })
+      .on('click', function(event, d) {
+        if (d.type === 'bill') {
+          window.location.href = `bill-detail.html?id=${d.billId}`;
+        }
+      });
+
+    // Render labels
+    const label = svg.selectAll('.node-label')
+      .data(nodes)
+      .enter()
+      .append('text')
+      .attr('class', 'node-label')
+      .attr('text-anchor', 'middle')
+      .attr('dy', '0.3em')
+      .text(d => {
+        if (d.type === 'vector') return d.label;
+        if (d.type === 'bill') return d.label.replace('SB', 'S').replace('HB', 'H');
+        return '';
+      });
+
+    // Update positions on simulation tick
+    simulation.on('tick', () => {
+      link
+        .attr('x1', d => d.source.x)
+        .attr('y1', d => d.source.y)
+        .attr('x2', d => d.target.x)
+        .attr('y2', d => d.target.y);
+
+      node
+        .attr('cx', d => d.x = Math.max(d.radius, Math.min(width - d.radius, d.x)))
+        .attr('cy', d => d.y = Math.max(d.radius, Math.min(height - d.radius, d.y)));
+
+      label
+        .attr('x', d => d.x)
+        .attr('y', d => d.y);
+    });
+
+    // Drag handlers
+    function dragstarted(event, d) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      d.fx = d.x;
+      d.fy = d.y;
+    }
+
+    function dragged(event, d) {
+      d.fx = event.x;
+      d.fy = event.y;
+    }
+
+    function dragended(event, d) {
+      if (!event.active) simulation.alphaTarget(0);
+      d.fx = null;
+      d.fy = null;
+    }
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', initializeVectors);
+</script>
+
+</body>
+</html>
