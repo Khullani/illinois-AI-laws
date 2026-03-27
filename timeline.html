@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Legislative Timeline — Illinois AI Ecosystem Map</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Timeline-specific styles */
+    .timeline-header {
+      margin-bottom: 48px;
+    }
+
+    /* Horizontal timeline bar */
+    .timeline-bar-container {
+      margin-bottom: 56px;
+    }
+
+    #timeline-bar {
+      width: 100%;
+      height: 120px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .timeline-bar-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Timeline event styles */
+    .timeline-events {
+      position: relative;
+    }
+
+    .tl-item {
+      position: relative;
+      padding-bottom: 32px;
+      padding-left: 36px;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    .tl-item.hidden {
+      display: none;
+    }
+
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      left: -32px; top: 6px;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--purple);
+      border: 3px solid var(--bg);
+      box-shadow: 0 0 0 2px var(--purple);
+    }
+
+    .tl-item.past::before {
+      background: var(--gray-400);
+      box-shadow: 0 0 0 2px var(--gray-400);
+    }
+
+    .tl-item.current::before {
+      background: var(--purple);
+      box-shadow: 0 0 0 2px var(--purple), 0 0 12px rgba(189,71,230,0.4);
+      width: 14px;
+      height: 14px;
+      left: -33px;
+      top: 5px;
+    }
+
+    .tl-date {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--purple);
+      margin-bottom: 4px;
+      letter-spacing: 0.05em;
+    }
+
+    .tl-item.past .tl-date {
+      color: var(--gray-500);
+    }
+
+    .tl-title {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--darkest);
+      margin-bottom: 6px;
+    }
+
+    .tl-desc {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      max-width: 640px;
+      margin-bottom: 8px;
+    }
+
+    .tl-bills {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .tl-bills .bill-tag {
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tl-bills .bill-tag:hover {
+      background: var(--purple-glow);
+      color: var(--purple);
+    }
+
+    /* Filter buttons */
+    .filter-controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+      align-items: center;
+    }
+
+    .filter-controls .filter-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-right: 8px;
+    }
+
+    .filter-btn {
+      padding: 8px 18px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface);
+      font-size: 0.8rem;
+      font-weight: 600;
+      font-family: var(--font-body);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--purple);
+      color: var(--purple);
+    }
+
+    .filter-btn.active {
+      background: var(--purple);
+      color: var(--white);
+      border-color: var(--purple);
+    }
+
+    /* Timeline vertical line */
+    .timeline-container {
+      position: relative;
+      padding-left: 0;
+    }
+
+    .timeline-container::before {
+      content: '';
+      position: absolute;
+      left: 8px; top: 8px; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--purple), var(--gray-300));
+    }
+
+    .tl-item:last-child {
+      padding-bottom: 0;
+    }
+
+    /* Today marker in horizontal bar */
+    .today-marker {
+      position: absolute;
+      top: -10px;
+      width: 2px;
+      height: 140%;
+      background: var(--purple);
+      box-shadow: 0 0 12px rgba(189,71,230,0.5);
+    }
+
+    .today-label {
+      position: absolute;
+      top: -28px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--purple);
+      color: var(--white);
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .timeline-container::before {
+        left: 5px;
+      }
+
+      .tl-item::before {
+        left: -25px;
+        width: 10px;
+        height: 10px;
+      }
+
+      .tl-item.current::before {
+        width: 12px;
+        height: 12px;
+        left: -26px;
+      }
+
+      .tl-item {
+        padding-left: 28px;
+      }
+
+      .filter-controls {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .filter-label {
+        margin-right: 0;
+      }
+
+      .tl-title {
+        font-size: 0.95rem;
+      }
+
+      .tl-desc {
+        font-size: 0.82rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .filter-btn {
+        font-size: 0.72rem;
+        padding: 6px 14px;
+      }
+
+      .tl-date {
+        font-size: 0.65rem;
+      }
+
+      .tl-title {
+        font-size: 0.9rem;
+      }
+
+      .tl-desc {
+        font-size: 0.78rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- SITE HEADER -->
+  <div class="site-header">
+    <div class="site-header-inner">
+      <a href="index.html" class="site-brand">
+        <img src="logo.svg" alt="Technê AI" style="height:28px;width:auto;">
+        <span class="site-brand-sub">IL AI Ecosystem Map</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <nav class="site-nav">
+    <div class="site-nav-inner">
+      <a href="index.html">Dashboard</a>
+      <a href="bills.html">Bill Tracker</a>
+      <a href="enacted.html">Enacted Laws</a>
+      <a href="vectors.html">Regulatory Vectors</a>
+      <a href="timeline.html" class="active">Timeline</a>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="hero-inner">
+      <div class="hero-badge">TEMPORAL VISUALIZATION</div>
+      <h1 class="hero-title">Legislative <em>Timeline</em></h1>
+      <p class="hero-sub">Track key milestones and deadlines in Illinois AI policy. From the first enacted laws to upcoming committee deadlines and projected effective dates, see how the ecosystem evolves.</p>
+      <div class="hero-meta">
+        <span><strong>Timeline Span:</strong> August 2024 — January 2027</span>
+        <span><strong>Current Date:</strong> <strong id="current-date">March 27, 2026</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main>
+    <div class="container">
+      <!-- HORIZONTAL TIMELINE BAR -->
+      <div class="page-section">
+        <div class="timeline-bar-container">
+          <h2 class="chart-title">Timeline Overview</h2>
+          <div id="timeline-bar">
+            <svg class="timeline-bar-svg" preserveAspectRatio="xMidYMid meet">
+              <!-- Horizontal timeline rendered here -->
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- FILTER CONTROLS -->
+      <div class="page-section" style="padding-top: 0;">
+        <div class="filter-controls">
+          <span class="filter-label">Filter by type:</span>
+          <button class="filter-btn active" data-filter="all">All Events</button>
+          <button class="filter-btn" data-filter="enacted">Enacted</button>
+          <button class="filter-btn" data-filter="legislative">Legislative</button>
+          <button class="filter-btn" data-filter="deadline">Deadline</button>
+          <button class="filter-btn" data-filter="projected">Projected</button>
+        </div>
+      </div>
+
+      <!-- VERTICAL TIMELINE -->
+      <div class="page-section" style="padding-top: 0;">
+        <div class="timeline-container">
+          <div class="timeline-events" id="timeline-events">
+            <!-- Timeline events rendered here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <strong>Illinois AI Ecosystem Map</strong> — A comprehensive visualization of AI legislative activity in Illinois. Data current as of <span id="footer-date">March 27, 2026</span>.
+    <br>
+    <a href="https://ilga.gov" target="_blank">Illinois General Assembly</a> • Built with Technê AI
+  </footer>
+
+  <script>
+    // Constants
+    const TODAY = new Date('2026-03-27');
+    const TIMELINE_START = new Date('2024-08-09');
+    const TIMELINE_END = new Date('2027-01-01');
+    const MARGIN = { top: 40, right: 20, bottom: 40, left: 20 };
+
+    // Data structures
+    let allEvents = [];
+    let allBills = {};
+    let activeFilter = 'all';
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      initializePage();
+    });
+
+    async function initializePage() {
+      try {
+        // Fetch bills data
+        const response = await fetch('data/bills.json');
+        const data = await response.json();
+
+        allEvents = data.timeline || [];
+
+        // Create bill lookup
+        [...(data.enacted || []), ...(data.pending || [])].forEach(bill => {
+          allBills[bill.id] = bill;
+          allBills[bill.bill] = bill;
+        });
+
+        // Render components
+        renderHorizontalTimeline();
+        renderVerticalTimeline();
+        attachFilterListeners();
+        updateCurrentDateDisplay();
+      } catch (error) {
+        console.error('Failed to load timeline data:', error);
+      }
+    }
+
+    function renderHorizontalTimeline() {
+      const container = document.querySelector('#timeline-bar svg');
+      const width = container.parentElement.clientWidth;
+      const height = 120;
+      const innerWidth = width - MARGIN.left - MARGIN.right;
+      const innerHeight = height - MARGIN.top - MARGIN.bottom;
+
+      // Clear
+      container.innerHTML = '';
+      container.setAttribute('viewBox', `0 0 ${width} ${height}`);
+
+      // Background
+      const bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      bg.setAttribute('width', width);
+      bg.setAttribute('height', height);
+      bg.setAttribute('fill', 'var(--surface)');
+      container.appendChild(bg);
+
+      // Main group
+      const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      g.setAttribute('transform', `translate(${MARGIN.left},${MARGIN.top})`);
+
+      // Scale function
+      const timeScale = (date) => {
+        const range = TIMELINE_END - TIMELINE_START;
+        const offset = date - TIMELINE_START;
+        return (offset / range) * innerWidth;
+      };
+
+      // Baseline
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', 0);
+      line.setAttribute('y1', innerHeight / 2);
+      line.setAttribute('x2', innerWidth);
+      line.setAttribute('y2', innerHeight / 2);
+      line.setAttribute('stroke', 'var(--border)');
+      line.setAttribute('stroke-width', 1);
+      g.appendChild(line);
+
+      // Plot events
+      allEvents.forEach(event => {
+        const date = new Date(event.date);
+        const x = timeScale(date);
+        const y = innerHeight / 2;
+
+        // Determine color
+        let color = 'var(--purple)';
+        if (event.past) {
+          color = 'var(--gray-400)';
+        } else if (event.type === 'deadline') {
+          color = 'var(--warning)';
+        } else if (event.type === 'projected') {
+          color = 'var(--dark-purple)';
+        }
+
+        // Dot
+        const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        dot.setAttribute('cx', x);
+        dot.setAttribute('cy', y);
+        dot.setAttribute('r', 5);
+        dot.setAttribute('fill', color);
+        dot.setAttribute('stroke', 'var(--bg)');
+        dot.setAttribute('stroke-width', 2);
+        g.appendChild(dot);
+
+        // Label below (rotate)
+        const labelBg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        labelBg.setAttribute('x', x - 35);
+        labelBg.setAttribute('y', y + 18);
+        labelBg.setAttribute('width', 70);
+        labelBg.setAttribute('height', 16);
+        labelBg.setAttribute('rx', 3);
+        labelBg.setAttribute('fill', 'var(--gray-100)');
+        g.appendChild(labelBg);
+
+        const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        label.setAttribute('x', x);
+        label.setAttribute('y', y + 26);
+        label.setAttribute('text-anchor', 'middle');
+        label.setAttribute('font-size', '10');
+        label.setAttribute('fill', 'var(--text-secondary)');
+        label.setAttribute('font-weight', '500');
+        const dateStr = new Date(event.date).toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+        label.textContent = dateStr;
+        g.appendChild(label);
+      });
+
+      // TODAY marker
+      const todayX = timeScale(TODAY);
+      const todayGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+
+      const todayLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      todayLine.setAttribute('x1', todayX);
+      todayLine.setAttribute('y1', -10);
+      todayLine.setAttribute('x2', todayX);
+      todayLine.setAttribute('y2', innerHeight + 10);
+      todayLine.setAttribute('stroke', 'var(--purple)');
+      todayLine.setAttribute('stroke-width', 2);
+      todayLine.setAttribute('stroke-dasharray', '4,4');
+      todayGroup.appendChild(todayLine);
+
+      const todayLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      todayLabel.setAttribute('x', todayX);
+      todayLabel.setAttribute('y', -15);
+      todayLabel.setAttribute('text-anchor', 'middle');
+      todayLabel.setAttribute('font-size', '11');
+      todayLabel.setAttribute('fill', 'var(--purple)');
+      todayLabel.setAttribute('font-weight', '700');
+      todayLabel.setAttribute('letter-spacing', '1');
+      todayLabel.textContent = 'TODAY';
+      todayGroup.appendChild(todayLabel);
+
+      g.appendChild(todayGroup);
+
+      container.appendChild(g);
+    }
+
+    function renderVerticalTimeline() {
+      const container = document.getElementById('timeline-events');
+      container.innerHTML = '';
+
+      allEvents.forEach((event, index) => {
+        const eventDiv = document.createElement('div');
+        eventDiv.className = `tl-item ${event.past ? 'past' : ''} ${isCurrentEvent(event) ? 'current' : ''}`;
+        eventDiv.setAttribute('data-type', event.type);
+        if (activeFilter !== 'all' && event.type !== activeFilter) {
+          eventDiv.classList.add('hidden');
+        }
+
+        // Date
+        const dateEl = document.createElement('div');
+        dateEl.className = 'tl-date';
+        dateEl.textContent = event.dateDisplay;
+        eventDiv.appendChild(dateEl);
+
+        // Title
+        const titleEl = document.createElement('div');
+        titleEl.className = 'tl-title';
+        titleEl.textContent = event.title;
+        eventDiv.appendChild(titleEl);
+
+        // Description
+        const descEl = document.createElement('div');
+        descEl.className = 'tl-desc';
+        descEl.textContent = event.description;
+        eventDiv.appendChild(descEl);
+
+        // Bill tags
+        if (event.billIds && event.billIds.length > 0) {
+          const billsDiv = document.createElement('div');
+          billsDiv.className = 'tl-bills';
+
+          event.billIds.forEach(billId => {
+            const bill = allBills[billId];
+            if (bill) {
+              const tag = document.createElement('a');
+              tag.className = 'bill-tag';
+              tag.href = `bill-detail.html?id=${bill.id}`;
+              tag.textContent = bill.bill;
+              tag.title = bill.name;
+              billsDiv.appendChild(tag);
+            }
+          });
+
+          eventDiv.appendChild(billsDiv);
+        }
+
+        container.appendChild(eventDiv);
+      });
+    }
+
+    function isCurrentEvent(event) {
+      const eventDate = new Date(event.date);
+      return !event.past && eventDate <= TODAY;
+    }
+
+    function attachFilterListeners() {
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          activeFilter = btn.getAttribute('data-filter');
+          applyFilter();
+        });
+      });
+    }
+
+    function applyFilter() {
+      document.querySelectorAll('.tl-item').forEach(item => {
+        const type = item.getAttribute('data-type');
+        if (activeFilter === 'all' || type === activeFilter) {
+          item.classList.remove('hidden');
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+    }
+
+    function updateCurrentDateDisplay() {
+      const dateStr = TODAY.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      document.getElementById('current-date').textContent = dateStr;
+      document.getElementById('footer-date').textContent = dateStr;
+    }
+
+    // Handle resize
+    window.addEventListener('resize', () => {
+      renderHorizontalTimeline();
+    });
+  </script>
+</body>
+</html>

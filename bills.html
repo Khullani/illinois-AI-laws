@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bill Tracker — Illinois AI Ecosystem Map</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .hero-small {
+      padding: 48px 40px 40px;
+    }
+
+    .filter-group {
+      margin-bottom: 24px;
+    }
+
+    .filter-group-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .filter-group-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .results-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      padding: 0 2px;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+    }
+
+    .results-count {
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    .bill-id-cell {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--purple);
+    }
+
+    .bill-id-cell a {
+      color: var(--purple);
+      text-decoration: none;
+    }
+
+    .bill-id-cell a:hover {
+      text-decoration: underline;
+    }
+
+    .bill-name {
+      font-weight: 600;
+    }
+
+    th.sortable {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    th.sortable:hover {
+      background: rgba(189, 71, 230, 0.1);
+    }
+
+    th.sortable::after {
+      content: '';
+      display: inline-block;
+      margin-left: 6px;
+      font-size: 0.7rem;
+      opacity: 0.4;
+    }
+
+    th.sortable.asc::after {
+      content: '↑';
+      opacity: 1;
+    }
+
+    th.sortable.desc::after {
+      content: '↓';
+      opacity: 1;
+    }
+
+    .vector-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-secondary);
+    }
+
+    .no-results p {
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .hero-small {
+        padding: 36px 20px 28px;
+      }
+
+      .results-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .filter-group-buttons {
+        gap: 6px;
+      }
+
+      .filter-btn {
+        padding: 8px 14px;
+        font-size: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- SITE HEADER -->
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a href="index.html" class="site-brand">
+        <img src="logo.svg" alt="Technê AI" style="height:28px;width:auto;">
+        <span class="site-brand-sub">IL AI Ecosystem Map</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- NAVIGATION -->
+  <nav class="site-nav">
+    <div class="site-nav-inner">
+      <a href="index.html">Dashboard</a>
+      <a href="bills.html" class="active">Bill Tracker</a>
+      <a href="enacted.html">Enacted Laws</a>
+      <a href="vectors.html">Regulatory Vectors</a>
+      <a href="timeline.html">Timeline</a>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="hero-inner hero-small">
+      <h1 class="hero-title">Bill Tracker</h1>
+      <p class="hero-sub">Search and filter all Illinois AI legislative proposals. Explore pending bills, track committee status, and find legislation by vector, sponsor, or keywords.</p>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <main class="page-section">
+    <div class="container">
+      <!-- SEARCH INPUT -->
+      <div class="search-bar">
+        <input
+          type="text"
+          id="searchInput"
+          class="search-input"
+          placeholder="Search bills by ID, name, sponsor, summary..."
+          aria-label="Search bills"
+        >
+      </div>
+
+      <!-- FILTER GROUPS -->
+      <div id="filtersContainer">
+        <!-- Status Filters -->
+        <div class="filter-group">
+          <label class="filter-group-label">Status</label>
+          <div class="filter-group-buttons">
+            <button class="filter-btn active" data-filter="status" data-value="">All</button>
+            <button class="filter-btn" data-filter="status" data-value="committee">In Committee</button>
+            <button class="filter-btn" data-filter="status" data-value="pending">2nd Reading</button>
+            <button class="filter-btn" data-filter="status" data-value="stalled">Re-referred</button>
+            <button class="filter-btn" data-filter="status" data-value="enacted">Enacted</button>
+          </div>
+        </div>
+
+        <!-- Vector Filters -->
+        <div class="filter-group">
+          <label class="filter-group-label">Vector</label>
+          <div class="filter-group-buttons">
+            <button class="filter-btn active" data-filter="vector" data-value="">All</button>
+            <button class="filter-btn" data-filter="vector" data-value="v1">Frontier Risk</button>
+            <button class="filter-btn" data-filter="vector" data-value="v2">Discrimination</button>
+            <button class="filter-btn" data-filter="vector" data-value="v3">Transparency</button>
+            <button class="filter-btn" data-filter="vector" data-value="v4">Youth Safety</button>
+            <button class="filter-btn" data-filter="vector" data-value="v5">Data Privacy</button>
+            <button class="filter-btn" data-filter="vector" data-value="v6">Public Sector</button>
+          </div>
+        </div>
+
+        <!-- Chamber Filters -->
+        <div class="filter-group">
+          <label class="filter-group-label">Chamber</label>
+          <div class="filter-group-buttons">
+            <button class="filter-btn active" data-filter="chamber" data-value="">All</button>
+            <button class="filter-btn" data-filter="chamber" data-value="Senate">Senate</button>
+            <button class="filter-btn" data-filter="chamber" data-value="House">House</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULTS COUNT -->
+      <div class="results-meta">
+        <span class="results-count">Showing <strong id="displayedCount">0</strong> of <strong id="totalCount">0</strong> bills</span>
+      </div>
+
+      <!-- BILLS TABLE -->
+      <div class="table-wrap">
+        <div class="table-responsive">
+          <table id="billsTable">
+            <thead>
+              <tr>
+                <th class="sortable" data-sort="id">Bill ID</th>
+                <th class="sortable" data-sort="name">Name</th>
+                <th class="sortable" data-sort="sponsor">Sponsor</th>
+                <th class="sortable" data-sort="committee">Committee</th>
+                <th class="sortable" data-sort="status">Status</th>
+                <th class="sortable" data-sort="vector">Vector</th>
+                <th class="sortable" data-sort="lastAction">Last Action</th>
+              </tr>
+            </thead>
+            <tbody id="billsTableBody">
+              <!-- Populated by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+        <div id="noResults" class="no-results hidden">
+          <p>No bills match your search or filter criteria.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <p>Illinois AI Ecosystem Map — A project of Technê AI<br>
+    <strong>Last updated:</strong> March 27, 2026 | <strong>Data source:</strong> Illinois General Assembly (ilga.gov)</p>
+  </footer>
+
+  <script>
+    // Global state
+    let allBills = [];
+    let filteredBills = [];
+    let vectorsMap = {};
+    let currentSort = { field: null, ascending: true };
+    let currentFilters = {
+      status: '',
+      vector: '',
+      chamber: '',
+      search: ''
+    };
+
+    // Fetch data on page load
+    async function loadData() {
+      try {
+        const response = await fetch('data/bills.json');
+        const data = await response.json();
+
+        // Build vectors map for quick lookup
+        data.vectors.forEach(vector => {
+          vectorsMap[vector.id] = vector;
+        });
+
+        // Merge enacted and pending bills
+        allBills = [
+          ...data.enacted.map(bill => ({
+            ...bill,
+            status: 'enacted',
+            statusClass: 'enacted',
+            chamber: bill.bill.startsWith('PA') ? 'Both' : 'Both',
+            vectorIds: [],
+            committee: 'Enacted',
+            lastAction: bill.effectiveDate,
+            lastActionText: `Effective ${bill.effectiveDateDisplay}`
+          })),
+          ...data.pending.map(bill => ({
+            ...bill,
+            statusClass: bill.statusClass || bill.status
+          }))
+        ];
+
+        // Extract chamber from bill ID
+        allBills.forEach(bill => {
+          if (!bill.chamber) {
+            bill.chamber = bill.id.startsWith('SB') ? 'Senate' : bill.id.startsWith('HB') ? 'House' : 'Both';
+          }
+        });
+
+        // Update total count
+        document.getElementById('totalCount').textContent = allBills.length;
+
+        // Render initial table
+        applyFiltersAndSort();
+        attachFilterListeners();
+        attachSearchListener();
+        attachSortListeners();
+      } catch (error) {
+        console.error('Error loading bills data:', error);
+      }
+    }
+
+    function attachFilterListeners() {
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const filterType = this.dataset.filter;
+          const filterValue = this.dataset.value;
+
+          // Toggle the active state
+          const group = this.closest('.filter-group-buttons');
+          const allBtns = group.querySelectorAll('.filter-btn');
+
+          if (filterValue === '') {
+            // "All" button: deactivate siblings
+            allBtns.forEach(b => {
+              if (b !== this) b.classList.remove('active');
+            });
+            this.classList.add('active');
+            currentFilters[filterType] = '';
+          } else {
+            // Regular filter button
+            const allBtn = group.querySelector('[data-value=""]');
+            allBtn.classList.remove('active');
+            this.classList.toggle('active');
+
+            // Collect active filters of this type
+            const activeValues = [];
+            allBtns.forEach(b => {
+              if (b !== allBtn && b.classList.contains('active')) {
+                activeValues.push(b.dataset.value);
+              }
+            });
+
+            if (activeValues.length === 0) {
+              allBtn.classList.add('active');
+              currentFilters[filterType] = '';
+            } else {
+              currentFilters[filterType] = activeValues;
+            }
+          }
+
+          applyFiltersAndSort();
+        });
+      });
+    }
+
+    function attachSearchListener() {
+      const searchInput = document.getElementById('searchInput');
+      searchInput.addEventListener('input', function() {
+        currentFilters.search = this.value.toLowerCase();
+        applyFiltersAndSort();
+      });
+    }
+
+    function attachSortListeners() {
+      document.querySelectorAll('th.sortable').forEach(th => {
+        th.addEventListener('click', function() {
+          const field = this.dataset.sort;
+
+          // Toggle sort direction
+          if (currentSort.field === field) {
+            currentSort.ascending = !currentSort.ascending;
+          } else {
+            currentSort.field = field;
+            currentSort.ascending = true;
+          }
+
+          // Update visual indicators
+          document.querySelectorAll('th.sortable').forEach(h => {
+            h.classList.remove('asc', 'desc');
+          });
+          this.classList.add(currentSort.ascending ? 'asc' : 'desc');
+
+          applyFiltersAndSort();
+        });
+      });
+    }
+
+    function applyFiltersAndSort() {
+      // Filter bills
+      filteredBills = allBills.filter(bill => {
+        // Status filter
+        if (currentFilters.status) {
+          const statuses = Array.isArray(currentFilters.status)
+            ? currentFilters.status
+            : [currentFilters.status];
+          if (!statuses.includes(bill.statusClass)) {
+            return false;
+          }
+        }
+
+        // Vector filter
+        if (currentFilters.vector) {
+          const vectors = Array.isArray(currentFilters.vector)
+            ? currentFilters.vector
+            : [currentFilters.vector];
+          const billVectors = bill.vectorIds || [];
+          if (!vectors.some(v => billVectors.includes(v))) {
+            return false;
+          }
+        }
+
+        // Chamber filter
+        if (currentFilters.chamber) {
+          const chambers = Array.isArray(currentFilters.chamber)
+            ? currentFilters.chamber
+            : [currentFilters.chamber];
+          if (!chambers.includes(bill.chamber)) {
+            return false;
+          }
+        }
+
+        // Search filter
+        if (currentFilters.search) {
+          const query = currentFilters.search;
+          const searchableFields = [
+            bill.id,
+            bill.name,
+            bill.fullName || bill.name,
+            bill.sponsor,
+            bill.summary
+          ].map(f => String(f).toLowerCase());
+
+          if (!searchableFields.some(field => field.includes(query))) {
+            return false;
+          }
+        }
+
+        return true;
+      });
+
+      // Sort bills
+      if (currentSort.field) {
+        filteredBills.sort((a, b) => {
+          let aVal = a[currentSort.field];
+          let bVal = b[currentSort.field];
+
+          // Handle null/undefined
+          if (aVal == null) aVal = '';
+          if (bVal == null) bVal = '';
+
+          // Convert to string for comparison
+          aVal = String(aVal).toLowerCase();
+          bVal = String(bVal).toLowerCase();
+
+          const comparison = aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
+          return currentSort.ascending ? comparison : -comparison;
+        });
+      }
+
+      // Render table
+      renderBillsTable();
+
+      // Update count
+      document.getElementById('displayedCount').textContent = filteredBills.length;
+    }
+
+    function renderBillsTable() {
+      const tbody = document.getElementById('billsTableBody');
+      const noResults = document.getElementById('noResults');
+
+      if (filteredBills.length === 0) {
+        tbody.innerHTML = '';
+        noResults.classList.remove('hidden');
+        return;
+      }
+
+      noResults.classList.add('hidden');
+      tbody.innerHTML = filteredBills.map(bill => {
+        const statusBadge = getStatusBadge(bill.statusClass);
+        const vectorDots = getVectorDots(bill.vectorIds || []);
+        const chamber = bill.chamber === 'Both' ? '—' : bill.chamber;
+
+        return `
+          <tr>
+            <td class="bill-id-cell">
+              <a href="bill-detail.html?id=${bill.id}">${bill.id}</a>
+            </td>
+            <td class="bill-name">${bill.name}</td>
+            <td>${bill.sponsor || '—'}</td>
+            <td>${bill.committee || '—'}</td>
+            <td>${statusBadge}</td>
+            <td>${vectorDots}</td>
+            <td>${bill.lastActionText || formatDate(bill.lastAction) || '—'}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function getStatusBadge(statusClass) {
+      const statusMap = {
+        'enacted': 'Enacted',
+        'committee': 'In Committee',
+        'pending': '2nd Reading',
+        'stalled': 'Re-referred'
+      };
+
+      const label = statusMap[statusClass] || statusClass;
+      return `<span class="badge badge-${statusClass}">${label}</span>`;
+    }
+
+    function getVectorDots(vectorIds) {
+      if (!vectorIds || vectorIds.length === 0) {
+        return '—';
+      }
+
+      return vectorIds.map(vId => {
+        const vector = vectorsMap[vId];
+        if (!vector) return '';
+        return `<span class="vector-dot" style="background-color: ${vector.color};" title="${vector.shortName}"></span>`;
+      }).join('');
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '';
+      const date = new Date(dateStr);
+      const options = { year: 'numeric', month: 'short', day: 'numeric' };
+      return date.toLocaleDateString('en-US', options);
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', loadData);
+  </script>
+</body>
+</html>
