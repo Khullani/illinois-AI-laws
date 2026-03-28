@@ -57,9 +57,9 @@
         <circle cx="12" cy="19" r="1"></circle>
       </svg>
       Timeline
-            <a href="https://techne.ai/" target="_blank">Techne AI</a>
-      <a href="https://www.linkedin.com/in/khullani/" target="_blank">LinkedIn</a>
     </a>
+    <a href="https://techne.ai/" target="_blank">Techne AI</a>
+    <a href="https://www.linkedin.com/in/khullani/" target="_blank">LinkedIn</a>
   </div>
 </nav>
 
@@ -137,6 +137,7 @@
           <tr>
             <th>Bill</th>
             <th>Name</th>
+            <th>TL;DR</th>
             <th>Status</th>
             <th>Vector</th>
             <th>Last Action</th>
@@ -297,11 +298,19 @@ function populateKeyBills() {
         ? billsData.vectors.find(v => v.id === bill.vectorIds[0])?.shortName
         : 'N/A';
 
+      // Generate a concise TL;DR from the summary (first sentence or 120 chars)
+      const summary = bill.summary || '';
+      const firstSentence = summary.split('. ')[0];
+      const tldr = firstSentence.length > 120
+        ? firstSentence.substring(0, 117) + '...'
+        : firstSentence + (firstSentence.endsWith('.') ? '' : '.');
+
       const statusBadgeClass = `badge-${bill.statusClass}`;
       const row = document.createElement('tr');
       row.innerHTML = `
         <td><a href="bill-detail.html?id=${bill.id}">${bill.bill}</a></td>
         <td>${bill.name}</td>
+        <td style="font-size:0.82rem;color:var(--text-secondary);max-width:280px;white-space:normal;line-height:1.5;">${tldr}</td>
         <td><span class="badge ${statusBadgeClass}">${bill.status}</span></td>
         <td><span class="bill-tag">${vectorName}</span></td>
         <td>${bill.lastActionText}</td>
