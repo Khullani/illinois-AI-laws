@@ -1325,6 +1325,72 @@ function postToWebhook() {
   let totalGaps = 0, criticalGaps = 0;
   Object.values(sections).forEach(s => { if (s.gaps) { totalGaps += s.gaps.length; criticalGaps += s.gaps.filter(g => g.weight === 3).length; } });
 
+  // Build pre-formatted HTML for the notification email
+  const weightLabel = w => w === 3 ? 'CRITICAL' : w === 2 ? 'HIGH' : 'MEDIUM';
+  const weightColor = w => w === 3 ? '#c0392b' : w === 2 ? '#d4940a' : '#2563eb';
+  const answerIcon = a => a === 'yes' ? '✅' : a === 'no' ? '❌' : a === 'unsure' ? '⚠️' : '➖';
+
+  let detailHTML = '';
+
+  // Section-by-section breakdown with every answer
+  SECTIONS.forEach(sec => {
+    const ss = sectionScores[sec.id];
+    if (!ss || !ss.applicable) return;
+
+    const scoreText = ss.pct >= 0 ? ss.pct + '%' : 'N/A';
+    const scoreColor = ss.pct >= 80 ? '#2d8a56' : ss.pct >= 60 ? '#d4940a' : ss.pct >= 40 ? '#c0392b' : ss.pct >= 0 ? '#c0392b' : '#969696';
+
+    detailHTML += `<h3 style="margin:24px 0 8px;color:#431558;border-bottom:1px solid #e4e4e4;padding-bottom:6px;">${sec.icon} ${sec.title} — <span style="color:${scoreColor}">${scoreText}</span></h3>`;
+    detailHTML += '<table style="border-collapse:collapse;width:100%;max-width:700px;font-size:13px;">';
+
+    sec.questions.forEach(q => {
+      const a = answers[q.id] || 'unanswered';
+      const icon = answerIcon(a);
+      const isGap = a === 'no' || a === 'unsure';
+      const rowBg = isGap ? '#fef2f2' : a === 'yes' ? '#f0fdf4' : '#f7f7f8';
+
+      detailHTML += `<tr style="background:${rowBg};border-bottom:1px solid #e4e4e4;">`;
+      detailHTML += `<td style="padding:8px 10px;width:30px;text-align:center;font-size:16px;">${icon}</td>`;
+      detailHTML += `<td style="padding:8px 10px;">${q.text}</td>`;
+      detailHTML += `<td style="padding:8px 10px;width:70px;text-align:center;font-weight:bold;color:${isGap ? '#c0392b' : a === 'yes' ? '#2d8a56' : '#969696'}">${a.toUpperCase()}</td>`;
+      detailHTML += `<td style="padding:8px 10px;width:60px;text-align:center;"><span style="color:${weightColor(q.weight)};font-weight:bold;font-size:11px;">${weightLabel(q.weight)}</span></td>`;
+      detailHTML += `<td style="padding:8px 10px;width:100px;font-size:11px;color:#969696;">${q.law}</td>`;
+      detailHTML += '</tr>';
+
+      if (isGap) {
+        detailHTML += `<tr style="background:#fef2f2;"><td></td><td colspan="4" style="padding:4px 10px 10px;font-size:12px;color:#666;">`;
+        detailHTML += `<strong>Remediation:</strong> ${q.remediation}<br>`;
+        detailHTML += `<strong>Enforcement:</strong> ${q.enforcement}<br>`;
+        detailHTML += `<strong>Timeline:</strong> ${q.timeline}`;
+        detailHTML += '</td></tr>';
+      }
+    });
+
+    detailHTML += '</table>';
+  });
+
+  // Gap summary list
+  let gapSummaryHTML = '';
+  if (totalGaps > 0) {
+    gapSummaryHTML = '<h3 style="margin:24px 0 8px;color:#c0392b;">Priority Gap Summary</h3><table style="border-collapse:collapse;width:100%;max-width:700px;font-size:13px;">';
+    gapSummaryHTML += '<tr style="background:#431558;color:white;"><th style="padding:6px 10px;text-align:left;">#</th><th style="padding:6px 10px;text-align:left;">Question</th><th style="padding:6px 10px;">Answer</th><th style="padding:6px 10px;">Weight</th><th style="padding:6px 10px;">Law</th></tr>';
+    let gapNum = 0;
+    SECTIONS.forEach(sec => {
+      if (!sections[sec.id] || !sections[sec.id].gaps) return;
+      sections[sec.id].gaps.sort((a,b) => b.weight - a.weight).forEach(g => {
+        gapNum++;
+        gapSummaryHTML += `<tr style="border-bottom:1px solid #e4e4e4;">`;
+        gapSummaryHTML += `<td style="padding:6px 10px;font-weight:bold;">${gapNum}</td>`;
+        gapSummaryHTML += `<td style="padding:6px 10px;">${g.question}</td>`;
+        gapSummaryHTML += `<td style="padding:6px 10px;text-align:center;font-weight:bold;color:#c0392b;">${g.answer.toUpperCase()}</td>`;
+        gapSummaryHTML += `<td style="padding:6px 10px;text-align:center;color:${weightColor(g.weight)};font-weight:bold;">${weightLabel(g.weight)}</td>`;
+        gapSummaryHTML += `<td style="padding:6px 10px;font-size:11px;">${g.law}</td>`;
+        gapSummaryHTML += '</tr>';
+      });
+    });
+    gapSummaryHTML += '</table>';
+  }
+
   const payload = {
     timestamp: new Date().toISOString(),
     lead: {
@@ -1348,11 +1414,12 @@ function postToWebhook() {
       riskTier: tier.tier,
       riskLabel: tier.label,
       totalGaps,
-      criticalGaps,
-      sections
+      criticalGaps
     },
     answers: { ...answers },
-    isPersonalEmail: false // already blocked by validation
+    detailHTML,
+    gapSummaryHTML,
+    isPersonalEmail: false
   };
 
   fetch(WEBHOOK_URL, {
