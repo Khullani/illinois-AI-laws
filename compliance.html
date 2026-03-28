@@ -4,312 +4,239 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Illinois AI Compliance Readiness — Technê AI</title>
-<link rel="stylesheet" href="css/style.css">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
 <style>
-/* ── Scoped dark theme for compliance page ── */
-.compliance-page {
-  background: #0c0a0f;
-  color: #e8e4ee;
-  min-height: 100vh;
-  --bg:#0c0a0f;--surface:#15121a;--surface-2:#1e1a25;--surface-3:#272230;--border:#332e3d;--border-accent:#4a3f5c;--text:#e8e4ee;--text-muted:#9990a8;--text-dim:#6b6280;--accent-violet:#a78bfa;--accent-violet-bg:rgba(167,139,250,.08);--accent-rose:#fb7185;--accent-rose-bg:rgba(251,113,133,.08);--accent-amber:#fbbf24;--accent-amber-bg:rgba(251,191,36,.08);--accent-emerald:#34d399;--accent-emerald-bg:rgba(52,211,153,.08);--accent-sky:#38bdf8;--accent-sky-bg:rgba(56,189,248,.08);--accent-crimson:#f43f5e;--accent-crimson-bg:rgba(244,63,94,.08);--radius:10px;--radius-sm:6px;
-}
-.compliance-page a{color:var(--accent-violet);text-decoration:none}
-.compliance-page a:hover{text-decoration:underline}
-.compliance-page .container{max-width:1200px;margin:0 auto;padding:0 24px}
+:root{--bg:#0c0a0f;--surface:#15121a;--surface-2:#1e1a25;--surface-3:#272230;--border:#332e3d;--border-accent:#4a3f5c;--text:#e8e4ee;--text-muted:#9990a8;--text-dim:#6b6280;--accent-violet:#a78bfa;--accent-violet-bg:rgba(167,139,250,.08);--accent-rose:#fb7185;--accent-rose-bg:rgba(251,113,133,.08);--accent-amber:#fbbf24;--accent-amber-bg:rgba(251,191,36,.08);--accent-emerald:#34d399;--accent-emerald-bg:rgba(52,211,153,.08);--accent-sky:#38bdf8;--accent-sky-bg:rgba(56,189,248,.08);--accent-crimson:#f43f5e;--accent-crimson-bg:rgba(244,63,94,.08);--radius:10px;--radius-sm:6px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+a{color:var(--accent-violet);text-decoration:none}a:hover{text-decoration:underline}
 
 /* ── CONFIG BANNER ── */
-.compliance-page .config-banner{margin:16px 0 0;padding:14px 18px;background:rgba(251,191,36,.06);border:1px dashed rgba(251,191,36,.25);border-radius:var(--radius-sm);font-size:12px;color:var(--accent-amber);display:flex;align-items:flex-start;gap:10px;line-height:1.5}
-.compliance-page .config-banner code{background:rgba(251,191,36,.1);padding:1px 5px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:11px}
-.compliance-page .config-banner .dismiss{margin-left:auto;cursor:pointer;opacity:.6;flex-shrink:0}
-.compliance-page .config-banner .dismiss:hover{opacity:1}
-.compliance-page .config-banner.hidden{display:none}
+.config-banner{margin:16px 0 0;padding:14px 18px;background:rgba(251,191,36,.06);border:1px dashed rgba(251,191,36,.25);border-radius:var(--radius-sm);font-size:12px;color:var(--accent-amber);display:flex;align-items:flex-start;gap:10px;line-height:1.5}
+.config-banner code{background:rgba(251,191,36,.1);padding:1px 5px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:11px}
+.config-banner .dismiss{margin-left:auto;cursor:pointer;opacity:.6;flex-shrink:0}
+.config-banner .dismiss:hover{opacity:1}
+.config-banner.hidden{display:none}
 
 /* ── HERO ── */
-.compliance-page .hero{padding:56px 0 40px;position:relative;overflow:hidden}
-.compliance-page .hero::before{content:'';position:absolute;top:-120px;right:-120px;width:500px;height:500px;background:radial-gradient(circle,rgba(244,63,94,.05) 0%,rgba(167,139,250,.04) 40%,transparent 70%);pointer-events:none}
-.compliance-page .hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent-crimson);margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.compliance-page .pulse{width:8px;height:8px;background:var(--accent-crimson);border-radius:50%;animation:cp-pulse 2s ease-in-out infinite}
-@keyframes cp-pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(244,63,94,.4)}50%{opacity:.8;box-shadow:0 0 0 6px rgba(244,63,94,0)}}
-.compliance-page h1{font-family:'DM Serif Display',serif;font-size:clamp(30px,4.5vw,48px);font-weight:400;line-height:1.15;margin-bottom:16px;color:var(--text)}
-.compliance-page h1 em{font-style:italic;color:var(--accent-crimson)}
-.compliance-page .hero-sub{font-size:16px;color:var(--text-muted);max-width:720px;line-height:1.75;margin-bottom:28px}
-.compliance-page .hero-sub strong{color:var(--text)}
+.hero{padding:56px 0 40px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-120px;right:-120px;width:500px;height:500px;background:radial-gradient(circle,rgba(244,63,94,.05) 0%,rgba(167,139,250,.04) 40%,transparent 70%);pointer-events:none}
+.hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent-crimson);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.pulse{width:8px;height:8px;background:var(--accent-crimson);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(244,63,94,.4)}50%{opacity:.8;box-shadow:0 0 0 6px rgba(244,63,94,0)}}
+h1{font-family:'DM Serif Display',serif;font-size:clamp(30px,4.5vw,48px);font-weight:400;line-height:1.15;margin-bottom:16px}
+h1 em{font-style:italic;color:var(--accent-crimson)}
+.hero-sub{font-size:16px;color:var(--text-muted);max-width:720px;line-height:1.75;margin-bottom:28px}
+.hero-sub strong{color:var(--text)}
 
 /* ── RISK STRIP ── */
-.compliance-page .risk-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:36px}
-.compliance-page .risk-cell{background:var(--surface);padding:22px 20px;text-align:center}
-.compliance-page .risk-number{font-family:'DM Serif Display',serif;font-size:32px;line-height:1;margin-bottom:6px}
-.compliance-page .risk-label{font-size:12px;color:var(--text-dim);line-height:1.4}
+.risk-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:36px}
+.risk-cell{background:var(--surface);padding:22px 20px;text-align:center}
+.risk-number{font-family:'DM Serif Display',serif;font-size:32px;line-height:1;margin-bottom:6px}
+.risk-label{font-size:12px;color:var(--text-dim);line-height:1.4}
 
 /* ── URGENCY ── */
-.compliance-page .urgency-box{background:linear-gradient(135deg,rgba(244,63,94,.06),rgba(251,191,36,.03));border:1px solid rgba(244,63,94,.18);border-radius:var(--radius);padding:24px;margin-bottom:36px}
-.compliance-page .urgency-headline{font-size:15px;font-weight:700;color:var(--accent-crimson);margin-bottom:8px;display:flex;align-items:center;gap:8px}
-.compliance-page .urgency-body{font-size:14px;color:var(--text-muted);line-height:1.7}
-.compliance-page .urgency-body strong{color:var(--text)}
+.urgency-box{background:linear-gradient(135deg,rgba(244,63,94,.06),rgba(251,191,36,.03));border:1px solid rgba(244,63,94,.18);border-radius:var(--radius);padding:24px;margin-bottom:36px}
+.urgency-headline{font-size:15px;font-weight:700;color:var(--accent-crimson);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.urgency-body{font-size:14px;color:var(--text-muted);line-height:1.7}
+.urgency-body strong{color:var(--text)}
 
 /* ── CTA BUTTONS ── */
-.compliance-page .cta-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:var(--accent-violet);color:var(--bg);font-weight:700;font-size:14px;border-radius:var(--radius-sm);text-decoration:none;transition:all .2s;white-space:nowrap;flex-shrink:0;border:none;cursor:pointer}
-.compliance-page .cta-btn:hover{background:#b99dfc;text-decoration:none;transform:translateY(-1px)}
-.compliance-page .cta-btn-secondary{background:transparent;border:1px solid var(--accent-violet);color:var(--accent-violet)}
-.compliance-page .cta-btn-secondary:hover{background:var(--accent-violet-bg)}
-.compliance-page .cta-btn-sm{padding:10px 20px;font-size:13px}
-.compliance-page .cta-btn-book{background:var(--accent-emerald);color:var(--bg)}
-.compliance-page .cta-btn-book:hover{background:#5de8b7}
+.cta-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:var(--accent-violet);color:var(--bg);font-weight:700;font-size:14px;border-radius:var(--radius-sm);text-decoration:none;transition:all .2s;white-space:nowrap;flex-shrink:0;border:none;cursor:pointer}
+.cta-btn:hover{background:#b99dfc;text-decoration:none;transform:translateY(-1px)}
+.cta-btn-secondary{background:transparent;border:1px solid var(--accent-violet);color:var(--accent-violet)}
+.cta-btn-secondary:hover{background:var(--accent-violet-bg)}
+.cta-btn-sm{padding:10px 20px;font-size:13px}
+.cta-btn-book{background:var(--accent-emerald);color:var(--bg)}
+.cta-btn-book:hover{background:#5de8b7}
 
-/* ── NAV TABS ── */
-.compliance-page .nav-tabs{display:flex;gap:4px;padding:8px 0 0;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--border)}
-.compliance-page .nav-tabs::-webkit-scrollbar{display:none}
-.compliance-page .nav-tab{padding:12px 18px;font-size:13px;font-weight:500;color:var(--text-dim);background:0;border:none;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:all .2s;font-family:inherit}
-.compliance-page .nav-tab:hover{color:var(--text-muted)}
-.compliance-page .nav-tab.active{color:var(--accent-violet);border-bottom-color:var(--accent-violet)}
+/* ── NAV ── */
+.nav-tabs{display:flex;gap:4px;padding:8px 0 0;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--border)}
+.nav-tabs::-webkit-scrollbar{display:none}
+.nav-tab{padding:12px 18px;font-size:13px;font-weight:500;color:var(--text-dim);background:0;border:none;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:all .2s}
+.nav-tab:hover{color:var(--text-muted)}.nav-tab.active{color:var(--accent-violet);border-bottom-color:var(--accent-violet)}
 
 /* ── SECTION ── */
-.compliance-page .section{padding:32px 0}
-.compliance-page .section-header{display:flex;align-items:baseline;gap:12px;margin-bottom:8px}
-.compliance-page .section-number{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent-violet);letter-spacing:1px}
-.compliance-page .section-title{font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;color:var(--text)}
-.compliance-page .section-desc{font-size:14px;color:var(--text-muted);margin-bottom:24px;line-height:1.7;max-width:700px}
+.section{padding:32px 0}
+.section-header{display:flex;align-items:baseline;gap:12px;margin-bottom:8px}
+.section-number{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent-violet);letter-spacing:1px}
+.section-title{font-family:'DM Serif Display',serif;font-size:22px;font-weight:400}
+.section-desc{font-size:14px;color:var(--text-muted);margin-bottom:24px;line-height:1.7;max-width:700px}
 
 /* ── ASSESS CARDS ── */
-.compliance-page .assess-grid{display:grid;gap:16px}
-.compliance-page .assess-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
-.compliance-page .assess-header{padding:20px 24px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
-.compliance-page .assess-left{display:flex;align-items:center;gap:14px}
-.compliance-page .assess-icon{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.compliance-page .assess-name{font-weight:600;font-size:15px}
-.compliance-page .assess-scope{font-size:12px;color:var(--text-dim);margin-top:2px}
-.compliance-page .assess-score-badge{font-family:'JetBrains Mono',monospace;font-size:12px;padding:4px 10px;border-radius:20px;font-weight:500}
-.compliance-page .assess-chevron{color:var(--text-dim);transition:transform .25s;font-size:14px;margin-left:12px}
-.compliance-page .assess-card.open .assess-chevron{transform:rotate(180deg)}
-.compliance-page .assess-body{display:none;padding:0 24px 24px}
-.compliance-page .assess-card.open .assess-body{display:block}
+.assess-grid{display:grid;gap:16px}
+.assess-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.assess-header{padding:20px 24px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+.assess-left{display:flex;align-items:center;gap:14px}
+.assess-icon{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.assess-name{font-weight:600;font-size:15px}
+.assess-scope{font-size:12px;color:var(--text-dim);margin-top:2px}
+.assess-score-badge{font-family:'JetBrains Mono',monospace;font-size:12px;padding:4px 10px;border-radius:20px;font-weight:500}
+.assess-chevron{color:var(--text-dim);transition:transform .25s;font-size:14px;margin-left:12px}
+.assess-card.open .assess-chevron{transform:rotate(180deg)}
+.assess-body{display:none;padding:0 24px 24px}.assess-card.open .assess-body{display:block}
 
 /* ── QUESTIONS ── */
-.compliance-page .question-group{margin-bottom:20px;padding:18px;background:var(--surface-2);border-radius:var(--radius-sm);border-left:3px solid var(--border-accent);transition:border-color .3s}
-.compliance-page .question-group.answered-yes{border-left-color:var(--accent-emerald)}
-.compliance-page .question-group.answered-no{border-left-color:var(--accent-crimson)}
-.compliance-page .question-law{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
-.compliance-page .law-tag{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 8px;border-radius:4px;font-weight:500}
-.compliance-page .question-text{font-size:14px;font-weight:500;margin-bottom:10px;line-height:1.5}
-.compliance-page .question-context{font-size:12.5px;color:var(--text-dim);margin-bottom:12px;line-height:1.55;font-style:italic}
-.compliance-page .question-btns{display:flex;gap:8px}
-.compliance-page .q-btn{padding:7px 20px;font-size:13px;font-weight:600;border-radius:var(--radius-sm);border:1px solid var(--border-accent);background:0;color:var(--text-muted);cursor:pointer;transition:all .2s;font-family:inherit}
-.compliance-page .q-btn:hover{border-color:var(--text-dim);color:var(--text)}
-.compliance-page .q-btn.selected-yes{background:var(--accent-emerald-bg);border-color:var(--accent-emerald);color:var(--accent-emerald)}
-.compliance-page .q-btn.selected-no{background:var(--accent-crimson-bg);border-color:var(--accent-crimson);color:var(--accent-crimson)}
-.compliance-page .q-btn.selected-unsure{background:var(--accent-amber-bg);border-color:var(--accent-amber);color:var(--accent-amber)}
+.question-group{margin-bottom:20px;padding:18px;background:var(--surface-2);border-radius:var(--radius-sm);border-left:3px solid var(--border-accent);transition:border-color .3s}
+.question-group.answered-yes{border-left-color:var(--accent-emerald)}
+.question-group.answered-no{border-left-color:var(--accent-crimson)}
+.question-law{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.law-tag{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 8px;border-radius:4px;font-weight:500}
+.question-text{font-size:14px;font-weight:500;margin-bottom:10px;line-height:1.5}
+.question-context{font-size:12.5px;color:var(--text-dim);margin-bottom:12px;line-height:1.55;font-style:italic}
+.question-btns{display:flex;gap:8px}
+.q-btn{padding:7px 20px;font-size:13px;font-weight:600;border-radius:var(--radius-sm);border:1px solid var(--border-accent);background:0;color:var(--text-muted);cursor:pointer;transition:all .2s;font-family:inherit}
+.q-btn:hover{border-color:var(--text-dim);color:var(--text)}
+.q-btn.selected-yes{background:var(--accent-emerald-bg);border-color:var(--accent-emerald);color:var(--accent-emerald)}
+.q-btn.selected-no{background:var(--accent-crimson-bg);border-color:var(--accent-crimson);color:var(--accent-crimson)}
+.q-btn.selected-unsure{background:var(--accent-amber-bg);border-color:var(--accent-amber);color:var(--accent-amber)}
 
 /* ── GAP REVEAL ── */
-.compliance-page .gap-reveal{display:none;margin-top:10px;padding:14px 16px;background:rgba(244,63,94,.04);border:1px solid rgba(244,63,94,.12);border-radius:var(--radius-sm);font-size:13px;color:var(--text-muted);line-height:1.6}
-.compliance-page .gap-reveal strong{color:var(--accent-crimson)}
-.compliance-page .gap-reveal.visible{display:block;animation:cp-fadeSlide .3s ease}
-@keyframes cp-fadeSlide{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.gap-reveal{display:none;margin-top:10px;padding:14px 16px;background:rgba(244,63,94,.04);border:1px solid rgba(244,63,94,.12);border-radius:var(--radius-sm);font-size:13px;color:var(--text-muted);line-height:1.6}
+.gap-reveal strong{color:var(--accent-crimson)}
+.gap-reveal.visible{display:block;animation:fadeSlide .3s ease}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
 
 /* ── RESULTS PANEL ── */
-.compliance-page .results-panel{display:none;margin-top:32px}
-.compliance-page .results-panel.visible{display:block;animation:cp-fadeSlide .4s ease}
-.compliance-page .results-score-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:32px;margin-bottom:16px}
-.compliance-page .results-header{display:flex;align-items:center;gap:24px;margin-bottom:24px;flex-wrap:wrap}
-.compliance-page .results-score-circle{width:100px;height:100px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;border:3px solid;flex-shrink:0}
-.compliance-page .results-score-num{font-family:'DM Serif Display',serif;font-size:32px;line-height:1}
-.compliance-page .results-score-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
-.compliance-page .results-text h3{font-family:'DM Serif Display',serif;font-size:20px;font-weight:400;margin-bottom:6px;color:var(--text)}
-.compliance-page .results-text p{font-size:14px;color:var(--text-muted);line-height:1.6}
+.results-panel{display:none;margin-top:32px}.results-panel.visible{display:block;animation:fadeSlide .4s ease}
+.results-score-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:32px;margin-bottom:16px}
+.results-header{display:flex;align-items:center;gap:24px;margin-bottom:24px;flex-wrap:wrap}
+.results-score-circle{width:100px;height:100px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;border:3px solid;flex-shrink:0}
+.results-score-num{font-family:'DM Serif Display',serif;font-size:32px;line-height:1}
+.results-score-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.results-text h3{font-family:'DM Serif Display',serif;font-size:20px;font-weight:400;margin-bottom:6px}
+.results-text p{font-size:14px;color:var(--text-muted);line-height:1.6}
 
 /* Risk meter */
-.compliance-page .risk-exposure{margin-top:20px;padding:20px;background:rgba(244,63,94,.04);border:1px solid rgba(244,63,94,.12);border-radius:var(--radius)}
-.compliance-page .risk-exposure h4{font-size:14px;font-weight:700;color:var(--accent-crimson);margin-bottom:10px}
-.compliance-page .risk-meter{height:8px;background:var(--surface-3);border-radius:4px;overflow:hidden;margin-bottom:12px}
-.compliance-page .risk-meter-fill{height:100%;border-radius:4px;transition:width .8s ease}
-.compliance-page .risk-item{font-size:13px;color:var(--text-muted);padding:4px 0;line-height:1.5}
-.compliance-page .results-gaps{margin-top:16px}
-.compliance-page .results-gap-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid rgba(51,46,61,.4);font-size:13.5px;color:var(--text-muted);line-height:1.55}
-.compliance-page .results-gap-item:last-child{border-bottom:none}
-.compliance-page .gap-x{color:var(--accent-crimson);font-weight:700;font-size:14px;flex-shrink:0;margin-top:1px}
-.compliance-page .gap-warn{color:var(--accent-amber);font-weight:700;font-size:14px;flex-shrink:0;margin-top:1px}
+.risk-exposure{margin-top:20px;padding:20px;background:rgba(244,63,94,.04);border:1px solid rgba(244,63,94,.12);border-radius:var(--radius)}
+.risk-exposure h4{font-size:14px;font-weight:700;color:var(--accent-crimson);margin-bottom:10px}
+.risk-meter{height:8px;background:var(--surface-3);border-radius:4px;overflow:hidden;margin-bottom:12px}
+.risk-meter-fill{height:100%;border-radius:4px;transition:width .8s ease}
+.risk-item{font-size:13px;color:var(--text-muted);padding:4px 0;line-height:1.5}
+.results-gaps{margin-top:16px}
+.results-gap-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid rgba(51,46,61,.4);font-size:13.5px;color:var(--text-muted);line-height:1.55}
+.results-gap-item:last-child{border-bottom:none}
+.gap-x{color:var(--accent-crimson);font-weight:700;font-size:14px;flex-shrink:0;margin-top:1px}
+.gap-warn{color:var(--accent-amber);font-weight:700;font-size:14px;flex-shrink:0;margin-top:1px}
 
 /* ── LEAD CAPTURE CTA BOX ── */
-.compliance-page .lead-capture-box{background:linear-gradient(135deg,var(--surface-2),rgba(167,139,250,.04));border:1px solid rgba(167,139,250,.2);border-radius:var(--radius);padding:32px;text-align:center;margin-top:16px}
-.compliance-page .lead-capture-box h3{font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;margin-bottom:8px;color:var(--text)}
-.compliance-page .lead-capture-box .lead-sub{font-size:14px;color:var(--text-muted);max-width:560px;margin:0 auto 12px;line-height:1.65}
-.compliance-page .lead-capture-box .lead-detail{font-size:12.5px;color:var(--text-dim);margin-bottom:20px;line-height:1.5}
-.compliance-page .lead-capture-box .lead-detail strong{color:var(--text-muted)}
-.compliance-page .lead-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.compliance-page .lead-trust{display:flex;gap:16px;justify-content:center;margin-top:16px;font-size:11px;color:var(--text-dim);flex-wrap:wrap}
-.compliance-page .lead-trust span{display:flex;align-items:center;gap:4px}
+.lead-capture-box{background:linear-gradient(135deg,var(--surface-2),rgba(167,139,250,.04));border:1px solid rgba(167,139,250,.2);border-radius:var(--radius);padding:32px;text-align:center;margin-top:16px}
+.lead-capture-box h3{font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;margin-bottom:8px}
+.lead-capture-box .lead-sub{font-size:14px;color:var(--text-muted);max-width:560px;margin:0 auto 12px;line-height:1.65}
+.lead-capture-box .lead-detail{font-size:12.5px;color:var(--text-dim);margin-bottom:20px;line-height:1.5}
+.lead-capture-box .lead-detail strong{color:var(--text-muted)}
+.lead-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.lead-trust{display:flex;gap:16px;justify-content:center;margin-top:16px;font-size:11px;color:var(--text-dim);flex-wrap:wrap}
+.lead-trust span{display:flex;align-items:center;gap:4px}
 
 /* ── INLINE CTA ── */
-.compliance-page .inline-cta{margin-top:32px;padding:28px;background:linear-gradient(135deg,rgba(167,139,250,.06),rgba(167,139,250,.02));border:1px solid rgba(167,139,250,.18);border-radius:var(--radius);text-align:center}
-.compliance-page .inline-cta h4{font-family:'DM Serif Display',serif;font-size:18px;font-weight:400;margin-bottom:8px;color:var(--text)}
-.compliance-page .inline-cta p{font-size:13.5px;color:var(--text-muted);margin-bottom:16px;line-height:1.6;max-width:560px;margin-left:auto;margin-right:auto}
-.compliance-page .inline-cta .cta-btn{font-size:13px;padding:12px 24px}
+.inline-cta{margin-top:32px;padding:28px;background:linear-gradient(135deg,rgba(167,139,250,.06),rgba(167,139,250,.02));border:1px solid rgba(167,139,250,.18);border-radius:var(--radius);text-align:center}
+.inline-cta h4{font-family:'DM Serif Display',serif;font-size:18px;font-weight:400;margin-bottom:8px}
+.inline-cta p{font-size:13.5px;color:var(--text-muted);margin-bottom:16px;line-height:1.6;max-width:560px;margin-left:auto;margin-right:auto}
+.inline-cta .cta-btn{font-size:13px;padding:12px 24px}
 
 /* ── STAKEHOLDER CARDS ── */
-.compliance-page .stake-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;transition:border-color .2s}
-.compliance-page .stake-card:hover{border-color:var(--border-accent)}
-.compliance-page .stake-header{padding:20px 24px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
-.compliance-page .stake-left{display:flex;align-items:center;gap:14px}
-.compliance-page .stake-icon{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.compliance-page .stake-name{font-weight:600;font-size:15px}
-.compliance-page .stake-scope{font-size:12px;color:var(--text-dim);margin-top:2px}
-.compliance-page .stake-chevron{color:var(--text-dim);transition:transform .25s;font-size:14px}
-.compliance-page .stake-card.open .stake-chevron{transform:rotate(180deg)}
-.compliance-page .stake-body{display:none;padding:0 24px 24px}
-.compliance-page .stake-card.open .stake-body{display:block}
+.stake-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;transition:border-color .2s}
+.stake-card:hover{border-color:var(--border-accent)}
+.stake-header{padding:20px 24px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+.stake-left{display:flex;align-items:center;gap:14px}
+.stake-icon{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.stake-name{font-weight:600;font-size:15px}
+.stake-scope{font-size:12px;color:var(--text-dim);margin-top:2px}
+.stake-chevron{color:var(--text-dim);transition:transform .25s;font-size:14px}
+.stake-card.open .stake-chevron{transform:rotate(180deg)}
+.stake-body{display:none;padding:0 24px 24px}.stake-card.open .stake-body{display:block}
 
-.compliance-page .law-trigger{margin-bottom:20px;padding:16px;background:var(--surface-2);border-radius:var(--radius-sm);border-left:3px solid var(--accent-violet)}
-.compliance-page .law-trigger-header{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
-.compliance-page .law-trigger-title{font-size:14px;font-weight:600}
-.compliance-page .law-trigger-desc{font-size:13px;color:var(--text-muted);margin-bottom:12px;line-height:1.6}
-.compliance-page .action-category{margin-top:14px}
-.compliance-page .action-category-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-bottom:8px}
-.compliance-page .action-list{list-style:none;padding:0;margin:0}
-.compliance-page .action-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(51,46,61,.5);font-size:13.5px;color:var(--text-muted);line-height:1.55}
-.compliance-page .action-item:last-child{border-bottom:none}
-.compliance-page .action-text{flex:1}
-.compliance-page .priority{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;padding:2px 7px;border-radius:3px;flex-shrink:0;margin-top:3px}
-.compliance-page .priority-critical{background:var(--accent-crimson-bg);color:var(--accent-crimson)}
-.compliance-page .priority-high{background:var(--accent-amber-bg);color:var(--accent-amber)}
-.compliance-page .priority-medium{background:var(--accent-sky-bg);color:var(--accent-sky)}
+.law-trigger{margin-bottom:20px;padding:16px;background:var(--surface-2);border-radius:var(--radius-sm);border-left:3px solid var(--accent-violet)}
+.law-trigger-header{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.law-trigger-title{font-size:14px;font-weight:600}
+.law-trigger-desc{font-size:13px;color:var(--text-muted);margin-bottom:12px;line-height:1.6}
+.action-category{margin-top:14px}
+.action-category-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-bottom:8px}
+.action-list{list-style:none}
+.action-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(51,46,61,.5);font-size:13.5px;color:var(--text-muted);line-height:1.55}
+.action-item:last-child{border-bottom:none}
+.action-text{flex:1}
+.priority{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;padding:2px 7px;border-radius:3px;flex-shrink:0;margin-top:3px}
+.priority-critical{background:var(--accent-crimson-bg);color:var(--accent-crimson)}
+.priority-high{background:var(--accent-amber-bg);color:var(--accent-amber)}
+.priority-medium{background:var(--accent-sky-bg);color:var(--accent-sky)}
 
 /* ── TIMELINE ── */
-.compliance-page .timeline-container{position:relative;padding-left:28px}
-.compliance-page .timeline-container::before{content:'';position:absolute;left:6px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--accent-violet),var(--border),transparent)}
-.compliance-page .timeline-item{position:relative;margin-bottom:28px}
-.compliance-page .timeline-dot{position:absolute;left:-25px;top:6px;width:11px;height:11px;border-radius:50%;border:2px solid var(--accent-violet);background:var(--bg)}
-.compliance-page .timeline-dot.active{background:var(--accent-violet);box-shadow:0 0 8px rgba(167,139,250,.4)}
-.compliance-page .timeline-dot.past{border-color:var(--accent-emerald);background:var(--accent-emerald)}
-.compliance-page .timeline-date{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent-violet);margin-bottom:4px}
-.compliance-page .timeline-title{font-size:15px;font-weight:600;margin-bottom:6px}
-.compliance-page .timeline-desc{font-size:13px;color:var(--text-muted);line-height:1.6}
-.compliance-page .timeline-tags{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
-.compliance-page .timeline-tag{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 8px;background:var(--surface-2);border:1px solid var(--border);border-radius:4px;color:var(--text-dim)}
+.timeline-container{position:relative;padding-left:28px}
+.timeline-container::before{content:'';position:absolute;left:6px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--accent-violet),var(--border),transparent)}
+.timeline-item{position:relative;margin-bottom:28px}
+.timeline-dot{position:absolute;left:-25px;top:6px;width:11px;height:11px;border-radius:50%;border:2px solid var(--accent-violet);background:var(--bg)}
+.timeline-dot.active{background:var(--accent-violet);box-shadow:0 0 8px rgba(167,139,250,.4)}
+.timeline-dot.past{border-color:var(--accent-emerald);background:var(--accent-emerald)}
+.timeline-date{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent-violet);margin-bottom:4px}
+.timeline-title{font-size:15px;font-weight:600;margin-bottom:6px}
+.timeline-desc{font-size:13px;color:var(--text-muted);line-height:1.6}
+.timeline-tags{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.timeline-tag{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 8px;background:var(--surface-2);border:1px solid var(--border);border-radius:4px;color:var(--text-dim)}
 
 /* ── MATRIX ── */
-.compliance-page .matrix-wrap{overflow-x:auto}
-.compliance-page .matrix-table{width:100%;border-collapse:collapse;font-size:13px}
-.compliance-page .matrix-table thead th{text-align:left;padding:12px 14px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:0;white-space:nowrap}
-.compliance-page .matrix-table td{padding:12px 14px;border-bottom:1px solid rgba(51,46,61,.3);vertical-align:top;color:var(--text-muted)}
-.compliance-page .matrix-table tr:hover td{background:var(--surface)}
-.compliance-page .matrix-law{font-family:'JetBrains Mono',monospace;font-size:11px;white-space:nowrap}
-.compliance-page .matrix-cell{text-align:center;font-size:14px}
+.matrix-wrap{overflow-x:auto}
+.matrix-table{width:100%;border-collapse:collapse;font-size:13px}
+.matrix-table thead th{text-align:left;padding:12px 14px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:0;white-space:nowrap}
+.matrix-table td{padding:12px 14px;border-bottom:1px solid rgba(51,46,61,.3);vertical-align:top;color:var(--text-muted)}
+.matrix-table tr:hover td{background:var(--surface)}
+.matrix-law{font-family:'JetBrains Mono',monospace;font-size:11px;white-space:nowrap}
+.matrix-cell{text-align:center;font-size:14px}
 
 /* ── COMPLEXITY CALLOUT ── */
-.compliance-page .complexity-callout{margin:28px 0;padding:20px 24px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:20px;text-align:center}
-.compliance-page .cc-item-num{font-family:'DM Serif Display',serif;font-size:28px}
-.compliance-page .cc-item-label{font-size:12px;color:var(--text-dim);line-height:1.4}
+.complexity-callout{margin:28px 0;padding:20px 24px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:20px;text-align:center}
+.cc-item-num{font-family:'DM Serif Display',serif;font-size:28px}
+.cc-item-label{font-size:12px;color:var(--text-dim);line-height:1.4}
 
-/* ── COMPLIANCE FOOTER CTA ── */
-.compliance-page footer{padding:40px 0 32px;border-top:1px solid var(--border)}
-.compliance-page .footer-cta{text-align:center;margin-bottom:32px}
-.compliance-page .footer-cta h3{font-family:'DM Serif Display',serif;font-size:24px;font-weight:400;margin-bottom:10px;color:var(--text)}
-.compliance-page .footer-cta p{font-size:14px;color:var(--text-muted);max-width:600px;margin:0 auto 20px;line-height:1.7}
-.compliance-page .footer-bottom{text-align:center;font-size:12px;color:var(--text-dim)}
+/* ── FOOTER ── */
+footer{padding:40px 0 32px;border-top:1px solid var(--border)}
+.footer-cta{text-align:center;margin-bottom:32px}
+.footer-cta h3{font-family:'DM Serif Display',serif;font-size:24px;font-weight:400;margin-bottom:10px}
+.footer-cta p{font-size:14px;color:var(--text-muted);max-width:600px;margin:0 auto 20px;line-height:1.7}
+.footer-bottom{text-align:center;font-size:12px;color:var(--text-dim)}
 
 /* ── EMAIL GATE MODAL ── */
-.compliance-page .email-gate-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(12,10,15,.85);backdrop-filter:blur(6px);z-index:1000;align-items:center;justify-content:center;padding:24px}
-.compliance-page .email-gate-overlay.visible{display:flex;animation:cp-fadeIn .2s ease}
-@keyframes cp-fadeIn{from{opacity:0}to{opacity:1}}
-.compliance-page .email-gate-modal{background:var(--surface);border:1px solid var(--border-accent);border-radius:var(--radius);padding:36px;max-width:460px;width:100%;position:relative;animation:cp-slideUp .3s ease}
-@keyframes cp-slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.compliance-page .email-gate-close{position:absolute;top:16px;right:16px;background:0;border:0;color:var(--text-dim);font-size:18px;cursor:pointer;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:4px}
-.compliance-page .email-gate-close:hover{color:var(--text);background:var(--surface-2)}
-.compliance-page .email-gate-modal h3{font-family:'DM Serif Display',serif;font-size:20px;font-weight:400;margin-bottom:6px;color:var(--text)}
-.compliance-page .email-gate-modal .gate-sub{font-size:13.5px;color:var(--text-muted);margin-bottom:20px;line-height:1.6}
-.compliance-page .email-input-wrap{position:relative;margin-bottom:8px}
-.compliance-page .email-input{width:100%;padding:14px 16px;background:var(--surface-2);border:1.5px solid var(--border-accent);border-radius:var(--radius-sm);color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border-color .2s}
-.compliance-page .email-input:focus{border-color:var(--accent-violet)}
-.compliance-page .email-input.error{border-color:var(--accent-crimson);animation:cp-shake .3s ease}
-.compliance-page .email-input.valid{border-color:var(--accent-emerald)}
-@keyframes cp-shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
-.compliance-page .email-error{font-size:12px;color:var(--accent-crimson);margin-bottom:12px;min-height:18px;line-height:1.4}
-.compliance-page .email-hint{font-size:11.5px;color:var(--text-dim);margin-bottom:16px;display:flex;align-items:center;gap:6px}
-.compliance-page .gate-submit{width:100%;padding:14px;background:var(--accent-violet);color:var(--bg);font-weight:700;font-size:14px;border:none;border-radius:var(--radius-sm);cursor:pointer;transition:all .2s;font-family:inherit}
-.compliance-page .gate-submit:hover{background:#b99dfc;transform:translateY(-1px)}
-.compliance-page .gate-submit:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.compliance-page .gate-privacy{font-size:11px;color:var(--text-dim);text-align:center;margin-top:12px;line-height:1.5}
+.email-gate-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(12,10,15,.85);backdrop-filter:blur(6px);z-index:1000;align-items:center;justify-content:center;padding:24px}
+.email-gate-overlay.visible{display:flex;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.email-gate-modal{background:var(--surface);border:1px solid var(--border-accent);border-radius:var(--radius);padding:36px;max-width:460px;width:100%;position:relative;animation:slideUp .3s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.email-gate-close{position:absolute;top:16px;right:16px;background:0;border:0;color:var(--text-dim);font-size:18px;cursor:pointer;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:4px}
+.email-gate-close:hover{color:var(--text);background:var(--surface-2)}
+.email-gate-modal h3{font-family:'DM Serif Display',serif;font-size:20px;font-weight:400;margin-bottom:6px}
+.email-gate-modal .gate-sub{font-size:13.5px;color:var(--text-muted);margin-bottom:20px;line-height:1.6}
+.email-input-wrap{position:relative;margin-bottom:8px}
+.email-input{width:100%;padding:14px 16px;background:var(--surface-2);border:1.5px solid var(--border-accent);border-radius:var(--radius-sm);color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border-color .2s}
+.email-input:focus{border-color:var(--accent-violet)}
+.email-input.error{border-color:var(--accent-crimson);animation:shake .3s ease}
+.email-input.valid{border-color:var(--accent-emerald)}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.email-error{font-size:12px;color:var(--accent-crimson);margin-bottom:12px;min-height:18px;line-height:1.4}
+.email-hint{font-size:11.5px;color:var(--text-dim);margin-bottom:16px;display:flex;align-items:center;gap:6px}
+.gate-submit{width:100%;padding:14px;background:var(--accent-violet);color:var(--bg);font-weight:700;font-size:14px;border:none;border-radius:var(--radius-sm);cursor:pointer;transition:all .2s;font-family:inherit}
+.gate-submit:hover{background:#b99dfc;transform:translateY(-1px)}
+.gate-submit:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.gate-privacy{font-size:11px;color:var(--text-dim);text-align:center;margin-top:12px;line-height:1.5}
 
-.compliance-page .view-section{display:none}
-.compliance-page .view-section.active{display:block}
-
-@media(max-width:768px){
-  .compliance-page .risk-strip{grid-template-columns:1fr 1fr}
-  .compliance-page .results-header{flex-direction:column}
-  .compliance-page .nav-tab{padding:10px 14px;font-size:12px}
-  .compliance-page .lead-btns{flex-direction:column;align-items:center}
-}
+.view-section{display:none}.view-section.active{display:block}
+@media(max-width:768px){.risk-strip{grid-template-columns:1fr 1fr}.results-header{flex-direction:column}.nav-tab{padding:10px 14px;font-size:12px}.lead-btns{flex-direction:column;align-items:center}}
 </style>
 </head>
 <body>
 
-<!-- Site Header (light theme from style.css) -->
-<header class="site-header">
-  <div class="site-header-inner">
-    <a href="index.html" class="site-brand">
-      <img src="logo.svg" alt="Technê AI" style="height:28px;width:auto;">
-      <span class="site-brand-sub">IL AI Ecosystem Map</span>
-    </a>
-  </div>
-</header>
-
-<nav class="site-nav">
-  <div class="site-nav-inner">
-    <a href="index.html">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-      </svg>
-      Dashboard
-    </a>
-    <a href="bills.html">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"></path>
-        <line x1="9" y1="9" x2="15" y2="9"></line>
-        <line x1="9" y1="15" x2="15" y2="15"></line>
-      </svg>
-      Bill Tracker
-    </a>
-    <a href="enacted.html">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <polyline points="20 6 9 17 4 12"></polyline>
-      </svg>
-      Enacted Laws
-    </a>
-    <a href="vectors.html">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="12" r="10"></circle>
-        <line x1="12" y1="2" x2="12" y2="12" stroke-linecap="round"></line>
-        <line x1="12" y1="12" x2="18" y2="18" stroke-linecap="round"></line>
-      </svg>
-      Regulatory Vectors
-    </a>
-    <a href="timeline.html">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="12" r="1"></circle>
-        <circle cx="12" cy="5" r="1"></circle>
-        <circle cx="12" cy="19" r="1"></circle>
-      </svg>
-      Timeline
-    </a>
-    <a href="compliance.html" class="active">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-      </svg>
-      Compliance
-    </a>
-    <a href="https://techne.ai/" target="_blank">Techne AI</a>
-    <a href="https://www.linkedin.com/in/khullani/" target="_blank">LinkedIn</a>
-  </div>
-</nav>
-
-<!-- Compliance Page Content (dark theme) -->
-<div class="compliance-page">
-
+<!--
+  ╔══════════════════════════════════════════════════════════════╗
+  ║  SETUP: Replace these 2 URLs with your Microsoft 365 links  ║
+  ║  See m365-lead-capture-setup.md for full instructions        ║
+  ╚══════════════════════════════════════════════════════════════╝
+-->
 <script>
 // ━━━ CONFIGURE THESE TWO URLs ━━━
-const FORMS_URL   = 'https://forms.office.com/Pages/ResponsePage.aspx?id=y2A80xgmz0mfNQ_iYicZmQCHuHuA-HVBgZAokBl7BFxUNVY3UUpFNkdPUTdXWVFJWkdMMVMxMlo5NS4u';
-const BOOKINGS_URL = 'https://outlook.office.com/bookwithme/user/c8a6ffe3a86d4f029b66d8d070b94ec7@techneaix1.onmicrosoft.com/meetingtype/Son9tVtnI0mUToDZK2jXhQ2?anonymous&ismsaljsauthenabled&ep=mlink';
+const FORMS_URL   = 'YOUR_FORMS_URL';   // e.g. https://forms.office.com/r/XXXXXXXXXX
+const BOOKINGS_URL = 'YOUR_BOOKINGS_URL'; // e.g. https://outlook.office.com/bookwithme/user/XXXXXXXXXX
 
 // Set all CTA hrefs on load
 document.addEventListener('DOMContentLoaded', () => {
@@ -624,7 +551,7 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
   </div>
 
-  <!-- ═══ COMPLIANCE PAGE FOOTER (internal CTA) ═══ -->
+  <!-- ═══ FOOTER ═══ -->
   <footer>
     <div class="footer-cta">
       <h3>Compliance is complex. Guidance shouldn't be.</h3>
@@ -632,23 +559,15 @@ document.addEventListener('DOMContentLoaded', () => {
       <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
         <a href="#" data-cta="book" target="_blank" class="cta-btn cta-btn-book">Book a Free Consultation →</a>
         <a href="#" data-cta="form" target="_blank" class="cta-btn cta-btn-secondary cta-btn-sm">Take the Full Assessment</a>
-        <a href="index.html" class="cta-btn cta-btn-secondary cta-btn-sm">View the Bill Tracker ↗</a>
+        <a href="https://strategy.techne.ai/illinois-AI-laws/" target="_blank" class="cta-btn cta-btn-secondary cta-btn-sm">View the Bill Tracker ↗</a>
       </div>
     </div>
     <div class="footer-bottom">
-      <p><a href="index.html">Illinois AI Ecosystem Map</a> · Powered by <a href="https://techne.ai">Technê AI</a></p>
+      <p><a href="https://strategy.techne.ai/illinois-AI-laws/">Illinois AI Ecosystem Map</a> · Powered by <a href="https://techne.ai">Technê AI</a></p>
       <p style="margin-top:6px">Data as of March 27, 2026. Not legal advice. Consult qualified counsel for implementation.</p>
     </div>
   </footer>
 </div>
-
-</div><!-- end .compliance-page -->
-
-<!-- Site Footer (light theme) -->
-<footer class="site-footer">
-  <p><strong>Illinois AI Legislative Ecosystem</strong> — Powered by Technê AI</p>
-  <p>This dashboard aggregates data from <a href="https://ilga.gov" target="_blank">ilga.gov</a>. Updated: March 27, 2026. All bill information subject to change. Not legal advice.</p>
-</footer>
 
 <script>
 // ── Email gate: blocked personal domains ──
@@ -675,6 +594,7 @@ function isWorkEmail(email) {
   if (parts.length !== 2 || !parts[1].includes('.')) return { valid: false, reason: 'Please enter a valid email address.' };
   const domain = parts[1];
   if (BLOCKED_DOMAINS.includes(domain)) return { valid: false, reason: 'Please use your work email. We send compliance briefs to organizational addresses only.' };
+  // Block obvious patterns
   if (/^(test|asdf|fake|none|no|na|n\/a)@/.test(e)) return { valid: false, reason: 'Please enter your real work email address.' };
   return { valid: true, domain: domain };
 }
@@ -683,6 +603,7 @@ const gateInput = document.getElementById('gateEmail');
 const gateError = document.getElementById('gateError');
 const gateSubmit = document.getElementById('gateSubmit');
 
+// Live validation on input
 gateInput.addEventListener('input', () => {
   const val = gateInput.value.trim();
   gateInput.classList.remove('error', 'valid');
@@ -693,6 +614,7 @@ gateInput.addEventListener('input', () => {
   }
 });
 
+// Enter key submits
 gateInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') submitEmailGate(); });
 
 function openEmailGate() {
@@ -706,10 +628,12 @@ function closeEmailGate() {
   document.body.style.overflow = '';
 }
 
+// Close on overlay click
 document.getElementById('emailGate').addEventListener('click', (e) => {
   if (e.target === document.getElementById('emailGate')) closeEmailGate();
 });
 
+// Close on Escape
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeEmailGate(); });
 
 function submitEmailGate() {
@@ -727,57 +651,31 @@ function submitEmailGate() {
   gateSubmit.disabled = true;
   gateSubmit.textContent = 'Generating your report…';
 
-  // Check if user has answered any assessment questions
-  const allScores = {...scores.e, ...scores.h, ...scores.d, ...scores.c};
-  const totalAnswered = Object.keys(allScores).length;
-
-  if (totalAnswered < 3) {
-    // Not enough answers for a meaningful report — go straight to the Form
-    gateSubmit.disabled = false;
-    gateSubmit.textContent = '📄 Generate & Download Report →';
-    closeEmailGate();
-    window.open(FORMS_URL + (FORMS_URL.includes('?') ? '&' : '?') + 'email=' + encodeURIComponent(val), '_blank');
-    return;
-  }
-
+  // Generate and download PDF
   setTimeout(() => {
-    let pdfSuccess = false;
     try {
       generateCompliancePDF(val);
-      pdfSuccess = true;
     } catch(err) {
       console.error('PDF generation error:', err);
     }
-
-    if (pdfSuccess) {
-      document.getElementById('gateStep1').style.display = 'none';
-      document.getElementById('gateStep2').style.display = 'block';
-      const formUrl = FORMS_URL + (FORMS_URL.includes('?') ? '&' : '?') + 'email=' + encodeURIComponent(val);
-      document.querySelectorAll('[data-cta="form-direct"]').forEach(a => a.href = formUrl);
-    } else {
-      gateError.textContent = 'PDF generation failed. Redirecting to the full assessment…';
-      setTimeout(() => {
-        closeEmailGate();
-        window.open(FORMS_URL, '_blank');
-      }, 1500);
-    }
+    // Switch to success state
+    document.getElementById('gateStep1').style.display = 'none';
+    document.getElementById('gateStep2').style.display = 'block';
+    // Set form direct link (bypasses email gate)
+    const formUrl = FORMS_URL + (FORMS_URL.includes('?') ? '&' : '?') + 'email=' + encodeURIComponent(val);
+    document.querySelectorAll('[data-cta="form-direct"]').forEach(a => a.href = formUrl);
+    // Reset for next use
     gateSubmit.disabled = false;
     gateSubmit.textContent = '📄 Generate & Download Report →';
   }, 300);
 }
 
-// ── Intercept Form CTA clicks ──
+// ── Intercept all Form CTA clicks to show email gate ──
 document.addEventListener('click', (e) => {
   const link = e.target.closest('[data-cta="form"]');
   if (link) {
     e.preventDefault();
-    // If user hasn't taken any assessment, go directly to the Form
-    const allScores = {...scores.e, ...scores.h, ...scores.d, ...scores.c};
-    if (Object.keys(allScores).length < 3) {
-      window.open(FORMS_URL, '_blank');
-      return;
-    }
-    // Otherwise show the email gate for PDF download
+    // Reset modal to step 1
     document.getElementById('gateStep1').style.display = 'block';
     document.getElementById('gateStep2').style.display = 'none';
     openEmailGate();
@@ -794,6 +692,7 @@ function generateCompliancePDF(userEmail) {
   const ML = 20, MR = 20, PW = W - ML - MR;
   const today = new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
 
+  // Color palette
   const C = {
     bg: [12,10,15], surface: [21,18,26], violet: [167,139,250], crimson: [244,63,94],
     amber: [251,191,36], emerald: [52,211,153], sky: [56,189,248],
@@ -801,6 +700,7 @@ function generateCompliancePDF(userEmail) {
     darkPurple: [30,26,37]
   };
 
+  // Collect assessment data
   const allScores = {...scores.e, ...scores.h, ...scores.d, ...scores.c};
   const totalQ = Object.keys(allScores).length;
   const yesCount = Object.values(allScores).filter(v=>v==='yes').length;
@@ -809,6 +709,7 @@ function generateCompliancePDF(userEmail) {
   const pct = totalQ > 0 ? Math.round((yesCount/totalQ)*100) : 0;
   const riskPct = totalQ > 0 ? Math.min(100, Math.round(((noCount + unsureCount*.7)/totalQ)*100)) : 0;
 
+  // Question metadata
   const QM = {
     'q-e1': { law:'PA 103-0804', title:'AI Employment Discrimination Act', q:'Issued AI transparency notice to employees/applicants', fix:'Inventory all AI-assisted employment decisions. Deploy transparency notices to all current employees and add disclosure to job postings immediately.', priority:'CRITICAL' },
     'q-e2': { law:'PA 103-0804', title:'AI Employment Discrimination Act', q:'Audited AI hiring tools for disparate impact', fix:'Engage counsel for a privileged bias audit of all AI employment tools. Send due diligence questionnaires to AI vendors requesting bias testing documentation.', priority:'CRITICAL' },
@@ -827,12 +728,14 @@ function generateCompliancePDF(userEmail) {
     'q-c3': { law:'PA 103-0806', title:'AI-Generated Imagery (Criminal)', q:'Content moderation policy for AI-generated NCII/CSAM', fix:'Implement content moderation policies specifically addressing AI-generated nonconsensual intimate imagery and CSAM. Ensure NCMEC and law enforcement reporting mechanisms are documented.', priority:'CRITICAL' }
   };
 
+  // Helper: draw colored rectangle
   function rect(x,y,w,h,color,radius) {
     doc.setFillColor(...color);
     if (radius) doc.roundedRect(x,y,w,h,radius,radius,'F');
     else doc.rect(x,y,w,h,'F');
   }
 
+  // Helper: wrapped text, returns y after
   function wrapText(text, x, y, maxW, fontSize, color, lineH) {
     doc.setFontSize(fontSize);
     doc.setTextColor(...color);
@@ -847,8 +750,11 @@ function generateCompliancePDF(userEmail) {
 
   // ══════ PAGE 1: COVER ══════
   rect(0, 0, W, H, C.bg);
+
+  // Top accent bar
   rect(0, 0, W, 3, C.violet);
 
+  // Logo text
   doc.setFont('helvetica','bold');
   doc.setFontSize(28);
   doc.setTextColor(...C.white);
@@ -856,19 +762,23 @@ function generateCompliancePDF(userEmail) {
   doc.setTextColor(...C.violet);
   doc.text(' AI', ML + doc.getTextWidth('TECHNE'), 38);
 
+  // Divider
   rect(ML, 46, 40, 0.5, C.violet);
 
+  // Title
   doc.setFont('helvetica','bold');
   doc.setFontSize(24);
   doc.setTextColor(...C.white);
   doc.text('Illinois AI Compliance', ML, 65);
   doc.text('Readiness Report', ML, 76);
 
+  // Subtitle
   doc.setFont('helvetica','normal');
   doc.setFontSize(11);
   doc.setTextColor(...C.muted);
   doc.text('Assessment results and compliance gap analysis', ML, 90);
 
+  // Score circle
   const cx = W - MR - 30, cy = 65;
   doc.setDrawColor(...(pct >= 80 ? C.emerald : pct >= 50 ? C.amber : C.crimson));
   doc.setLineWidth(1.5);
@@ -881,6 +791,7 @@ function generateCompliancePDF(userEmail) {
   doc.setTextColor(...C.muted);
   doc.text('READINESS', cx, cy + 11, { align: 'center' });
 
+  // Meta info cards
   let my = 108;
   rect(ML, my, PW, 48, C.darkPurple, 3);
   doc.setFontSize(9);
@@ -905,6 +816,7 @@ function generateCompliancePDF(userEmail) {
   doc.setFont('helvetica','normal');
   doc.text(totalQ + ' questions across ' + Object.keys(scores).filter(k=>Object.keys(scores[k]).length>0).length + ' compliance domains', ML + 50, my + 40);
 
+  // Stats bar
   my = 168;
   const statsW = PW / 4;
   [[yesCount, 'Compliant', C.emerald], [noCount, 'Gaps', C.crimson], [unsureCount, 'Uncertain', C.amber], [totalQ, 'Total Items', C.violet]].forEach(([val,label,clr], i) => {
@@ -920,6 +832,7 @@ function generateCompliancePDF(userEmail) {
     doc.text(label, sx + statsW/2, my + 22, { align:'center' });
   });
 
+  // Risk meter
   my = 208;
   doc.setFontSize(9);
   doc.setTextColor(...C.muted);
@@ -927,6 +840,7 @@ function generateCompliancePDF(userEmail) {
   rect(ML, my + 4, PW, 4, C.darkPurple, 2);
   if (riskPct > 0) rect(ML, my + 4, PW * riskPct / 100, 4, riskColor, 2);
 
+  // Disclaimer
   my = 225;
   rect(ML, my, PW, 20, C.darkPurple, 2);
   doc.setFontSize(7.5);
@@ -934,6 +848,7 @@ function generateCompliancePDF(userEmail) {
   const discLines = doc.splitTextToSize('This report is based on your self-assessment responses and provides a preliminary compliance gap analysis. It is not legal advice. Consult qualified legal counsel for implementation of any compliance measures. Data reflects Illinois AI legislation as of March 27, 2026.', PW - 16);
   discLines.forEach((line, i) => doc.text(line, ML + 8, my + 8 + i * 3.5));
 
+  // Footer
   doc.setFontSize(7);
   doc.setTextColor(...C.dim);
   doc.text('TECHNE AI  ·  techne.ai  ·  strategy.techne.ai/illinois-AI-laws', W/2, H - 12, { align:'center' });
@@ -944,6 +859,7 @@ function generateCompliancePDF(userEmail) {
   rect(0, 0, W, H, C.bg);
   rect(0, 0, W, 3, C.violet);
 
+  // Header
   doc.setFont('helvetica','bold');
   doc.setFontSize(16);
   doc.setTextColor(...C.white);
@@ -958,6 +874,7 @@ function generateCompliancePDF(userEmail) {
   let gapNum = 0;
   let pageNum = 2;
 
+  // Gaps (No answers)
   const noAnswers = Object.entries(allScores).filter(([,v]) => v === 'no');
   const unsureAnswers = Object.entries(allScores).filter(([,v]) => v === 'unsure');
 
@@ -980,26 +897,31 @@ function generateCompliancePDF(userEmail) {
         doc.addPage(); rect(0,0,W,H,C.bg); rect(0,0,W,3,C.violet); py = 18; pageNum++;
       }
 
+      // Gap card
       const cardH = 42;
       rect(ML, py, PW, cardH, C.darkPurple, 2);
       rect(ML, py, 2, cardH, C.crimson);
 
+      // Gap number + priority
       doc.setFont('helvetica','bold');
       doc.setFontSize(8);
       doc.setTextColor(...C.crimson);
       doc.text('GAP #' + gapNum + '  ·  ' + m.priority, ML + 8, py + 8);
 
+      // Law tag
       doc.setFont('helvetica','normal');
       doc.setFontSize(7);
       doc.setTextColor(...C.violet);
       doc.text(m.law + ' — ' + m.title, ML + 8, py + 14);
 
+      // Question
       doc.setFont('helvetica','bold');
       doc.setFontSize(9);
       doc.setTextColor(...C.text);
       const qLines = doc.splitTextToSize(m.q, PW - 16);
       qLines.forEach((line, i) => doc.text(line, ML + 8, py + 21 + i * 4));
 
+      // Remediation
       doc.setFont('helvetica','normal');
       doc.setFontSize(7.5);
       doc.setTextColor(...C.muted);
@@ -1013,6 +935,7 @@ function generateCompliancePDF(userEmail) {
     });
   }
 
+  // Uncertain items
   if (unsureAnswers.length > 0) {
     if (py > H - 55) {
       doc.setFontSize(7); doc.setTextColor(...C.dim);
@@ -1050,6 +973,7 @@ function generateCompliancePDF(userEmail) {
     });
   }
 
+  // Compliant items summary
   const yesAnswers = Object.entries(allScores).filter(([,v]) => v === 'yes');
   if (yesAnswers.length > 0) {
     if (py > H - 40) {
@@ -1077,6 +1001,7 @@ function generateCompliancePDF(userEmail) {
     });
   }
 
+  // Page footer
   doc.setFontSize(7); doc.setTextColor(...C.dim);
   doc.text('Page ' + pageNum, W - MR, H - 12, { align:'right' });
   doc.text('TECHNE AI  ·  techne.ai', W/2, H - 12, { align:'center' });
@@ -1095,6 +1020,7 @@ function generateCompliancePDF(userEmail) {
 
   py = 48;
 
+  // Step 1
   rect(ML, py, PW, 36, C.darkPurple, 3);
   rect(ML, py, 3, 36, C.violet);
   doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(...C.violet);
@@ -1104,6 +1030,7 @@ function generateCompliancePDF(userEmail) {
   s1.forEach((line, i) => doc.text(line, ML + 10, py + 17 + i * 3.8));
   py += 44;
 
+  // Step 2
   rect(ML, py, PW, 36, C.darkPurple, 3);
   rect(ML, py, 3, 36, C.emerald);
   doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(...C.emerald);
@@ -1113,6 +1040,7 @@ function generateCompliancePDF(userEmail) {
   s2.forEach((line, i) => doc.text(line, ML + 10, py + 17 + i * 3.8));
   py += 44;
 
+  // Step 3
   rect(ML, py, PW, 28, C.darkPurple, 3);
   rect(ML, py, 3, 28, C.amber);
   doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(...C.amber);
@@ -1122,6 +1050,7 @@ function generateCompliancePDF(userEmail) {
   s3.forEach((line, i) => doc.text(line, ML + 10, py + 17 + i * 3.8));
   py += 40;
 
+  // Contact block
   py += 8;
   rect(ML, py, PW, 44, [40, 30, 55], 3);
   doc.setFont('helvetica','bold'); doc.setFontSize(14); doc.setTextColor(...C.white);
@@ -1132,17 +1061,19 @@ function generateCompliancePDF(userEmail) {
   doc.setFontSize(8);
   doc.text('Illinois AI Legislative Ecosystem Map', ML + PW/2, py + 38, { align:'center' });
 
+  // Footer
   doc.setFontSize(7); doc.setTextColor(...C.dim);
   doc.text('Page ' + pageNum, W - MR, H - 12, { align:'right' });
   doc.text('TECHNE AI  ·  techne.ai', W/2, H - 12, { align:'center' });
   doc.setFontSize(6.5);
   doc.text('This report is generated from a self-assessment tool and is not legal advice.', W/2, H - 8, { align:'center' });
 
+  // Save
   doc.save('Illinois-AI-Compliance-Report_TechneAI.pdf');
 }
 
 // ── Tab nav ──
-document.querySelectorAll('.compliance-page .nav-tab').forEach(tab=>{tab.addEventListener('click',()=>{document.querySelectorAll('.compliance-page .nav-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.compliance-page .view-section').forEach(v=>v.classList.remove('active'));tab.classList.add('active');document.getElementById('view-'+tab.dataset.view).classList.add('active')})});
+document.querySelectorAll('.nav-tab').forEach(tab=>{tab.addEventListener('click',()=>{document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.view-section').forEach(v=>v.classList.remove('active'));tab.classList.add('active');document.getElementById('view-'+tab.dataset.view).classList.add('active')})});
 
 function toggleAssess(id){document.getElementById(id).classList.toggle('open')}
 function toggleStake(id){document.getElementById(id).classList.toggle('open')}
