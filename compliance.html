@@ -185,7 +185,7 @@ body{background:#0c0a0f !important}
 .gate-row .gate-field{flex:1}
 .gate-field{margin-bottom:10px}
 .gate-field label{display:block;font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:4px}
-.gate-input{width:100%;padding:12px 14px;background:var(--surface-2);border:1.5px solid var(--border-accent);border-radius:var(--radius-sm);color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border-color .2s}
+.gate-input{width:100%;padding:12px 14px;background:var(--surface-2);border:1.5px solid var(--border-accent);border-radius:var(--radius-sm);color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border-color .2s;box-sizing:border-box}
 .gate-input:focus{border-color:var(--accent-violet)}
 .gate-input.error{border-color:var(--accent-crimson)}
 .gate-input.valid{border-color:var(--accent-emerald)}
@@ -1231,8 +1231,10 @@ function submitLeadGate() {
       return;
     }
 
+    if (!window.jspdf) { btn.disabled = false; btn.textContent = 'Generate & Download Report →'; alert('PDF library failed to load. Please check your internet connection and reload the page.'); return; }
+
     setTimeout(() => {
-      try { generateCompliancePDF(info.email); } catch(err) { console.error('PDF generation error:', err); }
+      try { generateCompliancePDF(info.email); } catch(err) { console.error('PDF generation error:', err); alert('There was an error generating your PDF. Please try again.'); }
       document.getElementById('gateStep1').style.display = 'none';
       document.getElementById('gateStep2').style.display = 'block';
       const formUrl = FORMS_URL + (FORMS_URL.includes('?') ? '&' : '?') + 'email=' + encodeURIComponent(info.email);
@@ -1274,19 +1276,15 @@ document.addEventListener('click', (e) => {
   const link = e.target.closest('[data-cta="form"]');
   if (link) {
     e.preventDefault();
-    if (leadInfo) {
-      // Already captured — go straight to PDF mode
-      openLeadGate('pdf');
-    } else {
-      openLeadGate('pdf');
-    }
+    openLeadGate('pdf');
   }
 });
 
 // Direct PDF download — lead info already captured
 function downloadPDFDirect() {
   if (!leadInfo) { openLeadGate('pdf'); return; }
-  try { generateCompliancePDF(leadInfo.email); } catch(err) { console.error('PDF error:', err); }
+  if (!window.jspdf) { alert('PDF library failed to load. Please check your internet connection and reload the page.'); return; }
+  try { generateCompliancePDF(leadInfo.email); } catch(err) { console.error('PDF error:', err); alert('There was an error generating your PDF. Please try again.'); }
 }
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1456,7 +1454,7 @@ function generateCompliancePDF(userEmail) {
     rect(barX, py - 3.5, barW, barH, C.darkPurple, 2);
     if (ss.pct > 0) rect(barX, py - 3.5, barW * ss.pct / 100, barH, tc, 2);
     doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(...tc);
-    doc.text(ss.pct + '%', ML + PW - 12, py, {align:'right'});
+    doc.text(ss.pct >= 0 ? ss.pct + '%' : 'N/A', ML + PW - 12, py, {align:'right'});
     py += 10;
   });
 
@@ -1533,9 +1531,8 @@ function generateCompliancePDF(userEmail) {
       });
       py += 4;
     });
+    pageFooter(pageNum);
   }
-
-  pageFooter(pageNum);
 
   // ══════ PAGE: COMPLIANCE ROADMAP ══════
   doc.addPage(); pageNum++;
