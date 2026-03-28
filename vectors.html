@@ -271,9 +271,39 @@
     @media (max-width: 768px) {
       .network-legend {
         grid-template-columns: repeat(2, 1fr);
+        padding: 16px;
+        gap: 16px;
       }
       .cross-cutting-bills {
         grid-template-columns: 1fr;
+      }
+      #network-graph {
+        min-height: 350px;
+      }
+      .vector-detail-name {
+        font-size: 1.1rem;
+      }
+      .vector-detail-description {
+        font-size: 0.85rem;
+      }
+      .vector-detail-card {
+        padding: 20px 16px;
+      }
+      .vector-bills-table {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .vector-bills-table table {
+        min-width: 500px;
+      }
+    }
+    @media (max-width: 480px) {
+      .network-legend {
+        grid-template-columns: 1fr;
+      }
+      .vector-detail-header {
+        flex-direction: column;
+        gap: 4px;
       }
     }
   </style>
@@ -631,6 +661,12 @@
     links = [];
     nodeMap = {};
 
+    // Responsive node sizing
+    const vectorRadius = isMobile ? 20 : 28;
+    const billRadius = isMobile ? 11 : 16;
+    const smallRadius = isMobile ? 6 : 10;
+    const labelFontSize = isMobile ? '9px' : '11px';
+
     // Add vector nodes (large)
     billsData.vectors.forEach(vector => {
       const nodeId = `v-${vector.id}`;
@@ -639,7 +675,7 @@
         type: 'vector',
         label: vector.shortName,
         color: vector.color,
-        radius: 28
+        radius: vectorRadius
       });
       nodeMap[nodeId] = { id: nodeId, type: 'vector' };
     });
@@ -658,7 +694,7 @@
         status: bill.status,
         statusClass: bill.statusClass,
         color: primaryVectorColor,
-        radius: 16,
+        radius: billRadius,
         billId: bill.id
       });
       nodeMap[nodeId] = { id: nodeId, type: 'bill', bill: bill };
@@ -680,7 +716,7 @@
           type: 'sponsor',
           label: bill.sponsor,
           color: '#969696',
-          radius: 10
+          radius: smallRadius
         });
         nodeMap[sponsorNodeId] = { id: sponsorNodeId, type: 'sponsor' };
       }
@@ -698,7 +734,7 @@
           type: 'committee',
           label: bill.committee,
           color: '#7d7d7d',
-          radius: 10
+          radius: smallRadius
         });
         nodeMap[committeeNodeId] = { id: committeeNodeId, type: 'committee' };
       }
@@ -709,10 +745,11 @@
       });
     });
 
-    // Create SVG
+    // Create SVG — responsive sizing
     const container = document.getElementById('network-graph');
     const width = container.clientWidth;
-    const height = 560;
+    const isMobile = width < 600;
+    const height = isMobile ? 400 : 560;
 
     const svg = d3.select('#network-graph').append('svg')
       .attr('width', width)
@@ -730,22 +767,26 @@
       .attr('points', '0 0, 10 3, 0 6')
       .attr('fill', 'var(--gray-300)');
 
-    // Create force simulation
+    // Create force simulation — scale forces for viewport
+    const linkDist = isMobile ? 50 : 80;
+    const chargeSt = isMobile ? -100 : -200;
+    const collisionPad = isMobile ? 4 : 8;
+
     simulation = d3.forceSimulation(nodes)
       .force('link', d3.forceLink(links)
         .id(d => d.id)
         .distance(d => {
-          if (d.type === 'bill-vector') return 80;
-          if (d.type === 'bill-sponsor') return 60;
-          if (d.type === 'bill-committee') return 60;
-          return 100;
+          if (d.type === 'bill-vector') return linkDist;
+          if (d.type === 'bill-sponsor') return linkDist * 0.75;
+          if (d.type === 'bill-committee') return linkDist * 0.75;
+          return linkDist * 1.25;
         })
         .strength(0.4)
       )
-      .force('charge', d3.forceManyBody().strength(-200))
+      .force('charge', d3.forceManyBody().strength(chargeSt))
       .force('center', d3.forceCenter(width / 2, height / 2))
       .force('collision', d3.forceCollide()
-        .radius(d => d.radius + 8)
+        .radius(d => d.radius + collisionPad)
       );
 
     // Render links
@@ -820,14 +861,19 @@
         }
       });
 
-    // Render labels
+    // Render labels — only show vector and bill labels (skip sponsor/committee to reduce overlap)
+    const labelData = isMobile
+      ? nodes.filter(d => d.type === 'vector')
+      : nodes.filter(d => d.type === 'vector' || d.type === 'bill');
+
     const label = svg.selectAll('.node-label')
-      .data(nodes)
+      .data(labelData)
       .enter()
       .append('text')
       .attr('class', 'node-label')
       .attr('text-anchor', 'middle')
-      .attr('dy', '0.3em')
+      .attr('dy', d => d.type === 'vector' ? '0.3em' : (isMobile ? '0.3em' : '0.3em'))
+      .style('font-size', d => d.type === 'vector' ? (isMobile ? '9px' : '11px') : (isMobile ? '7px' : '10px'))
       .text(d => {
         if (d.type === 'vector') return d.label;
         if (d.type === 'bill') return d.label.replace('SB', 'S').replace('HB', 'H');
@@ -847,8 +893,8 @@
         .attr('cy', d => d.y = Math.max(d.radius, Math.min(height - d.radius, d.y)));
 
       label
-        .attr('x', d => d.x)
-        .attr('y', d => d.y);
+        .attr('x', d => Math.max(d.radius, Math.min(width - d.radius, d.x)))
+        .attr('y', d => Math.max(d.radius, Math.min(height - d.radius, d.y)));
     });
 
     // Drag handlers
