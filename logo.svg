@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 60" fill="none">
+  <style>
+    .logo-text { font-family: 'Lora', Georgia, serif; font-weight: 700; font-size: 42px; fill: #ffffff; letter-spacing: 0.08em; }
+    .logo-ai { font-family: 'Lora', Georgia, serif; font-weight: 700; font-size: 42px; fill: #bd47e6; letter-spacing: 0.08em; }
+  </style>
+  <!-- TECHNE in geometric style -->
+  <g transform="translate(0, 46)">
+    <!-- T -->
+    <path d="M0 -36 L30 -36 L30 -30 L18 -30 L18 0 L12 0 L12 -30 L0 -30 Z" fill="#e4e4e4"/>
+    <!-- E -->
+    <path d="M36 -36 L60 -36 L60 -30 L42 -30 L42 -21 L57 -21 L57 -15 L42 -15 L42 -6 L60 -6 L60 0 L36 0 Z" fill="#e4e4e4"/>
+    <!-- C -->
+    <path d="M66 -36 L90 -36 L90 -30 L72 -30 L72 -6 L90 -6 L90 0 L66 0 Z" fill="#e4e4e4"/>
+    <!-- H -->
+    <path d="M96 -36 L102 -36 L102 -21 L120 -21 L120 -36 L126 -36 L126 0 L120 0 L120 -15 L102 -15 L102 0 L96 0 Z" fill="#e4e4e4"/>
+    <!-- N -->
+    <path d="M134 -36 L140 -36 L160 -10 L160 -36 L166 -36 L166 0 L160 0 L140 -26 L140 0 L134 0 Z" fill="#e4e4e4"/>
+    <!-- E -->
+    <path d="M174 -36 L198 -36 L198 -30 L180 -30 L180 -21 L195 -21 L195 -15 L180 -15 L180 -6 L198 -6 L198 0 L174 0 Z" fill="#e4e4e4"/>
+    <!-- Spacer -->
+    <!-- A -->
+    <path d="M220 -36 L228 -36 L244 0 L238 0 L234 -9 L214 -9 L210 0 L204 0 Z M224 -28 L216 -15 L232 -15 Z" fill="#bd47e6"/>
+    <!-- I -->
+    <path d="M250 -36 L256 -36 L256 0 L250 0 Z" fill="#bd47e6"/>
+  </g>
+</svg>
