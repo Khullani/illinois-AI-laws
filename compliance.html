@@ -8,6 +8,8 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
 <style>
+/* ── Body override for dark page ── */
+body{background:#0c0a0f !important}
 /* ── Compliance page dark theme (scoped) ── */
 .compliance-page{--bg:#0c0a0f;--surface:#15121a;--surface-2:#1e1a25;--surface-3:#272230;--border:#332e3d;--border-accent:#4a3f5c;--text:#e8e4ee;--text-muted:#9990a8;--text-dim:#6b6280;--accent-violet:#a78bfa;--accent-violet-bg:rgba(167,139,250,.08);--accent-rose:#fb7185;--accent-rose-bg:rgba(251,113,133,.08);--accent-amber:#fbbf24;--accent-amber-bg:rgba(251,191,36,.08);--accent-emerald:#34d399;--accent-emerald-bg:rgba(52,211,153,.08);--accent-sky:#38bdf8;--accent-sky-bg:rgba(56,189,248,.08);--accent-crimson:#f43f5e;--accent-crimson-bg:rgba(244,63,94,.08);--accent-orange:#fb923c;--accent-orange-bg:rgba(251,146,60,.08);--radius:10px;--radius-sm:6px;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
 .compliance-page a{color:var(--accent-violet);text-decoration:none}
@@ -530,7 +532,7 @@ const SECTIONS = [
   {
     id: 's1', title: 'Employment AI Compliance', subtitle: 'PA 103-0804, PA 101-0260',
     icon: '🏢', iconBg: 'var(--accent-rose-bg)', iconColor: 'var(--accent-rose)',
-    condition: (p) => p.aiEmployment !== 'no' || parseInt(p.orgSize) > 50,
+    condition: (p) => p.aiEmployment !== 'no' || (p.orgSize && p.orgSize !== '1-50'),
     questions: [
       { id:'S1-Q1', formId:'Q13', weight:3, law:'PA 103-0804', lawName:'AI Employment Discrimination Act', text:'Have you issued a formal AI transparency notice to all current employees explaining which employment decisions use AI?', gap:'You are currently in violation. IDHR can accept complaints today. Any employee or applicant can file a charge. Priority: inventory all AI-assisted decisions and issue notices immediately.', remediation:'Inventory all AI-assisted employment decisions. Deploy transparency notices to all current employees and add disclosure language to job postings immediately.', enforcement:'IDHR can accept complaints today. Employees and applicants have a private right of action.', timeline:'Immediate' },
       { id:'S1-Q2', formId:'Q14', weight:3, law:'PA 103-0804', lawName:'AI Employment Discrimination Act', text:'Do your job postings and application portals include AI disclosure language where AI is used to screen or rank candidates?', gap:'Applicants are not being notified of AI involvement in their screening. This is a standalone violation regardless of whether discrimination occurs.', remediation:'Add AI disclosure language to all job postings and application portals where AI screens, ranks, or evaluates candidates.', enforcement:'IDHR complaint exposure. Each undisclosed use is a separate violation.', timeline:'Immediate' },
@@ -760,7 +762,7 @@ function updateProfile() {
 
   profile = {
     industry,
-    orgSize: orgSize ? parseInt(orgSize) : 0,
+    orgSize: orgSize || '',
     aiEmployment: getRadio('pf-ai-employment'),
     healthcare: getRadio('pf-healthcare'),
     k12: getRadio('pf-k12'),
@@ -850,6 +852,14 @@ function prevStep() {
   }
 }
 
+function goToSection(secId) {
+  const idx = activeSteps.indexOf(secId);
+  if (idx >= 0) {
+    showStep(idx);
+    window.scrollTo({ top: document.getElementById('wizardProgress').offsetTop - 100, behavior: 'smooth' });
+  }
+}
+
 function answerQuestion(qId, val, btn) {
   applyAnswer(qId, val, btn, true);
 }
@@ -888,15 +898,17 @@ function computeScores() {
       sectionScores[sec.id] = { applicable: false };
       return;
     }
-    let earned = 0, possible = 0;
+    let earned = 0, possible = 0, answeredCount = 0;
     sec.questions.forEach(q => {
-      possible += q.weight;
-      if (answers[q.id] === 'yes') earned += q.weight;
+      if (answers[q.id]) { // only count answered questions
+        possible += q.weight;
+        answeredCount++;
+        if (answers[q.id] === 'yes') earned += q.weight;
+      }
     });
-    const pct = possible > 0 ? Math.round((earned / possible) * 100) : 0;
-    sectionScores[sec.id] = { applicable: true, earned, possible, pct };
-    totalEarned += earned;
-    totalPossible += possible;
+    const pct = possible > 0 ? Math.round((earned / possible) * 100) : -1; // -1 = no answers
+    sectionScores[sec.id] = { applicable: true, earned, possible, pct, answeredCount, totalQuestions: sec.questions.length };
+    if (possible > 0) { totalEarned += earned; totalPossible += possible; }
   });
 
   const overallPct = totalPossible > 0 ? Math.round((totalEarned / totalPossible) * 100) : 0;
@@ -904,6 +916,7 @@ function computeScores() {
 }
 
 function getTier(pct) {
+  if (pct < 0) return { label: 'Not Assessed', tier: 'Not Assessed', color: '#6b6280', cssVar: 'var(--text-dim)' };
   if (pct >= 80) return { label: 'Solid Foundation', tier: 'Low Risk', color: '#34d399', cssVar: 'var(--accent-emerald)' };
   if (pct >= 60) return { label: 'Gaps Identified', tier: 'Moderate Risk', color: '#fbbf24', cssVar: 'var(--accent-amber)' };
   if (pct >= 40) return { label: 'Significant Exposure', tier: 'High Risk', color: '#fb923c', cssVar: 'var(--accent-orange)' };
@@ -918,14 +931,15 @@ function renderResults() {
   const tier = getTier(overallPct);
 
   // Count gaps
-  let totalAnswered = 0, yesCount = 0, noCount = 0, unsureCount = 0, criticalGaps = 0;
+  let totalAnswered = 0, yesCount = 0, noCount = 0, unsureCount = 0, unansweredCount = 0, criticalGaps = 0;
   const allGaps = [];
 
   SECTIONS.forEach(sec => {
     if (!sectionScores[sec.id].applicable) return;
     sec.questions.forEach(q => {
       const a = answers[q.id];
-      if (a) totalAnswered++;
+      if (!a) { unansweredCount++; return; }
+      totalAnswered++;
       if (a === 'yes') yesCount++;
       if (a === 'no') { noCount++; allGaps.push({ ...q, answer: 'no', section: sec }); if (q.weight === 3) criticalGaps++; }
       if (a === 'unsure') { unsureCount++; allGaps.push({ ...q, answer: 'unsure', section: sec }); }
@@ -942,6 +956,9 @@ function renderResults() {
     const ss = sectionScores[sec.id];
     if (!ss.applicable) {
       return `<div class="score-bar-row"><span class="score-bar-label">${sec.icon} ${sec.title}</span><span class="score-bar-na">Not applicable to your organization</span></div>`;
+    }
+    if (ss.pct === -1) {
+      return `<div class="score-bar-row"><span class="score-bar-label">${sec.icon} ${sec.title}</span><span class="score-bar-na">No questions answered — <a href="#" onclick="goToSection('${sec.id}');return false;" style="color:var(--accent-violet)">go back</a></span></div>`;
     }
     const t = getTier(ss.pct);
     return `<div class="score-bar-row">
@@ -1086,6 +1103,19 @@ function submitEmailGate() {
   btn.disabled = true;
   btn.textContent = 'Generating your report…';
 
+  // Check if user has actually completed the assessment
+  const hasAnswers = Object.keys(answers).length > 0;
+
+  if (!hasAnswers) {
+    // No assessment taken — redirect to MS Form directly instead of generating empty PDF
+    btn.disabled = false;
+    btn.textContent = 'Generate & Download Report →';
+    const formUrl = FORMS_URL + (FORMS_URL.includes('?') ? '&' : '?') + 'email=' + encodeURIComponent(val);
+    closeEmailGate();
+    window.open(formUrl, '_blank');
+    return;
+  }
+
   setTimeout(() => {
     try { generateCompliancePDF(val); } catch(err) { console.error('PDF generation error:', err); }
     document.getElementById('gateStep1').style.display = 'none';
@@ -1133,7 +1163,7 @@ function generateCompliancePDF(userEmail) {
     darkPurple:[30,26,37]
   };
 
-  const tierColorMap = { '#34d399': C.emerald, '#fbbf24': C.amber, '#fb923c': C.orange, '#f43f5e': C.crimson };
+  const tierColorMap = { '#34d399': C.emerald, '#fbbf24': C.amber, '#fb923c': C.orange, '#f43f5e': C.crimson, '#6b6280': C.dim };
   const tierC = tierColorMap[tier.color] || C.crimson;
 
   // Collect all gaps
@@ -1309,7 +1339,7 @@ function generateCompliancePDF(userEmail) {
       const st = getTier(ss.pct);
       const stc = tierColorMap[st.color] || C.crimson;
       doc.setFontSize(9); doc.setTextColor(...stc);
-      doc.text(ss.pct + '% — ' + st.label, ML + PW, py, {align:'right'});
+      doc.text((ss.pct >= 0 ? ss.pct + '% — ' : '') + st.label, ML + PW, py, {align:'right'});
       py += 8;
 
       sec.questions.forEach(q => {
@@ -1322,32 +1352,37 @@ function generateCompliancePDF(userEmail) {
         const cardColor = isNo ? C.crimson : C.amber;
         const wLabel = q.weight === 3 ? 'CRITICAL' : q.weight === 2 ? 'HIGH' : 'MEDIUM';
 
-        // Card
-        const cardStartY = py;
-        rect(ML, py, PW, 2, C.darkPurple, 0);
-        rect(ML, py, 2, 50, cardColor);
-        rect(ML, py, PW, 50, C.darkPurple, 2);
+        // Compute dynamic card height
+        doc.setFont('helvetica','bold'); doc.setFontSize(9);
+        const qLines = doc.splitTextToSize(q.text, PW - 16);
+        doc.setFont('helvetica','normal'); doc.setFontSize(7.5);
+        const rLines = doc.splitTextToSize('Fix: ' + q.remediation, PW - 16);
+        const cardH = 12 + qLines.length * 4 + 2 + rLines.length * 3.2 + 6;
+
+        if (py + cardH > H - 20) { pageFooter(pageNum); doc.addPage(); pageNum++; rect(0,0,W,H,C.bg); rect(0,0,W,3,C.violet); py = 18; }
+
+        // Card background
+        rect(ML, py, PW, cardH, C.darkPurple, 2);
+        rect(ML, py, 2, cardH, cardColor);
 
         // Priority tag + law
         doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(...cardColor);
         doc.text(wLabel + '  ·  ' + q.law, ML+8, py+8);
 
+        // Timeline on right
+        doc.setFontSize(7); doc.setTextColor(...C.dim);
+        doc.text('Timeline: ' + q.timeline, ML + PW - 8, py + 8, {align:'right'});
+
         // Question text
         doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(...C.text);
-        const qLines = doc.splitTextToSize(q.text, PW - 16);
-        qLines.forEach((line, i) => { if (py + 15 + i*4 < cardStartY + 48) doc.text(line, ML+8, py+15+i*4); });
+        qLines.forEach((line, i) => doc.text(line, ML+8, py+15+i*4));
 
         // Remediation
         const remY = py + 15 + qLines.length * 4 + 2;
         doc.setFont('helvetica','normal'); doc.setFontSize(7.5); doc.setTextColor(...C.muted);
-        const rLines = doc.splitTextToSize('Fix: ' + q.remediation, PW - 16);
-        rLines.forEach((line, i) => { if (remY + i*3.2 < cardStartY + 48) doc.text(line, ML+8, remY+i*3.2); });
+        rLines.forEach((line, i) => doc.text(line, ML+8, remY+i*3.2));
 
-        // Enforcement & timeline on right
-        doc.setFontSize(7); doc.setTextColor(...C.dim);
-        doc.text('Timeline: ' + q.timeline, ML + PW - 8, py + 8, {align:'right'});
-
-        py += 56;
+        py += cardH + 6;
       });
       py += 4;
     });
@@ -1532,16 +1567,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (hasState && Object.keys(profile).length > 0 && profile.industry) {
     // Restore profile form
     document.getElementById('pf-industry').value = profile.industry || '';
-    const sizeMap = {'1':1,'51':51,'251':251,'1001':1001,'5001':5001};
-    const sizeStr = Object.keys(sizeMap).find(k => profile.orgSize >= parseInt(k)) || '';
     if (profile.orgSize) {
-      const opts = document.getElementById('pf-orgsize').options;
-      for (let i = 0; i < opts.length; i++) {
-        if (parseInt(opts[i].value) === profile.orgSize || opts[i].value === String(profile.orgSize)) {
-          document.getElementById('pf-orgsize').value = opts[i].value;
-          break;
-        }
-      }
+      document.getElementById('pf-orgsize').value = profile.orgSize;
     }
     const radioFields = {'pf-ai-employment':'aiEmployment','pf-healthcare':'healthcare','pf-k12':'k12','pf-ai-content':'aiContent','pf-chatbots':'chatbots','pf-lending':'lending'};
     Object.entries(radioFields).forEach(([name, key]) => {
