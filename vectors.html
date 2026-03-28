@@ -661,6 +661,12 @@
     links = [];
     nodeMap = {};
 
+    // Responsive sizing — must compute before building nodes
+    const container = document.getElementById('network-graph');
+    const width = container.clientWidth;
+    const isMobile = width < 600;
+    const height = isMobile ? 400 : 560;
+
     // Responsive node sizing
     const vectorRadius = isMobile ? 20 : 28;
     const billRadius = isMobile ? 11 : 16;
@@ -745,12 +751,7 @@
       });
     });
 
-    // Create SVG — responsive sizing
-    const container = document.getElementById('network-graph');
-    const width = container.clientWidth;
-    const isMobile = width < 600;
-    const height = isMobile ? 400 : 560;
-
+    // Create SVG
     const svg = d3.select('#network-graph').append('svg')
       .attr('width', width)
       .attr('height', height);
