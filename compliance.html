@@ -322,7 +322,7 @@ body{background:#0c0a0f !important}
   <!-- CONFIG BANNER -->
   <div class="config-banner" id="configBanner">
     <span>⚙️</span>
-    <div><strong>Setup required:</strong> Open this file and replace <code>YOUR_FORMS_URL</code> and <code>YOUR_BOOKINGS_URL</code> at the top of the <code>&lt;script&gt;</code> block with your Microsoft Forms and Bookings links.<span class="dismiss" onclick="this.closest('.config-banner').classList.add('hidden')"> ✕</span></div>
+    <div><strong>Setup required:</strong> Open this file and replace <code>YOUR_WEBHOOK_URL</code> at the top of the <code>&lt;script&gt;</code> block with your Power Automate HTTP trigger URL. See the setup guide for instructions.<span class="dismiss" onclick="this.closest('.config-banner').classList.add('hidden')"> ✕</span></div>
   </div>
 
   <!-- HERO -->
@@ -431,7 +431,7 @@ body{background:#0c0a0f !important}
         </div>
       </div></div>
 
-      <div class="inline-cta"><h4>42 action items. 7 statutes. Where do you start?</h4><p>We build prioritized compliance roadmaps tailored to your AI usage, risk profile, and stakeholder mix.</p><div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><a href="#" data-cta="form" class="cp-btn">Get a Compliance Roadmap →</a><a href="#" data-cta="book" target="_blank" class="cp-btn cp-btn-book cp-btn-sm">Book a Free Consultation</a></div></div>
+      <div class="inline-cta"><h4>42 action items. 7 statutes. Where do you start?</h4><p>We build prioritized compliance roadmaps tailored to your AI usage, risk profile, and stakeholder mix.</p><div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><a href="#" data-cta="book" target="_blank" class="cp-btn cp-btn-book">Book a Free Consultation →</a></div></div>
     </div>
   </div>
 
@@ -485,7 +485,7 @@ body{background:#0c0a0f !important}
 
       <div class="stake-card" id="hz-4"><div class="stake-header" onclick="toggleStake('hz-4')"><div class="stake-left"><div class="stake-icon" style="background:var(--accent-sky-bg);color:var(--accent-sky)">⚡</div><div><div class="stake-name">SB 3364 — Algorithmic Civil Rights Expansion</div><div class="stake-scope">Beyond employment → housing, credit, public accommodations</div></div></div><div class="stake-chevron">▼</div></div><div class="stake-body"><div class="law-trigger" style="border-left-color:var(--accent-sky)"><div class="law-trigger-desc">Would amend Illinois Human Rights Act to cover AI in real estate, lending, credit, and public accommodations.</div><div class="action-category"><div class="action-category-label">Prepare now</div><ul class="action-list"><li class="action-item"><div class="action-text">Financial services: audit AI lending/credit models for disparate impact</div></li><li class="action-item"><div class="action-text">Real estate: review automated valuation models</div></li></ul></div></div></div></div>
 
-      <div class="inline-cta"><h4>The law is moving. Are you?</h4><p>We don't just track bills — we help you operationalize compliance before enforcement begins.</p><div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><a href="#" data-cta="form" class="cp-btn">Get Your Compliance Brief →</a><a href="#" data-cta="book" target="_blank" class="cp-btn cp-btn-book cp-btn-sm">Book a Consultation</a></div></div>
+      <div class="inline-cta"><h4>The law is moving. Are you?</h4><p>We don't just track bills — we help you operationalize compliance before enforcement begins.</p><div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><a href="#" data-cta="book" target="_blank" class="cp-btn cp-btn-book">Book a Consultation →</a></div></div>
     </div>
   </div>
 
@@ -517,14 +517,9 @@ body{background:#0c0a0f !important}
           <h3 style="margin-bottom:4px">Report downloaded!</h3>
           <p class="gate-sub" style="margin-bottom:0">Your compliance gap report has been saved as a PDF. Check your downloads folder.</p>
         </div>
-        <div style="background:var(--surface-2);border-radius:var(--radius-sm);padding:18px;margin-bottom:16px">
-          <p style="font-size:13px;font-weight:600;margin-bottom:6px">Want a deeper analysis?</p>
-          <p style="font-size:12.5px;color:var(--text-muted);line-height:1.55;margin-bottom:14px">Complete our full assessment (3 min) and our team will send you a personalized compliance brief.</p>
-          <a href="#" data-cta="form-direct" target="_blank" class="cp-btn" style="width:100%;justify-content:center;font-size:13px;padding:12px">Take the Full Assessment →</a>
-        </div>
         <div style="background:var(--surface-2);border-radius:var(--radius-sm);padding:18px;margin-bottom:8px">
-          <p style="font-size:13px;font-weight:600;margin-bottom:6px">Or talk to us directly</p>
-          <p style="font-size:12.5px;color:var(--text-muted);line-height:1.55;margin-bottom:14px">Book a free 30-minute consultation. We'll walk through your results together.</p>
+          <p style="font-size:13px;font-weight:600;margin-bottom:6px">Want to talk through your results?</p>
+          <p style="font-size:12.5px;color:var(--text-muted);line-height:1.55;margin-bottom:14px">Book a free 30-minute consultation. We'll walk through your results and build a prioritized compliance roadmap together.</p>
           <a href="#" data-cta="book" target="_blank" class="cp-btn cp-btn-book" style="width:100%;justify-content:center;font-size:13px;padding:12px">Book a Free Consultation →</a>
         </div>
       </div>
@@ -538,7 +533,6 @@ body{background:#0c0a0f !important}
       <p>Technê AI built the Illinois AI Legislative Ecosystem tracker. We know every bill, every vector, every deadline. Let us translate that intelligence into a compliance roadmap built for your organization.</p>
       <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
         <a href="#" data-cta="book" target="_blank" class="cp-btn cp-btn-book">Book a Free Consultation →</a>
-        <a href="#" data-cta="form" class="cp-btn cp-btn-secondary cp-btn-sm">Take the Full Assessment</a>
         <a href="index.html" class="cp-btn cp-btn-secondary cp-btn-sm">View the Bill Tracker ↗</a>
       </div>
     </div>
@@ -555,8 +549,7 @@ body{background:#0c0a0f !important}
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 //  CONFIGURATION
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-const FORMS_URL = 'YOUR_FORMS_URL';
-const BOOKINGS_URL = 'YOUR_BOOKINGS_URL';
+const BOOKINGS_URL = 'https://outlook.office.com/bookwithme/user/c8a6ffe3a86d4f029b66d8d070b94ec7@techneaix1.onmicrosoft.com/meetingtype/Son9tVtnI0mUToDZK2jXhQ2?anonymous&ismsaljsauthenabled&ep=mlink';
 const WEBHOOK_URL = 'YOUR_WEBHOOK_URL'; // Power Automate HTTP trigger URL
 
 // Industry → routing question defaults
@@ -744,9 +737,9 @@ function buildProfileStep() {
       ${buildRadioField('pf-ai-employment', 'Do you use AI in employment decisions?', '(hiring, promotion, discipline, performance reviews)', ['Yes','No','Not Sure'])}
       ${buildRadioField('pf-healthcare', 'Do you provide healthcare or mental health services?', '', ['Yes','No'])}
       ${buildRadioField('pf-k12', 'Are you a K-12 school or district?', '', ['Yes','No'])}
-      ${buildRadioField('pf-ai-content', 'Do you create, distribute, or host AI-generated content?', '', ['Yes','No'])}
-      ${buildRadioField('pf-chatbots', 'Do you operate customer-facing chatbots or AI agents?', '', ['Yes','No'])}
-      ${buildRadioField('pf-lending', 'Do you use AI in lending, credit, real estate, or public accommodations decisions?', '', ['Yes','No'])}
+      ${buildRadioField('pf-ai-content', 'Do you create, distribute, or host AI-generated content?', '', ['Yes','No','Not Sure'])}
+      ${buildRadioField('pf-chatbots', 'Do you operate customer-facing chatbots or AI agents?', '', ['Yes','No','Not Sure'])}
+      ${buildRadioField('pf-lending', 'Do you use AI in lending, credit, real estate, or public accommodations decisions?', '', ['Yes','No','Not Sure'])}
     </div>
     <div class="wizard-nav">
       <div></div>
@@ -1091,7 +1084,6 @@ function renderResults() {
     </div>`;
 
   // Set CTA hrefs
-  document.querySelectorAll('[data-cta="form"]').forEach(a => a.href = FORMS_URL);
   document.querySelectorAll('[data-cta="book"]').forEach(a => a.href = BOOKINGS_URL);
 
   // POST results to Power Automate webhook
@@ -1264,9 +1256,8 @@ function submitLeadGate() {
     if (!hasAnswers) {
       btn.disabled = false;
       btn.textContent = 'Generate & Download Report →';
-      const formUrl = FORMS_URL + (FORMS_URL.includes('?') ? '&' : '?') + 'email=' + encodeURIComponent(info.email);
       closeEmailGate();
-      window.open(formUrl, '_blank');
+      window.open(BOOKINGS_URL, '_blank');
       return;
     }
 
@@ -1276,8 +1267,6 @@ function submitLeadGate() {
       try { generateCompliancePDF(info.email); } catch(err) { console.error('PDF generation error:', err); alert('There was an error generating your PDF. Please try again.'); }
       document.getElementById('gateStep1').style.display = 'none';
       document.getElementById('gateStep2').style.display = 'block';
-      const formUrl = FORMS_URL + (FORMS_URL.includes('?') ? '&' : '?') + 'email=' + encodeURIComponent(info.email);
-      document.querySelectorAll('[data-cta="form-direct"]').forEach(a => a.href = formUrl);
       btn.disabled = false;
       btn.textContent = 'Generate & Download Report →';
     }, 300);
@@ -1309,15 +1298,6 @@ document.getElementById('gateEmail').addEventListener('keydown', (e) => { if (e.
 // Close on overlay click or Escape
 document.getElementById('emailGate').addEventListener('click', (e) => { if (e.target === document.getElementById('emailGate')) closeEmailGate(); });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeEmailGate(); });
-
-// Intercept form CTA clicks — now opens lead gate in PDF mode (if already captured, skip to PDF)
-document.addEventListener('click', (e) => {
-  const link = e.target.closest('[data-cta="form"]');
-  if (link) {
-    e.preventDefault();
-    openLeadGate('pdf');
-  }
-});
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 //  WEBHOOK — POST scores + answers to Power Automate
@@ -1799,11 +1779,10 @@ function toggleStake(id) { document.getElementById(id).classList.toggle('open');
 
 // Config banner
 document.addEventListener('DOMContentLoaded', () => {
-  if (FORMS_URL !== 'YOUR_FORMS_URL' && BOOKINGS_URL !== 'YOUR_BOOKINGS_URL') {
+  if (WEBHOOK_URL !== 'YOUR_WEBHOOK_URL') {
     document.getElementById('configBanner').classList.add('hidden');
   }
   // Set CTA hrefs
-  document.querySelectorAll('[data-cta="form"]').forEach(a => a.href = FORMS_URL);
   document.querySelectorAll('[data-cta="book"]').forEach(a => a.href = BOOKINGS_URL);
 
   // Restore lead info from sessionStorage
