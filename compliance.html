@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Illinois AI Compliance Readiness — Technê AI</title>
+<link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
+<style>
+/* ── Scoped dark theme for compliance page ── */
+.compliance-page {
+  background: #0c0a0f;
+  color: #e8e4ee;
+  min-height: 100vh;
+  --bg:#0c0a0f;--surface:#15121a;--surface-2:#1e1a25;--surface-3:#272230;--border:#332e3d;--border-accent:#4a3f5c;--text:#e8e4ee;--text-muted:#9990a8;--text-dim:#6b6280;--accent-violet:#a78bfa;--accent-violet-bg:rgba(167,139,250,.08);--accent-rose:#fb7185;--accent-rose-bg:rgba(251,113,133,.08);--accent-amber:#fbbf24;--accent-amber-bg:rgba(251,191,36,.08);--accent-emerald:#34d399;--accent-emerald-bg:rgba(52,211,153,.08);--accent-sky:#38bdf8;--accent-sky-bg:rgba(56,189,248,.08);--accent-crimson:#f43f5e;--accent-crimson-bg:rgba(244,63,94,.08);--radius:10px;--radius-sm:6px;
+}
+.compliance-page a{color:var(--accent-violet);text-decoration:none}
+.compliance-page a:hover{text-decoration:underline}
+.compliance-page .container{max-width:1200px;margin:0 auto;padding:0 24px}
+
+/* ── CONFIG BANNER ── */
+.compliance-page .config-banner{margin:16px 0 0;padding:14px 18px;background:rgba(251,191,36,.06);border:1px dashed rgba(251,191,36,.25);border-radius:var(--radius-sm);font-size:12px;color:var(--accent-amber);display:flex;align-items:flex-start;gap:10px;line-height:1.5}
+.compliance-page .config-banner code{background:rgba(251,191,36,.1);padding:1px 5px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:11px}
+.compliance-page .config-banner .dismiss{margin-left:auto;cursor:pointer;opacity:.6;flex-shrink:0}
+.compliance-page .config-banner .dismiss:hover{opacity:1}
+.compliance-page .config-banner.hidden{display:none}
+
+/* ── HERO ── */
+.compliance-page .hero{padding:56px 0 40px;position:relative;overflow:hidden}
+.compliance-page .hero::before{content:'';position:absolute;top:-120px;right:-120px;width:500px;height:500px;background:radial-gradient(circle,rgba(244,63,94,.05) 0%,rgba(167,139,250,.04) 40%,transparent 70%);pointer-events:none}
+.compliance-page .hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent-crimson);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.compliance-page .pulse{width:8px;height:8px;background:var(--accent-crimson);border-radius:50%;animation:cp-pulse 2s ease-in-out infinite}
+@keyframes cp-pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(244,63,94,.4)}50%{opacity:.8;box-shadow:0 0 0 6px rgba(244,63,94,0)}}
+.compliance-page h1{font-family:'DM Serif Display',serif;font-size:clamp(30px,4.5vw,48px);font-weight:400;line-height:1.15;margin-bottom:16px;color:var(--text)}
+.compliance-page h1 em{font-style:italic;color:var(--accent-crimson)}
+.compliance-page .hero-sub{font-size:16px;color:var(--text-muted);max-width:720px;line-height:1.75;margin-bottom:28px}
+.compliance-page .hero-sub strong{color:var(--text)}
+
+/* ── RISK STRIP ── */
+.compliance-page .risk-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:36px}
+.compliance-page .risk-cell{background:var(--surface);padding:22px 20px;text-align:center}
+.compliance-page .risk-number{font-family:'DM Serif Display',serif;font-size:32px;line-height:1;margin-bottom:6px}
+.compliance-page .risk-label{font-size:12px;color:var(--text-dim);line-height:1.4}
+
+/* ── URGENCY ── */
+.compliance-page .urgency-box{background:linear-gradient(135deg,rgba(244,63,94,.06),rgba(251,191,36,.03));border:1px solid rgba(244,63,94,.18);border-radius:var(--radius);padding:24px;margin-bottom:36px}
+.compliance-page .urgency-headline{font-size:15px;font-weight:700;color:var(--accent-crimson);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.compliance-page .urgency-body{font-size:14px;color:var(--text-muted);line-height:1.7}
+.compliance-page .urgency-body strong{color:var(--text)}
+
+/* ── CTA BUTTONS ── */
+.compliance-page .cta-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:var(--accent-violet);color:var(--bg);font-weight:700;font-size:14px;border-radius:var(--radius-sm);text-decoration:none;transition:all .2s;white-space:nowrap;flex-shrink:0;border:none;cursor:pointer}
+.compliance-page .cta-btn:hover{background:#b99dfc;text-decoration:none;transform:translateY(-1px)}
+.compliance-page .cta-btn-secondary{background:transparent;border:1px solid var(--accent-violet);color:var(--accent-violet)}
+.compliance-page .cta-btn-secondary:hover{background:var(--accent-violet-bg)}
+.compliance-page .cta-btn-sm{padding:10px 20px;font-size:13px}
+.compliance-page .cta-btn-book{background:var(--accent-emerald);color:var(--bg)}
+.compliance-page .cta-btn-book:hover{background:#5de8b7}
+
+/* ── NAV TABS ── */
+.compliance-page .nav-tabs{display:flex;gap:4px;padding:8px 0 0;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--border)}
+.compliance-page .nav-tabs::-webkit-scrollbar{display:none}
+.compliance-page .nav-tab{padding:12px 18px;font-size:13px;font-weight:500;color:var(--text-dim);background:0;border:none;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:all .2s;font-family:inherit}
+.compliance-page .nav-tab:hover{color:var(--text-muted)}
+.compliance-page .nav-tab.active{color:var(--accent-violet);border-bottom-color:var(--accent-violet)}
+
+/* ── SECTION ── */
+.compliance-page .section{padding:32px 0}
+.compliance-page .section-header{display:flex;align-items:baseline;gap:12px;margin-bottom:8px}
+.compliance-page .section-number{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent-violet);letter-spacing:1px}
+.compliance-page .section-title{font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;color:var(--text)}
+.compliance-page .section-desc{font-size:14px;color:var(--text-muted);margin-bottom:24px;line-height:1.7;max-width:700px}
+
+/* ── ASSESS CARDS ── */
+.compliance-page .assess-grid{display:grid;gap:16px}
+.compliance-page .assess-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.compliance-page .assess-header{padding:20px 24px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+.compliance-page .assess-left{display:flex;align-items:center;gap:14px}
+.compliance-page .assess-icon{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.compliance-page .assess-name{font-weight:600;font-size:15px}
+.compliance-page .assess-scope{font-size:12px;color:var(--text-dim);margin-top:2px}
+.compliance-page .assess-score-badge{font-family:'JetBrains Mono',monospace;font-size:12px;padding:4px 10px;border-radius:20px;font-weight:500}
+.compliance-page .assess-chevron{color:var(--text-dim);transition:transform .25s;font-size:14px;margin-left:12px}
+.compliance-page .assess-card.open .assess-chevron{transform:rotate(180deg)}
+.compliance-page .assess-body{display:none;padding:0 24px 24px}
+.compliance-page .assess-card.open .assess-body{display:block}
+
+/* ── QUESTIONS ── */
+.compliance-page .question-group{margin-bottom:20px;padding:18px;background:var(--surface-2);border-radius:var(--radius-sm);border-left:3px solid var(--border-accent);transition:border-color .3s}
+.compliance-page .question-group.answered-yes{border-left-color:var(--accent-emerald)}
+.compliance-page .question-group.answered-no{border-left-color:var(--accent-crimson)}
+.compliance-page .question-law{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.compliance-page .law-tag{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 8px;border-radius:4px;font-weight:500}
+.compliance-page .question-text{font-size:14px;font-weight:500;margin-bottom:10px;line-height:1.5}
+.compliance-page .question-context{font-size:12.5px;color:var(--text-dim);margin-bottom:12px;line-height:1.55;font-style:italic}
+.compliance-page .question-btns{display:flex;gap:8px}
+.compliance-page .q-btn{padding:7px 20px;font-size:13px;font-weight:600;border-radius:var(--radius-sm);border:1px solid var(--border-accent);background:0;color:var(--text-muted);cursor:pointer;transition:all .2s;font-family:inherit}
+.compliance-page .q-btn:hover{border-color:var(--text-dim);color:var(--text)}
+.compliance-page .q-btn.selected-yes{background:var(--accent-emerald-bg);border-color:var(--accent-emerald);color:var(--accent-emerald)}
+.compliance-page .q-btn.selected-no{background:var(--accent-crimson-bg);border-color:var(--accent-crimson);color:var(--accent-crimson)}
+.compliance-page .q-btn.selected-unsure{background:var(--accent-amber-bg);border-color:var(--accent-amber);color:var(--accent-amber)}
+
+/* ── GAP REVEAL ── */
+.compliance-page .gap-reveal{display:none;margin-top:10px;padding:14px 16px;background:rgba(244,63,94,.04);border:1px solid rgba(244,63,94,.12);border-radius:var(--radius-sm);font-size:13px;color:var(--text-muted);line-height:1.6}
+.compliance-page .gap-reveal strong{color:var(--accent-crimson)}
+.compliance-page .gap-reveal.visible{display:block;animation:cp-fadeSlide .3s ease}
+@keyframes cp-fadeSlide{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── RESULTS PANEL ── */
+.compliance-page .results-panel{display:none;margin-top:32px}
+.compliance-page .results-panel.visible{display:block;animation:cp-fadeSlide .4s ease}
+.compliance-page .results-score-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:32px;margin-bottom:16px}
+.compliance-page .results-header{display:flex;align-items:center;gap:24px;margin-bottom:24px;flex-wrap:wrap}
+.compliance-page .results-score-circle{width:100px;height:100px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;border:3px solid;flex-shrink:0}
+.compliance-page .results-score-num{font-family:'DM Serif Display',serif;font-size:32px;line-height:1}
+.compliance-page .results-score-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.compliance-page .results-text h3{font-family:'DM Serif Display',serif;font-size:20px;font-weight:400;margin-bottom:6px;color:var(--text)}
+.compliance-page .results-text p{font-size:14px;color:var(--text-muted);line-height:1.6}
+
+/* Risk meter */
+.compliance-page .risk-exposure{margin-top:20px;padding:20px;background:rgba(244,63,94,.04);border:1px solid rgba(244,63,94,.12);border-radius:var(--radius)}
+.compliance-page .risk-exposure h4{font-size:14px;font-weight:700;color:var(--accent-crimson);margin-bottom:10px}
+.compliance-page .risk-meter{height:8px;background:var(--surface-3);border-radius:4px;overflow:hidden;margin-bottom:12px}
+.compliance-page .risk-meter-fill{height:100%;border-radius:4px;transition:width .8s ease}
+.compliance-page .risk-item{font-size:13px;color:var(--text-muted);padding:4px 0;line-height:1.5}
+.compliance-page .results-gaps{margin-top:16px}
+.compliance-page .results-gap-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid rgba(51,46,61,.4);font-size:13.5px;color:var(--text-muted);line-height:1.55}
+.compliance-page .results-gap-item:last-child{border-bottom:none}
+.compliance-page .gap-x{color:var(--accent-crimson);font-weight:700;font-size:14px;flex-shrink:0;margin-top:1px}
+.compliance-page .gap-warn{color:var(--accent-amber);font-weight:700;font-size:14px;flex-shrink:0;margin-top:1px}
+
+/* ── LEAD CAPTURE CTA BOX ── */
+.compliance-page .lead-capture-box{background:linear-gradient(135deg,var(--surface-2),rgba(167,139,250,.04));border:1px solid rgba(167,139,250,.2);border-radius:var(--radius);padding:32px;text-align:center;margin-top:16px}
+.compliance-page .lead-capture-box h3{font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;margin-bottom:8px;color:var(--text)}
+.compliance-page .lead-capture-box .lead-sub{font-size:14px;color:var(--text-muted);max-width:560px;margin:0 auto 12px;line-height:1.65}
+.compliance-page .lead-capture-box .lead-detail{font-size:12.5px;color:var(--text-dim);margin-bottom:20px;line-height:1.5}
+.compliance-page .lead-capture-box .lead-detail strong{color:var(--text-muted)}
+.compliance-page .lead-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.compliance-page .lead-trust{display:flex;gap:16px;justify-content:center;margin-top:16px;font-size:11px;color:var(--text-dim);flex-wrap:wrap}
+.compliance-page .lead-trust span{display:flex;align-items:center;gap:4px}
+
+/* ── INLINE CTA ── */
+.compliance-page .inline-cta{margin-top:32px;padding:28px;background:linear-gradient(135deg,rgba(167,139,250,.06),rgba(167,139,250,.02));border:1px solid rgba(167,139,250,.18);border-radius:var(--radius);text-align:center}
+.compliance-page .inline-cta h4{font-family:'DM Serif Display',serif;font-size:18px;font-weight:400;margin-bottom:8px;color:var(--text)}
+.compliance-page .inline-cta p{font-size:13.5px;color:var(--text-muted);margin-bottom:16px;line-height:1.6;max-width:560px;margin-left:auto;margin-right:auto}
+.compliance-page .inline-cta .cta-btn{font-size:13px;padding:12px 24px}
+
+/* ── STAKEHOLDER CARDS ── */
+.compliance-page .stake-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;transition:border-color .2s}
+.compliance-page .stake-card:hover{border-color:var(--border-accent)}
+.compliance-page .stake-header{padding:20px 24px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+.compliance-page .stake-left{display:flex;align-items:center;gap:14px}
+.compliance-page .stake-icon{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.compliance-page .stake-name{font-weight:600;font-size:15px}
+.compliance-page .stake-scope{font-size:12px;color:var(--text-dim);margin-top:2px}
+.compliance-page .stake-chevron{color:var(--text-dim);transition:transform .25s;font-size:14px}
+.compliance-page .stake-card.open .stake-chevron{transform:rotate(180deg)}
+.compliance-page .stake-body{display:none;padding:0 24px 24px}
+.compliance-page .stake-card.open .stake-body{display:block}
+
+.compliance-page .law-trigger{margin-bottom:20px;padding:16px;background:var(--surface-2);border-radius:var(--radius-sm);border-left:3px solid var(--accent-violet)}
+.compliance-page .law-trigger-header{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.compliance-page .law-trigger-title{font-size:14px;font-weight:600}
+.compliance-page .law-trigger-desc{font-size:13px;color:var(--text-muted);margin-bottom:12px;line-height:1.6}
+.compliance-page .action-category{margin-top:14px}
+.compliance-page .action-category-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-bottom:8px}
+.compliance-page .action-list{list-style:none;padding:0;margin:0}
+.compliance-page .action-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(51,46,61,.5);font-size:13.5px;color:var(--text-muted);line-height:1.55}
+.compliance-page .action-item:last-child{border-bottom:none}
+.compliance-page .action-text{flex:1}
+.compliance-page .priority{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;padding:2px 7px;border-radius:3px;flex-shrink:0;margin-top:3px}
+.compliance-page .priority-critical{background:var(--accent-crimson-bg);color:var(--accent-crimson)}
+.compliance-page .priority-high{background:var(--accent-amber-bg);color:var(--accent-amber)}
+.compliance-page .priority-medium{background:var(--accent-sky-bg);color:var(--accent-sky)}
+
+/* ── TIMELINE ── */
+.compliance-page .timeline-container{position:relative;padding-left:28px}
+.compliance-page .timeline-container::before{content:'';position:absolute;left:6px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--accent-violet),var(--border),transparent)}
+.compliance-page .timeline-item{position:relative;margin-bottom:28px}
+.compliance-page .timeline-dot{position:absolute;left:-25px;top:6px;width:11px;height:11px;border-radius:50%;border:2px solid var(--accent-violet);background:var(--bg)}
+.compliance-page .timeline-dot.active{background:var(--accent-violet);box-shadow:0 0 8px rgba(167,139,250,.4)}
+.compliance-page .timeline-dot.past{border-color:var(--accent-emerald);background:var(--accent-emerald)}
+.compliance-page .timeline-date{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent-violet);margin-bottom:4px}
+.compliance-page .timeline-title{font-size:15px;font-weight:600;margin-bottom:6px}
+.compliance-page .timeline-desc{font-size:13px;color:var(--text-muted);line-height:1.6}
+.compliance-page .timeline-tags{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.compliance-page .timeline-tag{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 8px;background:var(--surface-2);border:1px solid var(--border);border-radius:4px;color:var(--text-dim)}
+
+/* ── MATRIX ── */
+.compliance-page .matrix-wrap{overflow-x:auto}
+.compliance-page .matrix-table{width:100%;border-collapse:collapse;font-size:13px}
+.compliance-page .matrix-table thead th{text-align:left;padding:12px 14px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:0;white-space:nowrap}
+.compliance-page .matrix-table td{padding:12px 14px;border-bottom:1px solid rgba(51,46,61,.3);vertical-align:top;color:var(--text-muted)}
+.compliance-page .matrix-table tr:hover td{background:var(--surface)}
+.compliance-page .matrix-law{font-family:'JetBrains Mono',monospace;font-size:11px;white-space:nowrap}
+.compliance-page .matrix-cell{text-align:center;font-size:14px}
+
+/* ── COMPLEXITY CALLOUT ── */
+.compliance-page .complexity-callout{margin:28px 0;padding:20px 24px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:20px;text-align:center}
+.compliance-page .cc-item-num{font-family:'DM Serif Display',serif;font-size:28px}
+.compliance-page .cc-item-label{font-size:12px;color:var(--text-dim);line-height:1.4}
+
+/* ── COMPLIANCE FOOTER CTA ── */
+.compliance-page footer{padding:40px 0 32px;border-top:1px solid var(--border)}
+.compliance-page .footer-cta{text-align:center;margin-bottom:32px}
+.compliance-page .footer-cta h3{font-family:'DM Serif Display',serif;font-size:24px;font-weight:400;margin-bottom:10px;color:var(--text)}
+.compliance-page .footer-cta p{font-size:14px;color:var(--text-muted);max-width:600px;margin:0 auto 20px;line-height:1.7}
+.compliance-page .footer-bottom{text-align:center;font-size:12px;color:var(--text-dim)}
+
+/* ── EMAIL GATE MODAL ── */
+.compliance-page .email-gate-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(12,10,15,.85);backdrop-filter:blur(6px);z-index:1000;align-items:center;justify-content:center;padding:24px}
+.compliance-page .email-gate-overlay.visible{display:flex;animation:cp-fadeIn .2s ease}
+@keyframes cp-fadeIn{from{opacity:0}to{opacity:1}}
+.compliance-page .email-gate-modal{background:var(--surface);border:1px solid var(--border-accent);border-radius:var(--radius);padding:36px;max-width:460px;width:100%;position:relative;animation:cp-slideUp .3s ease}
+@keyframes cp-slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.compliance-page .email-gate-close{position:absolute;top:16px;right:16px;background:0;border:0;color:var(--text-dim);font-size:18px;cursor:pointer;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:4px}
+.compliance-page .email-gate-close:hover{color:var(--text);background:var(--surface-2)}
+.compliance-page .email-gate-modal h3{font-family:'DM Serif Display',serif;font-size:20px;font-weight:400;margin-bottom:6px;color:var(--text)}
+.compliance-page .email-gate-modal .gate-sub{font-size:13.5px;color:var(--text-muted);margin-bottom:20px;line-height:1.6}
+.compliance-page .email-input-wrap{position:relative;margin-bottom:8px}
+.compliance-page .email-input{width:100%;padding:14px 16px;background:var(--surface-2);border:1.5px solid var(--border-accent);border-radius:var(--radius-sm);color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border-color .2s}
+.compliance-page .email-input:focus{border-color:var(--accent-violet)}
+.compliance-page .email-input.error{border-color:var(--accent-crimson);animation:cp-shake .3s ease}
+.compliance-page .email-input.valid{border-color:var(--accent-emerald)}
+@keyframes cp-shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.compliance-page .email-error{font-size:12px;color:var(--accent-crimson);margin-bottom:12px;min-height:18px;line-height:1.4}
+.compliance-page .email-hint{font-size:11.5px;color:var(--text-dim);margin-bottom:16px;display:flex;align-items:center;gap:6px}
+.compliance-page .gate-submit{width:100%;padding:14px;background:var(--accent-violet);color:var(--bg);font-weight:700;font-size:14px;border:none;border-radius:var(--radius-sm);cursor:pointer;transition:all .2s;font-family:inherit}
+.compliance-page .gate-submit:hover{background:#b99dfc;transform:translateY(-1px)}
+.compliance-page .gate-submit:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.compliance-page .gate-privacy{font-size:11px;color:var(--text-dim);text-align:center;margin-top:12px;line-height:1.5}
+
+.compliance-page .view-section{display:none}
+.compliance-page .view-section.active{display:block}
+
+@media(max-width:768px){
+  .compliance-page .risk-strip{grid-template-columns:1fr 1fr}
+  .compliance-page .results-header{flex-direction:column}
+  .compliance-page .nav-tab{padding:10px 14px;font-size:12px}
+  .compliance-page .lead-btns{flex-direction:column;align-items:center}
+}
+</style>
+</head>
+<body>
+
+<!-- Site Header (light theme from style.css) -->
+<header class="site-header">
+  <div class="site-header-inner">
+    <a href="index.html" class="site-brand">
+      <img src="logo.svg" alt="Technê AI" style="height:28px;width:auto;">
+      <span class="site-brand-sub">IL AI Ecosystem Map</span>
+    </a>
+  </div>
+</header>
+
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="index.html">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+      </svg>
+      Dashboard
+    </a>
+    <a href="bills.html">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"></path>
+        <line x1="9" y1="9" x2="15" y2="9"></line>
+        <line x1="9" y1="15" x2="15" y2="15"></line>
+      </svg>
+      Bill Tracker
+    </a>
+    <a href="enacted.html">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      Enacted Laws
+    </a>
+    <a href="vectors.html">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="2" x2="12" y2="12" stroke-linecap="round"></line>
+        <line x1="12" y1="12" x2="18" y2="18" stroke-linecap="round"></line>
+      </svg>
+      Regulatory Vectors
+    </a>
+    <a href="timeline.html">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="1"></circle>
+        <circle cx="12" cy="5" r="1"></circle>
+        <circle cx="12" cy="19" r="1"></circle>
+      </svg>
+      Timeline
+    </a>
+    <a href="compliance.html" class="active">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+      </svg>
+      Compliance
+    </a>
+    <a href="https://techne.ai/" target="_blank">Techne AI</a>
+    <a href="https://www.linkedin.com/in/khullani/" target="_blank">LinkedIn</a>
+  </div>
+</nav>
+
+<!-- Compliance Page Content (dark theme) -->
+<div class="compliance-page">
+
+<script>
+// ━━━ CONFIGURE THESE TWO URLs ━━━
+const FORMS_URL   = 'YOUR_FORMS_URL';   // e.g. https://forms.office.com/r/XXXXXXXXXX
+const BOOKINGS_URL = 'YOUR_BOOKINGS_URL'; // e.g. https://outlook.office.com/bookwithme/user/XXXXXXXXXX
+
+// Set all CTA hrefs on load
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('[data-cta="form"]').forEach(a => a.href = FORMS_URL);
+  document.querySelectorAll('[data-cta="book"]').forEach(a => a.href = BOOKINGS_URL);
+});
+</script>
+
+<div class="container">
+
+  <!-- CONFIG BANNER (visible only when URLs not set) -->
+  <div class="config-banner" id="configBanner">
+    ⚙️ &nbsp;<div><strong>Setup required:</strong> Open this file and replace <code>YOUR_FORMS_URL</code> and <code>YOUR_BOOKINGS_URL</code> at the top of the <code>&lt;script&gt;</code> block with your Microsoft Forms and Bookings links. See the setup guide for instructions.<span class="dismiss" onclick="this.closest('.config-banner').classList.add('hidden')"> ✕</span></div>
+  </div>
+
+  <!-- ═══ HERO ═══ -->
+  <div class="hero">
+    <div class="hero-eyebrow"><span class="pulse"></span> Compliance Deadline Active — PA 103-0804 in Effect</div>
+    <h1>Is Your Organization Ready for <em>Illinois AI Law?</em></h1>
+    <p class="hero-sub">Seven enacted statutes. 42 discrete compliance obligations. <strong>Enforcement rules being finalized right now.</strong> Most Illinois organizations using AI in employment, healthcare, education, or content creation have gaps they don't know about — and the penalties are already live.</p>
+  </div>
+
+  <div class="risk-strip">
+    <div class="risk-cell"><div class="risk-number" style="color:var(--accent-crimson)">7</div><div class="risk-label">Active laws with<br>compliance obligations</div></div>
+    <div class="risk-cell"><div class="risk-number" style="color:var(--accent-amber)">42</div><div class="risk-label">Discrete action items<br>across all stakeholders</div></div>
+    <div class="risk-cell"><div class="risk-number" style="color:var(--accent-rose)">29</div><div class="risk-label">Pending bills that could<br>become law this session</div></div>
+    <div class="risk-cell"><div class="risk-number" style="color:var(--accent-violet)">Apr 24</div><div class="risk-label">Committee deadline<br>for pending bills</div></div>
+  </div>
+
+  <div class="urgency-box">
+    <div class="urgency-headline">⚡ Why This Matters Right Now</div>
+    <div class="urgency-body">PA 103-0804 took effect <strong>January 1, 2026</strong>. Every Illinois employer using AI in any hiring, promotion, or discipline decision must have transparency notices deployed and disparate-impact-free systems — today. The <strong>IDHR is finalizing enforcement rules</strong> that will trigger investigations and complaints. Meanwhile, <strong>29 more bills</strong> are moving through committee with an April 24 deadline — the regulatory surface area is about to expand dramatically.</div>
+  </div>
+
+  <nav class="nav-tabs" id="nav">
+    <button class="nav-tab active" data-view="assess">Readiness Check</button>
+    <button class="nav-tab" data-view="actions">Full Action Plan</button>
+    <button class="nav-tab" data-view="timeline">Timeline</button>
+    <button class="nav-tab" data-view="matrix">Law × Action Matrix</button>
+    <button class="nav-tab" data-view="horizon">What's Coming</button>
+  </nav>
+
+  <!-- ═══ ASSESSMENT VIEW ═══ -->
+  <div class="view-section active" id="view-assess">
+    <div class="section">
+      <div class="section-header"><span class="section-number">01</span><span class="section-title">How Exposed Are You?</span></div>
+      <p class="section-desc">Answer these questions to see where your compliance gaps are. Each maps to a specific enacted Illinois AI statute. "No" or "Not Sure" answers reveal what you need to fix — and what's at stake.</p>
+
+      <div class="assess-grid">
+
+        <!-- ── EMPLOYER ── -->
+        <div class="assess-card open" id="assess-employer">
+          <div class="assess-header" onclick="toggleAssess('assess-employer')">
+            <div class="assess-left"><div class="assess-icon" style="background:var(--accent-rose-bg);color:var(--accent-rose);">🏢</div><div><div class="assess-name">Employer Readiness</div><div class="assess-scope">PA 103-0804 · PA 101-0260 — AI Employment Laws</div></div></div>
+            <div style="display:flex;align-items:center"><span class="assess-score-badge" id="score-employer" style="background:var(--surface-3);color:var(--text-dim)">Not assessed</span><span class="assess-chevron">▼</span></div>
+          </div>
+          <div class="assess-body">
+            <div class="question-group" id="q-e1"><div class="question-law"><span class="law-tag" style="background:var(--accent-crimson-bg);color:var(--accent-crimson)">PA 103-0804</span><span style="font-size:11px;color:var(--text-dim)">Effective Jan 1, 2026</span></div><div class="question-text">Have you issued a formal AI transparency notice to all employees and applicants explaining which employment decisions use AI?</div><div class="question-context">Required whenever AI influences employment decisions — regardless of whether discrimination occurs. Failure to notify is itself an IHRA violation.</div><div class="question-btns"><button class="q-btn" onclick="answer(this,'yes','e')">Yes</button><button class="q-btn" onclick="answer(this,'no','e')">No</button><button class="q-btn" onclick="answer(this,'unsure','e')">Not Sure</button></div><div class="gap-reveal" id="gap-e1"><strong>You are currently in violation.</strong> IDHR can accept complaints today. Any employee or applicant can file a charge. Priority: inventory all AI-assisted decisions and issue notices immediately.</div></div>
+
+            <div class="question-group" id="q-e2"><div class="question-law"><span class="law-tag" style="background:var(--accent-crimson-bg);color:var(--accent-crimson)">PA 103-0804</span></div><div class="question-text">Have you audited your AI hiring/promotion tools for disparate impact on protected classes?</div><div class="question-context">The statute prohibits AI in employment decisions where it results in discrimination — even unintentional. Resume screeners, assessments, and interview analyzers all fall in scope.</div><div class="question-btns"><button class="q-btn" onclick="answer(this,'yes','e')">Yes</button><button class="q-btn" onclick="answer(this,'no','e')">No</button><button class="q-btn" onclick="answer(this,'unsure','e')">Not Sure</button></div><div class="gap-reveal" id="gap-e2"><strong>Highest-exposure item.</strong> Unaudited AI tools create liability for every employment decision they influence. Engage counsel for a privileged bias audit and send due diligence questionnaires to all AI vendors.</div></div>
+
+            <div class="question-group" id="q-e3"><div class="question-law"><span class="law-tag" style="background:var(--accent-crimson-bg);color:var(--accent-crimson)">PA 103-0804</span></div><div class="question-text">Have you verified that no AI tool uses zip codes as a proxy for protected characteristics?</div><div class="question-context">Zip code proxy targeting is explicitly banned — not a gray area. Common in off-the-shelf recruiting tools.</div><div class="question-btns"><button class="q-btn" onclick="answer(this,'yes','e')">Yes</button><button class="q-btn" onclick="answer(this,'no','e')">No</button><button class="q-btn" onclick="answer(this,'unsure','e')">Not Sure</button></div><div class="gap-reveal" id="gap-e3"><strong>Enumerated violation.</strong> Many off-the-shelf tools use geographic data that creates this liability. You need a technical review of every input feature in every AI tool.</div></div>
+
+            <div class="question-group" id="q-e4"><div class="question-law"><span class="law-tag" style="background:var(--accent-crimson-bg);color:var(--accent-crimson)">PA 103-0804</span></div><div class="question-text">Have you updated your employee handbook and HR policies to reflect AI anti-discrimination requirements?</div><div class="question-btns"><button class="q-btn" onclick="answer(this,'yes','e')">Yes</button><button class="q-btn" onclick="answer(this,'no','e')">No</button><button class="q-btn" onclick="answer(this,'unsure','e')">Not Sure</button></div><div class="gap-reveal" id="gap-e4"><strong>Documentation gap.</strong> Outdated handbooks weaken your position in any IDHR investigation. Update by end of Q2 2026 at latest.</div></div>
+
+            <div class="question-group" id="q-e5"><div class="question-law"><span class="law-tag" style="background:var(--accent-amber-bg);color:var(--accent-amber)">PA 101-0260</span><span style="font-size:11px;color:var(--text-dim)">In effect since 2020</span></div><div class="question-text">If you use AI-analyzed video interviews, do you provide written explanation and obtain consent before AI evaluation?</div><div class="question-btns"><button class="q-btn" onclick="answer(this,'yes','e')">Yes</button><button class="q-btn" onclick="answer(this,'no','e')">No</button><button class="q-btn" onclick="answer(this,'unsure','e')">Not Sure</button></div><div class="gap-reveal" id="gap-e5"><strong>Six years of exposure.</strong> This law has been in effect since 2020 and is frequently overlooked. If your video interview vendor uses AI analysis, you need documented proof of notice + consent for every candidate.</div></div>
+
+            <div class="question-group" id="q-e6"><div class="question-law"><span class="law-tag" style="background:var(--accent-crimson-bg);color:var(--accent-crimson)">PA 103-0804</span></div><div class="question-text">Have you trained HR staff, hiring managers, and recruiters on the new AI employment law requirements?</div><div class="question-btns"><button class="q-btn" onclick="answer(this,'yes','e')">Yes</button><button class="q-btn" onclick="answer(this,'no','e')">No</button><button class="q-btn" onclick="answer(this,'unsure','e')">Not Sure</button></div><div class="gap-reveal" id="gap-e6"><strong>People risk.</strong> Untrained managers making AI-assisted employment decisions are your most likely source of a compliance failure.</div></div>
+          </div>
+        </div>
+
+        <!-- ── HEALTHCARE ── -->
+        <div class="assess-card" id="assess-health">
+          <div class="assess-header" onclick="toggleAssess('assess-health')">
+            <div class="assess-left"><div class="assess-icon" style="background:var(--accent-violet-bg);color:var(--accent-violet)">🏥</div><div><div class="assess-name">Healthcare / Mental Health</div><div class="assess-scope">PA 104-0539 (WOPR Act) — Effective Aug 2025</div></div></div>
+            <div style="display:flex;align-items:center"><span class="assess-score-badge" id="score-health" style="background:var(--surface-3);color:var(--text-dim)">Not assessed</span><span class="assess-chevron">▼</span></div>
+          </div>
+          <div class="assess-body">
+            <div class="question-group" id="q-h1"><div class="question-law"><span class="law-tag" style="background:var(--accent-violet-bg);color:var(--accent-violet)">PA 104-0539</span></div><div class="question-text">Have you audited all clinical AI tools to ensure none can function as an independent therapist?</div><div class="question-context">The WOPR Act flatly prohibits AI from serving as an independent mental health therapist — chatbots, triage systems, and symptom checkers included.</div><div class="question-btns"><button class="q-btn" onclick="answer(this,'yes','h')">Yes</button><button class="q-btn" onclick="answer(this,'no','h')">No</button><button class="q-btn" onclick="answer(this,'unsure','h')">Not Sure</button></div><div class="gap-reveal" id="gap-h1"><strong>Active violation.</strong> Any AI tool interpretable as independent therapy is noncompliant right now. Audit immediately — restructure or remove.</div></div>
+
+            <div class="question-group" id="q-h2"><div class="question-law"><span class="law-tag" style="background:var(--accent-violet-bg);color:var(--accent-violet)">PA 104-0539</span></div><div class="question-text">Have you disabled all emotion detection / sentiment analysis in clinical-facing AI tools?</div><div class="question-context">Flat prohibition — not a disclosure requirement.</div><div class="question-btns"><button class="q-btn" onclick="answer(this,'yes','h')">Yes</button><button class="q-btn" onclick="answer(this,'no','h')">No</button><button class="q-btn" onclick="answer(this,'unsure','h')">Not Sure</button></div><div class="gap-reveal" id="gap-h2"><strong>Absolute prohibition.</strong> Many telehealth platforms include emotion detection by default. You need a technical inventory of every AI feature in every vendor product touching clinical workflows.</div></div>
+
+            <div class="question-group" id="q-h3"><div class="question-law"><span class="law-tag" style="background:var(--accent-violet-bg);color:var(--accent-violet)">PA 104-0539</span></div><div class="question-text">Do you have a documented Human Oversight Protocol for all AI-assisted clinical decisions?</div><div class="question-btns"><button class="q-btn" onclick="answer(this,'yes','h')">Yes</button><button class="q-btn" onclick="answer(this,'no','h')">No</button><button class="q-btn" onclick="answer(this,'unsure','h')">Not Sure</button></div><div class="gap-reveal" id="gap-h3"><strong>Missing infrastructure.</strong> Without documented clinician review, your organization lacks the compliance framework to defend its practices.</div></div>
+          </div>
+        </div>
+
+        <!-- ── EDUCATION ── -->
+        <div class="assess-card" id="assess-edu">
+          <div class="assess-header" onclick="toggleAssess('assess-edu')">
+            <div class="assess-left"><div class="assess-icon" style="background:var(--accent-emerald-bg);color:var(--accent-emerald)">🏫</div><div><div class="assess-name">Education / K-12</div><div class="assess-scope">PA 104-0399 — Effective Jan 1, 2026</div></div></div>
+            <div style="display:flex;align-items:center"><span class="assess-score-badge" id="score-edu" style="background:var(--surface-3);color:var(--text-dim)">Not assessed</span><span class="assess-chevron">▼</span></div>
+          </div>
+          <div class="assess-body">
+            <div class="question-group" id="q-d1"><div class="question-law"><span class="law-tag" style="background:var(--accent-emerald-bg);color:var(--accent-emerald)">PA 104-0399</span></div><div class="question-text">Does your district have a formal AI Acceptable Use Policy for staff and students?</div><div class="question-btns"><button class="q-btn" onclick="answer(this,'yes','d')">Yes</button><button class="q-btn" onclick="answer(this,'no','d')">No</button><button class="q-btn" onclick="answer(this,'unsure','d')">Not Sure</button></div><div class="gap-reveal" id="gap-d1"><strong>ISBE guidance is coming.</strong> Get ahead with a draft policy now rather than scrambling when ISBE publishes — you'll need board approval time.</div></div>
+
+            <div class="question-group" id="q-d2"><div class="question-law"><span class="law-tag" style="background:var(--accent-emerald-bg);color:var(--accent-emerald)">PA 104-0399</span></div><div class="question-text">Have you begun developing AI literacy curriculum, including deepfake recognition?</div><div class="question-btns"><button class="q-btn" onclick="answer(this,'yes','d')">Yes</button><button class="q-btn" onclick="answer(this,'no','d')">No</button><button class="q-btn" onclick="answer(this,'unsure','d')">Not Sure</button></div><div class="gap-reveal" id="gap-d2"><strong>Curriculum mandate.</strong> Curriculum development takes semesters, not weeks. Start now.</div></div>
+
+            <div class="question-group" id="q-d3"><div class="question-law"><span class="law-tag" style="background:var(--accent-emerald-bg);color:var(--accent-emerald)">PA 104-0399</span></div><div class="question-text">Do you have a formal review process before any AI tool is deployed in classrooms?</div><div class="question-btns"><button class="q-btn" onclick="answer(this,'yes','d')">Yes</button><button class="q-btn" onclick="answer(this,'no','d')">No</button><button class="q-btn" onclick="answer(this,'unsure','d')">Not Sure</button></div><div class="gap-reveal" id="gap-d3"><strong>Shadow AI risk.</strong> Teachers and students are already using AI tools without district knowledge. Unvetted tools create simultaneous FERPA and state AI law exposure.</div></div>
+          </div>
+        </div>
+
+        <!-- ── CREATIVE ── -->
+        <div class="assess-card" id="assess-creative">
+          <div class="assess-header" onclick="toggleAssess('assess-creative')">
+            <div class="assess-left"><div class="assess-icon" style="background:var(--accent-amber-bg);color:var(--accent-amber)">🎬</div><div><div class="assess-name">Content, Media & IP</div><div class="assess-scope">PA 103-0882 · PA 103-0880 · PA 103-0806</div></div></div>
+            <div style="display:flex;align-items:center"><span class="assess-score-badge" id="score-creative" style="background:var(--surface-3);color:var(--text-dim)">Not assessed</span><span class="assess-chevron">▼</span></div>
+          </div>
+          <div class="assess-body">
+            <div class="question-group" id="q-c1"><div class="question-law"><span class="law-tag" style="background:var(--accent-amber-bg);color:var(--accent-amber)">PA 103-0882/0880</span></div><div class="question-text">Do all talent/performer contracts include specific descriptions of intended AI digital replica use, with legal representation confirmed?</div><div class="question-context">Contracts without "reasonably specific" use descriptions and legal representation are void — not voidable, void.</div><div class="question-btns"><button class="q-btn" onclick="answer(this,'yes','c')">Yes</button><button class="q-btn" onclick="answer(this,'no','c')">No</button><button class="q-btn" onclick="answer(this,'unsure','c')">Not Sure</button></div><div class="gap-reveal" id="gap-c1"><strong>Void contracts.</strong> Any AI-generated content based on a noncompliant contract has no legal foundation. Audit all talent agreements immediately.</div></div>
+
+            <div class="question-group" id="q-c2"><div class="question-law"><span class="law-tag" style="background:var(--accent-amber-bg);color:var(--accent-amber)">PA 103-0880</span></div><div class="question-text">Have you audited existing AI-generated content for unauthorized use of any person's voice, image, or likeness?</div><div class="question-btns"><button class="q-btn" onclick="answer(this,'yes','c')">Yes</button><button class="q-btn" onclick="answer(this,'no','c')">No</button><button class="q-btn" onclick="answer(this,'unsure','c')">Not Sure</button></div><div class="gap-reveal" id="gap-c2"><strong>Right of Publicity violation.</strong> In effect since August 2024. Every piece of AI-generated content in your library needs a consent audit.</div></div>
+
+            <div class="question-group" id="q-c3"><div class="question-law"><span class="law-tag" style="background:var(--accent-crimson-bg);color:var(--accent-crimson)">PA 103-0806</span></div><div class="question-text">Do you have content moderation policies specifically addressing AI-generated nonconsensual intimate imagery?</div><div class="question-btns"><button class="q-btn" onclick="answer(this,'yes','c')">Yes</button><button class="q-btn" onclick="answer(this,'no','c')">No</button><button class="q-btn" onclick="answer(this,'unsure','c')">Not Sure</button></div><div class="gap-reveal" id="gap-c3"><strong>Criminal statute.</strong> Not civil — criminal penalties. If you host user-generated content, you need explicit moderation policies and reporting mechanisms.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ RESULTS PANEL ═══ -->
+      <div class="results-panel" id="results-panel">
+        <div class="results-score-section">
+          <div class="results-header">
+            <div class="results-score-circle" id="results-circle" style="border-color:var(--text-dim)">
+              <div class="results-score-num" id="results-score">—</div>
+              <div class="results-score-label">Readiness</div>
+            </div>
+            <div class="results-text">
+              <h3 id="results-headline">Complete the assessment above</h3>
+              <p id="results-body">Answer all questions to see your compliance readiness score.</p>
+            </div>
+          </div>
+          <div class="risk-exposure" id="risk-exposure">
+            <h4>⚠️ Your Risk Exposure</h4>
+            <div class="risk-meter"><div class="risk-meter-fill" id="risk-fill" style="width:0%;background:var(--accent-crimson)"></div></div>
+            <div id="risk-items"></div>
+          </div>
+          <div class="results-gaps" id="results-gaps"></div>
+        </div>
+
+        <!-- ═══ LEAD CAPTURE — Two-Tier Report + Brief ═══ -->
+        <div class="lead-capture-box" id="leadBox">
+          <h3>Get your compliance gap report.</h3>
+          <p class="lead-sub">Enter your work email to instantly download a branded PDF report with your readiness score, identified gaps, and statute-specific remediation steps. We'll also prepare a deeper personalized brief within 2 business days.</p>
+          <p class="lead-detail"><strong>Instant PDF download</strong> + personalized follow-up brief. No obligation.</p>
+          <div class="lead-btns">
+            <a href="#" data-cta="form" class="cta-btn" id="cta-form-main">📄 Download My Gap Report →</a>
+            <a href="#" data-cta="book" target="_blank" class="cta-btn cta-btn-book">Book a Free 30-Min Consultation</a>
+          </div>
+          <div class="lead-trust">
+            <span>🏢 Work email required</span>
+            <span>📄 Instant branded PDF</span>
+            <span>🔒 Confidential</span>
+            <span>📊 Personalized brief in 2 days</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ FULL ACTION PLAN VIEW ═══ -->
+  <div class="view-section" id="view-actions">
+    <div class="section">
+      <div class="section-header"><span class="section-number">02</span><span class="section-title">Complete Compliance Action Plan</span></div>
+      <p class="section-desc">Every obligation, organized by stakeholder, mapped to the statute that creates it. This is the full picture of what impacted organizations need to do differently.</p>
+
+      <div class="complexity-callout">
+        <div><div class="cc-item-num" style="color:var(--accent-crimson)">7</div><div class="cc-item-label">Separate statutes</div></div>
+        <div><div class="cc-item-num" style="color:var(--accent-amber)">4</div><div class="cc-item-label">Affected sectors</div></div>
+        <div><div class="cc-item-num" style="color:var(--accent-rose)">6</div><div class="cc-item-label">Workstreams to<br>coordinate</div></div>
+        <div><div class="cc-item-num" style="color:var(--accent-violet)">3</div><div class="cc-item-label">Regulatory bodies</div></div>
+      </div>
+
+      <!-- Employer -->
+      <div class="stake-card open" id="stake-emp"><div class="stake-header" onclick="toggleStake('stake-emp')"><div class="stake-left"><div class="stake-icon" style="background:var(--accent-rose-bg);color:var(--accent-rose)">🏢</div><div><div class="stake-name">Employers — All Illinois</div><div class="stake-scope">3 active laws · 13 action items · IDHR enforcement imminent</div></div></div><div class="stake-chevron">▼</div></div><div class="stake-body">
+        <div class="law-trigger" style="border-left-color:var(--accent-crimson)"><div class="law-trigger-header"><span class="law-tag" style="background:var(--accent-crimson-bg);color:var(--accent-crimson)">PA 103-0804</span><span class="law-trigger-title">AI Employment Discrimination Act</span><span class="priority priority-critical">CRITICAL</span></div><div class="law-trigger-desc">Effective Jan 1, 2026. Prohibits AI in employment decisions if it results in disparate impact. Bans zip code proxy targeting. Mandates transparency notices. IDHR enforcement rules being finalized.</div>
+          <div class="action-category"><div class="action-category-label">📋 Policies</div><ul class="action-list"><li class="action-item"><div class="action-text">Create <strong>AI Use in Employment Policy</strong> — inventory every AI tool in recruiting, hiring, promotion, discipline</div><span class="priority priority-critical">Critical</span></li><li class="action-item"><div class="action-text">Amend employee handbook: AI decisions, employee rights, IDHR complaint process</div><span class="priority priority-critical">Critical</span></li><li class="action-item"><div class="action-text">Establish <strong>zip code audit policy</strong> — review all AI tools for geographic proxy inputs</div><span class="priority priority-high">High</span></li><li class="action-item"><div class="action-text">Add AI anti-discrimination clauses to vendor/staffing agency contracts</div><span class="priority priority-high">High</span></li></ul></div>
+          <div class="action-category"><div class="action-category-label">📢 Notices</div><ul class="action-list"><li class="action-item"><div class="action-text"><strong>Issue AI usage notice to all current employees</strong> — required regardless of discrimination</div><span class="priority priority-critical">Critical</span></li><li class="action-item"><div class="action-text">Add AI disclosure to all <strong>job postings and application portals</strong></div><span class="priority priority-critical">Critical</span></li><li class="action-item"><div class="action-text">Include summary of employee rights and IDHR charge-filing information</div><span class="priority priority-high">High</span></li></ul></div>
+          <div class="action-category"><div class="action-category-label">🔍 Audits</div><ul class="action-list"><li class="action-item"><div class="action-text">Conduct <strong>privileged disparate impact audit</strong> of all AI employment tools</div><span class="priority priority-critical">Critical</span></li><li class="action-item"><div class="action-text">Send vendor due diligence questionnaires — bias testing, training data, compliance certs</div><span class="priority priority-high">High</span></li><li class="action-item"><div class="action-text">Establish annual audit cadence with documented testing protocols</div><span class="priority priority-medium">Medium</span></li></ul></div>
+          <div class="action-category"><div class="action-category-label">🎓 Training</div><ul class="action-list"><li class="action-item"><div class="action-text">Train <strong>HR, hiring managers, recruiters</strong> on notice requirements, prohibited uses, disparate impact</div><span class="priority priority-critical">Critical</span></li><li class="action-item"><div class="action-text">Train legal/compliance on IDHR enforcement mechanics and documentation</div><span class="priority priority-high">High</span></li></ul></div>
+        </div>
+      </div></div>
+
+      <!-- Healthcare -->
+      <div class="stake-card" id="stake-hc"><div class="stake-header" onclick="toggleStake('stake-hc')"><div class="stake-left"><div class="stake-icon" style="background:var(--accent-violet-bg);color:var(--accent-violet)">🏥</div><div><div class="stake-name">Healthcare & Mental Health</div><div class="stake-scope">1 active law · 7 action items · Already enforceable</div></div></div><div class="stake-chevron">▼</div></div><div class="stake-body">
+        <div class="law-trigger" style="border-left-color:var(--accent-violet)"><div class="law-trigger-header"><span class="law-tag" style="background:var(--accent-violet-bg);color:var(--accent-violet)">PA 104-0539</span><span class="law-trigger-title">WOPR Act</span><span class="priority priority-critical">CRITICAL</span></div><div class="law-trigger-desc">Prohibits AI as independent therapist. Bans emotion detection in clinical settings. Mandates human oversight.</div>
+          <div class="action-category"><div class="action-category-label">📋 Policies & Operations</div><ul class="action-list"><li class="action-item"><div class="action-text">Audit all clinical AI tools — remove or restructure any that could function as independent therapy</div><span class="priority priority-critical">Critical</span></li><li class="action-item"><div class="action-text">Create <strong>Human Oversight Protocol</strong> — document clinician review of every AI-assisted decision</div><span class="priority priority-critical">Critical</span></li><li class="action-item"><div class="action-text"><strong>Disable all emotion detection</strong> in clinical-facing tools</div><span class="priority priority-critical">Critical</span></li><li class="action-item"><div class="action-text">Update informed consent forms to disclose AI involvement in care</div><span class="priority priority-high">High</span></li></ul></div>
+          <div class="action-category"><div class="action-category-label">🎓 Training & Vendors</div><ul class="action-list"><li class="action-item"><div class="action-text">Train clinical staff on "independent therapist" vs. permitted decision support boundary</div><span class="priority priority-critical">Critical</span></li><li class="action-item"><div class="action-text">Train IT/ops on identifying emotion-detection capabilities in vendor products</div><span class="priority priority-high">High</span></li><li class="action-item"><div class="action-text">Require all MH technology vendors to certify WOPR Act compliance</div><span class="priority priority-high">High</span></li></ul></div>
+        </div>
+      </div></div>
+
+      <!-- Education -->
+      <div class="stake-card" id="stake-ed"><div class="stake-header" onclick="toggleStake('stake-ed')"><div class="stake-left"><div class="stake-icon" style="background:var(--accent-emerald-bg);color:var(--accent-emerald)">🏫</div><div><div class="stake-name">K-12 Schools & Districts</div><div class="stake-scope">1 active law · 7 action items · ISBE guidance forthcoming</div></div></div><div class="stake-chevron">▼</div></div><div class="stake-body">
+        <div class="law-trigger" style="border-left-color:var(--accent-emerald)"><div class="law-trigger-header"><span class="law-tag" style="background:var(--accent-emerald-bg);color:var(--accent-emerald)">PA 104-0399</span><span class="law-trigger-title">Public Education AI Guidelines</span><span class="priority priority-high">HIGH</span></div><div class="law-trigger-desc">Mandates ISBE guidance on AI use in public schools. Requires deepfake recognition curriculum.</div>
+          <div class="action-category"><div class="action-category-label">📋 Policy & Curriculum</div><ul class="action-list"><li class="action-item"><div class="action-text">Draft district-level <strong>AI Acceptable Use Policy</strong></div><span class="priority priority-high">High</span></li><li class="action-item"><div class="action-text">Establish <strong>AI Tool Approval Process</strong> — no AI in classrooms without review</div><span class="priority priority-high">High</span></li><li class="action-item"><div class="action-text">Develop <strong>AI literacy curriculum</strong> including deepfake recognition</div><span class="priority priority-high">High</span></li><li class="action-item"><div class="action-text">Update Academic Integrity Policy for AI-generated student work</div><span class="priority priority-medium">Medium</span></li></ul></div>
+          <div class="action-category"><div class="action-category-label">🎓 Training</div><ul class="action-list"><li class="action-item"><div class="action-text">Professional development for teachers on AI content recognition</div><span class="priority priority-high">High</span></li><li class="action-item"><div class="action-text">Train administrators on compliance timeline and ISBE alignment</div><span class="priority priority-medium">Medium</span></li></ul></div>
+        </div>
+      </div></div>
+
+      <!-- Creative -->
+      <div class="stake-card" id="stake-cr"><div class="stake-header" onclick="toggleStake('stake-cr')"><div class="stake-left"><div class="stake-icon" style="background:var(--accent-amber-bg);color:var(--accent-amber)">🎬</div><div><div class="stake-name">Content, Media & Agencies</div><div class="stake-scope">3 active laws · 7 action items · In effect since 2024</div></div></div><div class="stake-chevron">▼</div></div><div class="stake-body">
+        <div class="law-trigger" style="border-left-color:var(--accent-amber)"><div class="law-trigger-header"><span class="law-tag" style="background:var(--accent-amber-bg);color:var(--accent-amber)">PA 103-0882/0880</span><span class="law-trigger-title">Voice, Likeness & Right of Publicity</span><span class="priority priority-critical">CRITICAL</span></div><div class="law-trigger-desc">Prohibits distributing AI replicas without consent. Contracts void without specific use descriptions (Jan 2026 amendments).</div>
+          <div class="action-category"><ul class="action-list"><li class="action-item"><div class="action-text">Create <strong>AI Content Generation Policy</strong></div><span class="priority priority-critical">Critical</span></li><li class="action-item"><div class="action-text">Audit all existing AI-generated content for unauthorized likeness</div><span class="priority priority-high">High</span></li><li class="action-item"><div class="action-text">Update all talent contracts with Jan 2026 requirements</div><span class="priority priority-critical">Critical</span></li><li class="action-item"><div class="action-text">Build consent management system</div><span class="priority priority-high">High</span></li></ul></div>
+        </div>
+        <div class="law-trigger" style="border-left-color:var(--accent-crimson)"><div class="law-trigger-header"><span class="law-tag" style="background:var(--accent-crimson-bg);color:var(--accent-crimson)">PA 103-0806</span><span class="law-trigger-title">AI-Generated CSAM & NCII</span><span class="priority priority-critical">CRIMINAL</span></div>
+          <div class="action-category"><ul class="action-list"><li class="action-item"><div class="action-text">Implement content moderation policies for AI-generated NCII/CSAM</div><span class="priority priority-critical">Critical</span></li><li class="action-item"><div class="action-text">Train content teams on recognition and reporting obligations</div><span class="priority priority-high">High</span></li></ul></div>
+        </div>
+      </div></div>
+
+      <div class="inline-cta">
+        <h4>42 action items. 7 statutes. Where do you start?</h4>
+        <p>We build prioritized compliance roadmaps tailored to your AI usage, risk profile, and stakeholder mix. We wrote the tracker — we know the territory.</p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+          <a href="#" data-cta="form" target="_blank" class="cta-btn">Get a Compliance Roadmap →</a>
+          <a href="#" data-cta="book" target="_blank" class="cta-btn cta-btn-book cta-btn-sm">Book a Free Consultation</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TIMELINE VIEW ═══ -->
+  <div class="view-section" id="view-timeline">
+    <div class="section">
+      <div class="section-header"><span class="section-number">03</span><span class="section-title">Compliance Timeline</span></div>
+      <p class="section-desc">Key dates, enforcement milestones, and what to have ready by when.</p>
+      <div class="timeline-container">
+        <div class="timeline-item"><div class="timeline-dot past"></div><div class="timeline-date">Jan 1, 2020</div><div class="timeline-title">AI Video Interview Act</div><div class="timeline-desc">Notice, explanation, and consent for AI-analyzed video interviews. Frequently overlooked.</div><div class="timeline-tags"><span class="timeline-tag">Employment</span></div></div>
+        <div class="timeline-item"><div class="timeline-dot past"></div><div class="timeline-date">Aug 9, 2024</div><div class="timeline-title">Voice/Likeness & CSAM Protections</div><div class="timeline-desc">PA 103-0882, PA 103-0880, PA 103-0806 all active. Consent processes and moderation policies needed.</div><div class="timeline-tags"><span class="timeline-tag">IP / Creative</span><span class="timeline-tag">Criminal</span></div></div>
+        <div class="timeline-item"><div class="timeline-dot past"></div><div class="timeline-date">Aug 4, 2025</div><div class="timeline-title">WOPR Act — Mental Health AI</div><div class="timeline-desc">Human oversight protocols required. Emotion detection banned in clinical settings.</div><div class="timeline-tags"><span class="timeline-tag">Healthcare</span></div></div>
+        <div class="timeline-item"><div class="timeline-dot active"></div><div class="timeline-date">Jan 1, 2026 — NOW</div><div class="timeline-title">Employment AI & Education AI — Live</div><div class="timeline-desc">PA 103-0804: Employers must have notices deployed and bias-free systems. PA 104-0399: Schools begin AI literacy work. Digital Likeness amendments take effect.</div><div class="timeline-tags"><span class="timeline-tag" style="color:var(--accent-crimson)">URGENT</span><span class="timeline-tag">Employment</span><span class="timeline-tag">Education</span></div></div>
+        <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-date">Apr 24, 2026</div><div class="timeline-title">Committee Deadline — 29 Pending Bills</div><div class="timeline-desc">Bills that don't clear committee are unlikely to advance. Watch: HB 3021, HB 4980, SB 3262, SB 3364.</div><div class="timeline-tags"><span class="timeline-tag">Legislative</span></div></div>
+        <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-date">Mid-2026 (Expected)</div><div class="timeline-title">IDHR Enforcement Rules Finalized</div><div class="timeline-desc">Subpart J rules will specify notice, recordkeeping, and investigation procedures. Enforcement accelerates.</div><div class="timeline-tags"><span class="timeline-tag" style="color:var(--accent-amber)">Prepare now</span></div></div>
+        <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-date">Jan 1, 2027 (Projected)</div><div class="timeline-title">Next Wave Takes Effect</div><div class="timeline-desc">Pending bills that pass this session would bring provenance, companion AI safety, human-in-the-loop, expanded civil rights.</div><div class="timeline-tags"><span class="timeline-tag">All sectors</span></div></div>
+      </div>
+      <div class="inline-cta"><h4>Don't let deadlines sneak up on you.</h4><p>We provide ongoing legislative monitoring and compliance milestone management.</p><a href="#" data-cta="book" target="_blank" class="cta-btn cta-btn-book">Book a Strategy Session →</a></div>
+    </div>
+  </div>
+
+  <!-- ═══ MATRIX VIEW ═══ -->
+  <div class="view-section" id="view-matrix">
+    <div class="section">
+      <div class="section-header"><span class="section-number">04</span><span class="section-title">Law × Compliance Action Matrix</span></div>
+      <p class="section-desc">Why siloed approaches fail — a single organization may need to coordinate across all seven columns simultaneously.</p>
+      <div class="matrix-wrap"><table class="matrix-table"><thead><tr><th>Law</th><th>Policy</th><th>HR Notice</th><th>Training</th><th>Vendor Audit</th><th>Bias Audit</th><th>Contracts</th><th>Curriculum</th></tr></thead><tbody>
+        <tr><td><span class="matrix-law" style="color:var(--accent-crimson)">PA 103-0804</span><br><small style="color:var(--text-dim)">Employment AI</small></td><td class="matrix-cell" style="color:var(--accent-crimson)">●</td><td class="matrix-cell" style="color:var(--accent-crimson)">●</td><td class="matrix-cell" style="color:var(--accent-crimson)">●</td><td class="matrix-cell" style="color:var(--accent-crimson)">●</td><td class="matrix-cell" style="color:var(--accent-crimson)">●</td><td class="matrix-cell" style="color:var(--accent-amber)">●</td><td class="matrix-cell" style="color:var(--text-dim)">—</td></tr>
+        <tr><td><span class="matrix-law" style="color:var(--accent-violet)">PA 104-0539</span><br><small style="color:var(--text-dim)">WOPR Act</small></td><td class="matrix-cell" style="color:var(--accent-crimson)">●</td><td class="matrix-cell" style="color:var(--accent-amber)">●</td><td class="matrix-cell" style="color:var(--accent-crimson)">●</td><td class="matrix-cell" style="color:var(--accent-crimson)">●</td><td class="matrix-cell" style="color:var(--text-dim)">—</td><td class="matrix-cell" style="color:var(--accent-amber)">●</td><td class="matrix-cell" style="color:var(--text-dim)">—</td></tr>
+        <tr><td><span class="matrix-law" style="color:var(--accent-emerald)">PA 104-0399</span><br><small style="color:var(--text-dim)">Education AI</small></td><td class="matrix-cell" style="color:var(--accent-amber)">●</td><td class="matrix-cell" style="color:var(--text-dim)">—</td><td class="matrix-cell" style="color:var(--accent-amber)">●</td><td class="matrix-cell" style="color:var(--accent-amber)">●</td><td class="matrix-cell" style="color:var(--text-dim)">—</td><td class="matrix-cell" style="color:var(--text-dim)">—</td><td class="matrix-cell" style="color:var(--accent-crimson)">●</td></tr>
+        <tr><td><span class="matrix-law" style="color:var(--accent-amber)">PA 103-0882</span><br><small style="color:var(--text-dim)">Voice & Likeness</small></td><td class="matrix-cell" style="color:var(--accent-amber)">●</td><td class="matrix-cell" style="color:var(--text-dim)">—</td><td class="matrix-cell" style="color:var(--accent-sky)">●</td><td class="matrix-cell" style="color:var(--text-dim)">—</td><td class="matrix-cell" style="color:var(--text-dim)">—</td><td class="matrix-cell" style="color:var(--accent-crimson)">●</td><td class="matrix-cell" style="color:var(--text-dim)">—</td></tr>
+        <tr><td><span class="matrix-law" style="color:var(--accent-amber)">PA 103-0880</span><br><small style="color:var(--text-dim)">Right of Publicity</small></td><td class="matrix-cell" style="color:var(--accent-amber)">●</td><td class="matrix-cell" style="color:var(--text-dim)">—</td><td class="matrix-cell" style="color:var(--accent-sky)">●</td><td class="matrix-cell" style="color:var(--text-dim)">—</td><td class="matrix-cell" style="color:var(--text-dim)">—</td><td class="matrix-cell" style="color:var(--accent-crimson)">●</td><td class="matrix-cell" style="color:var(--text-dim)">—</td></tr>
+        <tr><td><span class="matrix-law" style="color:var(--accent-crimson)">PA 103-0806</span><br><small style="color:var(--text-dim)">CSAM / NCII</small></td><td class="matrix-cell" style="color:var(--accent-crimson)">●</td><td class="matrix-cell" style="color:var(--text-dim)">—</td><td class="matrix-cell" style="color:var(--accent-amber)">●</td><td class="matrix-cell" style="color:var(--text-dim)">—</td><td class="matrix-cell" style="color:var(--text-dim)">—</td><td class="matrix-cell" style="color:var(--text-dim)">—</td><td class="matrix-cell" style="color:var(--text-dim)">—</td></tr>
+        <tr><td><span class="matrix-law" style="color:var(--accent-sky)">PA 101-0260</span><br><small style="color:var(--text-dim)">Video Interview</small></td><td class="matrix-cell" style="color:var(--accent-amber)">●</td><td class="matrix-cell" style="color:var(--accent-crimson)">●</td><td class="matrix-cell" style="color:var(--accent-sky)">●</td><td class="matrix-cell" style="color:var(--accent-amber)">●</td><td class="matrix-cell" style="color:var(--text-dim)">—</td><td class="matrix-cell" style="color:var(--text-dim)">—</td><td class="matrix-cell" style="color:var(--text-dim)">—</td></tr>
+      </tbody></table></div>
+      <div style="margin-top:12px;font-size:12px;color:var(--text-dim)"><span style="color:var(--accent-crimson)">● Critical</span> · <span style="color:var(--accent-amber)">● High</span> · <span style="color:var(--accent-sky)">● Medium</span> · — N/A</div>
+    </div>
+  </div>
+
+  <!-- ═══ HORIZON VIEW ═══ -->
+  <div class="view-section" id="view-horizon">
+    <div class="section">
+      <div class="section-header"><span class="section-number">05</span><span class="section-title">What's Coming Next</span></div>
+      <p class="section-desc">29 pending bills. Two at 2nd reading. Organizations that wait for enactment to start planning will be behind on day one.</p>
+
+      <div class="stake-card" id="hz-1"><div class="stake-header" onclick="toggleStake('hz-1')"><div class="stake-left"><div class="stake-icon" style="background:var(--accent-crimson-bg);color:var(--accent-crimson)">⚡</div><div><div class="stake-name">HB 3021 — Consumer AI Deception</div><div class="stake-scope">2nd Reading · Highest momentum</div></div></div><div class="stake-chevron">▼</div></div><div class="stake-body"><div class="law-trigger" style="border-left-color:var(--accent-crimson)"><div class="law-trigger-desc">Would prohibit chatbots/AI agents from misleading consumers into believing they're human. Every customer-facing chatbot needs disclosure.</div><div class="action-category"><div class="action-category-label">🔮 Prepare now</div><ul class="action-list"><li class="action-item"><div class="action-text">Audit all customer-facing chatbots — do they self-identify as AI?</div></li><li class="action-item"><div class="action-text">Design disclosure UX patterns ready to deploy on enactment</div></li></ul></div></div></div></div>
+
+      <div class="stake-card" id="hz-2"><div class="stake-header" onclick="toggleStake('hz-2')"><div class="stake-left"><div class="stake-icon" style="background:var(--accent-amber-bg);color:var(--accent-amber)">⚡</div><div><div class="stake-name">HB 4980 — Meaningful Human Control</div><div class="stake-scope">2nd Reading · Public employers</div></div></div><div class="stake-chevron">▼</div></div><div class="stake-body"><div class="law-trigger" style="border-left-color:var(--accent-amber)"><div class="law-trigger-desc">Would prohibit public employers from using automated decisions without human review. Impact assessments required. Private right of action.</div><div class="action-category"><div class="action-category-label">🔮 Prepare now</div><ul class="action-list"><li class="action-item"><div class="action-text">Government agencies: inventory all automated decision systems</div></li><li class="action-item"><div class="action-text">Draft impact assessment templates</div></li><li class="action-item"><div class="action-text">Build human review workflows for decisions currently lacking them</div></li></ul></div></div></div></div>
+
+      <div class="stake-card" id="hz-3"><div class="stake-header" onclick="toggleStake('hz-3')"><div class="stake-left"><div class="stake-icon" style="background:var(--accent-violet-bg);color:var(--accent-violet)">⚡</div><div><div class="stake-name">SB 3262 / SB 3384 — Companion AI Safety</div><div class="stake-scope">First-of-its-kind · High political salience</div></div></div><div class="stake-chevron">▼</div></div><div class="stake-body"><div class="law-trigger" style="border-left-color:var(--accent-violet)"><div class="law-trigger-desc">Would regulate emotionally adaptive AI companions — crisis intervention, persistent disclosure, parental consent, self-harm detection.</div><div class="action-category"><div class="action-category-label">🔮 Prepare now</div><ul class="action-list"><li class="action-item"><div class="action-text">Build crisis detection into product roadmaps</div></li><li class="action-item"><div class="action-text">Implement age verification and parental consent flows</div></li></ul></div></div></div></div>
+
+      <div class="stake-card" id="hz-4"><div class="stake-header" onclick="toggleStake('hz-4')"><div class="stake-left"><div class="stake-icon" style="background:var(--accent-sky-bg);color:var(--accent-sky)">⚡</div><div><div class="stake-name">SB 3364 — Algorithmic Civil Rights Expansion</div><div class="stake-scope">Beyond employment → housing, credit, public accommodations</div></div></div><div class="stake-chevron">▼</div></div><div class="stake-body"><div class="law-trigger" style="border-left-color:var(--accent-sky)"><div class="law-trigger-desc">Would amend Illinois Human Rights Act to cover AI in real estate, lending, credit, and public accommodations.</div><div class="action-category"><div class="action-category-label">🔮 Prepare now</div><ul class="action-list"><li class="action-item"><div class="action-text">Financial services: audit AI lending/credit models for disparate impact</div></li><li class="action-item"><div class="action-text">Real estate: review automated valuation models</div></li><li class="action-item"><div class="action-text">Retail/hospitality: evaluate AI affecting service, pricing, or access</div></li></ul></div></div></div></div>
+
+      <div class="inline-cta"><h4>The law is moving. Are you?</h4><p>We don't just track bills — we help you operationalize compliance before enforcement begins.</p><div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><a href="#" data-cta="form" target="_blank" class="cta-btn">Get Your Compliance Brief →</a><a href="#" data-cta="book" target="_blank" class="cta-btn cta-btn-book cta-btn-sm">Book a Consultation</a></div></div>
+    </div>
+  </div>
+
+  <!-- ═══ EMAIL GATE MODAL ═══ -->
+  <div class="email-gate-overlay" id="emailGate">
+    <div class="email-gate-modal">
+      <button class="email-gate-close" onclick="closeEmailGate()">✕</button>
+
+      <!-- State 1: Email entry -->
+      <div id="gateStep1">
+        <h3>Download your gap report</h3>
+        <p class="gate-sub">Enter your work email to instantly download a branded PDF report of your compliance readiness. We'll also prepare a deeper personalized brief and send it within 2 business days.</p>
+        <div class="email-input-wrap">
+          <input type="email" class="email-input" id="gateEmail" placeholder="you@yourcompany.com" autocomplete="email" autofocus>
+        </div>
+        <div class="email-error" id="gateError"></div>
+        <div class="email-hint">🏢 Work email required — we send reports to organizational addresses only.</div>
+        <button class="gate-submit" id="gateSubmit" onclick="submitEmailGate()">📄 Generate & Download Report →</button>
+        <p class="gate-privacy">Your email is used solely to deliver your reports. We don't share, sell, or spam. <a href="https://techne.ai" target="_blank">Privacy policy</a>.</p>
+      </div>
+
+      <!-- State 2: Post-download success -->
+      <div id="gateStep2" style="display:none">
+        <div style="text-align:center;margin-bottom:20px">
+          <div style="width:56px;height:56px;border-radius:50%;background:var(--accent-emerald-bg);display:inline-flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:12px">✓</div>
+          <h3 style="margin-bottom:4px">Report downloaded!</h3>
+          <p class="gate-sub" style="margin-bottom:0">Your instant gap report has been saved as a PDF. Check your downloads folder.</p>
+        </div>
+
+        <div style="background:var(--surface-2);border-radius:var(--radius-sm);padding:18px;margin-bottom:16px">
+          <p style="font-size:13px;font-weight:600;margin-bottom:6px">Want a deeper analysis?</p>
+          <p style="font-size:12.5px;color:var(--text-muted);line-height:1.55;margin-bottom:14px">Complete our full assessment (3 min) and our team will send you a personalized compliance brief covering your industry, org size, and the specific intersection of statutes that affect you.</p>
+          <a href="#" data-cta="form-direct" target="_blank" class="cta-btn" style="width:100%;justify-content:center;font-size:13px;padding:12px">Take the Full Assessment →</a>
+        </div>
+
+        <div style="background:var(--surface-2);border-radius:var(--radius-sm);padding:18px;margin-bottom:8px">
+          <p style="font-size:13px;font-weight:600;margin-bottom:6px">Or talk to us directly</p>
+          <p style="font-size:12.5px;color:var(--text-muted);line-height:1.55;margin-bottom:14px">Book a free 30-minute consultation. We'll walk through your results and build a prioritized compliance roadmap together.</p>
+          <a href="#" data-cta="book" target="_blank" class="cta-btn cta-btn-book" style="width:100%;justify-content:center;font-size:13px;padding:12px">Book a Free Consultation →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ COMPLIANCE PAGE FOOTER (internal CTA) ═══ -->
+  <footer>
+    <div class="footer-cta">
+      <h3>Compliance is complex. Guidance shouldn't be.</h3>
+      <p>Technê AI built the Illinois AI Legislative Ecosystem tracker. We know every bill, every vector, every deadline. Let us translate that intelligence into a compliance roadmap built for your organization.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <a href="#" data-cta="book" target="_blank" class="cta-btn cta-btn-book">Book a Free Consultation →</a>
+        <a href="#" data-cta="form" target="_blank" class="cta-btn cta-btn-secondary cta-btn-sm">Take the Full Assessment</a>
+        <a href="index.html" class="cta-btn cta-btn-secondary cta-btn-sm">View the Bill Tracker ↗</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p><a href="index.html">Illinois AI Ecosystem Map</a> · Powered by <a href="https://techne.ai">Technê AI</a></p>
+      <p style="margin-top:6px">Data as of March 27, 2026. Not legal advice. Consult qualified counsel for implementation.</p>
+    </div>
+  </footer>
+</div>
+
+</div><!-- end .compliance-page -->
+
+<!-- Site Footer (light theme) -->
+<footer class="site-footer">
+  <p><strong>Illinois AI Legislative Ecosystem</strong> — Powered by Technê AI</p>
+  <p>This dashboard aggregates data from <a href="https://ilga.gov" target="_blank">ilga.gov</a>. Updated: March 27, 2026. All bill information subject to change. Not legal advice.</p>
+</footer>
+
+<script>
+// ── Email gate: blocked personal domains ──
+const BLOCKED_DOMAINS = [
+  'gmail.com','googlemail.com','yahoo.com','yahoo.co.uk','yahoo.co.in','yahoo.ca','yahoo.com.au',
+  'hotmail.com','hotmail.co.uk','outlook.com','live.com','msn.com',
+  'aol.com','icloud.com','me.com','mac.com',
+  'mail.com','email.com','usa.com',
+  'protonmail.com','proton.me','pm.me','tutanota.com','tutamail.com',
+  'zoho.com','zohomail.com','yandex.com','yandex.ru',
+  'gmx.com','gmx.net','gmx.de','web.de','t-online.de',
+  'comcast.net','sbcglobal.net','verizon.net','att.net','bellsouth.net','charter.net','cox.net',
+  'earthlink.net','juno.com','netzero.com','aim.com',
+  'fastmail.com','hushmail.com','inbox.com','lavabit.com','rediffmail.com',
+  'ymail.com','rocketmail.com','qq.com','163.com','126.com','sina.com',
+  'mailinator.com','guerrillamail.com','tempmail.com','throwaway.email','sharklasers.com','grr.la','guerrillamailblock.com',
+  'duck.com','hey.com'
+];
+
+function isWorkEmail(email) {
+  const e = email.trim().toLowerCase();
+  if (!e || !e.includes('@')) return { valid: false, reason: 'Please enter a valid email address.' };
+  const parts = e.split('@');
+  if (parts.length !== 2 || !parts[1].includes('.')) return { valid: false, reason: 'Please enter a valid email address.' };
+  const domain = parts[1];
+  if (BLOCKED_DOMAINS.includes(domain)) return { valid: false, reason: 'Please use your work email. We send compliance briefs to organizational addresses only.' };
+  if (/^(test|asdf|fake|none|no|na|n\/a)@/.test(e)) return { valid: false, reason: 'Please enter your real work email address.' };
+  return { valid: true, domain: domain };
+}
+
+const gateInput = document.getElementById('gateEmail');
+const gateError = document.getElementById('gateError');
+const gateSubmit = document.getElementById('gateSubmit');
+
+gateInput.addEventListener('input', () => {
+  const val = gateInput.value.trim();
+  gateInput.classList.remove('error', 'valid');
+  gateError.textContent = '';
+  if (val.length > 4 && val.includes('@')) {
+    const check = isWorkEmail(val);
+    if (check.valid) { gateInput.classList.add('valid'); }
+  }
+});
+
+gateInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') submitEmailGate(); });
+
+function openEmailGate() {
+  document.getElementById('emailGate').classList.add('visible');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => gateInput.focus(), 100);
+}
+
+function closeEmailGate() {
+  document.getElementById('emailGate').classList.remove('visible');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('emailGate').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('emailGate')) closeEmailGate();
+});
+
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeEmailGate(); });
+
+function submitEmailGate() {
+  const val = gateInput.value.trim();
+  const check = isWorkEmail(val);
+  if (!check.valid) {
+    gateInput.classList.add('error');
+    gateInput.classList.remove('valid');
+    gateError.textContent = check.reason;
+    gateInput.focus();
+    return;
+  }
+  gateInput.classList.add('valid');
+  gateError.textContent = '';
+  gateSubmit.disabled = true;
+  gateSubmit.textContent = 'Generating your report…';
+
+  setTimeout(() => {
+    try {
+      generateCompliancePDF(val);
+    } catch(err) {
+      console.error('PDF generation error:', err);
+    }
+    document.getElementById('gateStep1').style.display = 'none';
+    document.getElementById('gateStep2').style.display = 'block';
+    const formUrl = FORMS_URL + (FORMS_URL.includes('?') ? '&' : '?') + 'email=' + encodeURIComponent(val);
+    document.querySelectorAll('[data-cta="form-direct"]').forEach(a => a.href = formUrl);
+    gateSubmit.disabled = false;
+    gateSubmit.textContent = '📄 Generate & Download Report →';
+  }, 300);
+}
+
+// ── Intercept all Form CTA clicks to show email gate ──
+document.addEventListener('click', (e) => {
+  const link = e.target.closest('[data-cta="form"]');
+  if (link) {
+    e.preventDefault();
+    document.getElementById('gateStep1').style.display = 'block';
+    document.getElementById('gateStep2').style.display = 'none';
+    openEmailGate();
+  }
+});
+
+// ══════════════════════════════════════════════════════
+//  PDF GENERATION — Full branded compliance gap report
+// ══════════════════════════════════════════════════════
+function generateCompliancePDF(userEmail) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const W = 210, H = 297;
+  const ML = 20, MR = 20, PW = W - ML - MR;
+  const today = new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+
+  const C = {
+    bg: [12,10,15], surface: [21,18,26], violet: [167,139,250], crimson: [244,63,94],
+    amber: [251,191,36], emerald: [52,211,153], sky: [56,189,248],
+    text: [232,228,238], muted: [153,144,168], dim: [107,98,128], white: [255,255,255],
+    darkPurple: [30,26,37]
+  };
+
+  const allScores = {...scores.e, ...scores.h, ...scores.d, ...scores.c};
+  const totalQ = Object.keys(allScores).length;
+  const yesCount = Object.values(allScores).filter(v=>v==='yes').length;
+  const noCount = Object.values(allScores).filter(v=>v==='no').length;
+  const unsureCount = Object.values(allScores).filter(v=>v==='unsure').length;
+  const pct = totalQ > 0 ? Math.round((yesCount/totalQ)*100) : 0;
+  const riskPct = totalQ > 0 ? Math.min(100, Math.round(((noCount + unsureCount*.7)/totalQ)*100)) : 0;
+
+  const QM = {
+    'q-e1': { law:'PA 103-0804', title:'AI Employment Discrimination Act', q:'Issued AI transparency notice to employees/applicants', fix:'Inventory all AI-assisted employment decisions. Deploy transparency notices to all current employees and add disclosure to job postings immediately.', priority:'CRITICAL' },
+    'q-e2': { law:'PA 103-0804', title:'AI Employment Discrimination Act', q:'Audited AI hiring tools for disparate impact', fix:'Engage counsel for a privileged bias audit of all AI employment tools. Send due diligence questionnaires to AI vendors requesting bias testing documentation.', priority:'CRITICAL' },
+    'q-e3': { law:'PA 103-0804', title:'AI Employment Discrimination Act', q:'Verified no AI tool uses zip codes as proxy', fix:'Conduct technical review of input features in every AI employment tool. Zip code proxy targeting is an enumerated violation with no gray area.', priority:'CRITICAL' },
+    'q-e4': { law:'PA 103-0804', title:'AI Employment Discrimination Act', q:'Updated employee handbook for AI requirements', fix:'Amend handbook to include: employer AI use in employment decisions, employee rights under the statute, and IDHR complaint process. Target completion: Q2 2026.', priority:'HIGH' },
+    'q-e5': { law:'PA 101-0260', title:'AI Video Interview Act', q:'Video interview AI: written explanation and consent', fix:'Verify all video interview platforms provide required written explanation of how AI evaluates candidates and obtain documented consent before analysis begins.', priority:'HIGH' },
+    'q-e6': { law:'PA 103-0804', title:'AI Employment Discrimination Act', q:'Trained HR staff on new AI employment law', fix:'Deliver training to all HR staff, hiring managers, and recruiters covering notice requirements, prohibited AI uses, and what constitutes disparate impact.', priority:'CRITICAL' },
+    'q-h1': { law:'PA 104-0539', title:'WOPR Act (Mental Health AI)', q:'Audited clinical AI tools — no independent therapist', fix:'Audit all clinical AI tools immediately. Any tool that can be interpreted as providing independent therapeutic guidance must be restructured or removed. This is a flat prohibition.', priority:'CRITICAL' },
+    'q-h2': { law:'PA 104-0539', title:'WOPR Act (Mental Health AI)', q:'Disabled all emotion detection in clinical tools', fix:'Conduct technical inventory of every AI feature in every vendor product touching clinical workflows. Emotion detection is an absolute prohibition — disable all instances.', priority:'CRITICAL' },
+    'q-h3': { law:'PA 104-0539', title:'WOPR Act (Mental Health AI)', q:'Documented Human Oversight Protocol for AI clinical decisions', fix:'Create a formal protocol documenting how a licensed clinician reviews, validates, and approves every AI-assisted clinical decision before it reaches the patient.', priority:'CRITICAL' },
+    'q-d1': { law:'PA 104-0399', title:'Public Education AI Guidelines', q:'District has formal AI Acceptable Use Policy', fix:'Draft a district-level AI Acceptable Use Policy covering both staff and student use. Position it to align with anticipated ISBE guidance. Begin board approval process.', priority:'HIGH' },
+    'q-d2': { law:'PA 104-0399', title:'Public Education AI Guidelines', q:'Developing AI literacy curriculum (deepfake recognition)', fix:'Begin curriculum development including deepfake recognition, source verification, and understanding of AI-generated content. Identify integration points in existing subjects.', priority:'HIGH' },
+    'q-d3': { law:'PA 104-0399', title:'Public Education AI Guidelines', q:'Formal review process for classroom AI tools', fix:'Establish an AI tool approval process — no AI tool enters classrooms without review for student data privacy, content safety, and learning objective alignment.', priority:'HIGH' },
+    'q-c1': { law:'PA 103-0882', title:'Digital Voice & Likeness Protection', q:'Talent contracts include specific AI replica use descriptions', fix:'Audit all existing talent/performer agreements. Contracts must include "reasonably specific description of intended use" and confirm legal representation. Noncompliant contracts are void.', priority:'CRITICAL' },
+    'q-c2': { law:'PA 103-0880', title:'Right of Publicity Act — AI Replicas', q:'Audited AI content for unauthorized voice/image/likeness', fix:'Review all existing AI-generated content for unauthorized use of any person\'s voice, image, or likeness. This law has been in effect since August 2024 — retroactive exposure is real.', priority:'HIGH' },
+    'q-c3': { law:'PA 103-0806', title:'AI-Generated Imagery (Criminal)', q:'Content moderation policy for AI-generated NCII/CSAM', fix:'Implement content moderation policies specifically addressing AI-generated nonconsensual intimate imagery and CSAM. Ensure NCMEC and law enforcement reporting mechanisms are documented.', priority:'CRITICAL' }
+  };
+
+  function rect(x,y,w,h,color,radius) {
+    doc.setFillColor(...color);
+    if (radius) doc.roundedRect(x,y,w,h,radius,radius,'F');
+    else doc.rect(x,y,w,h,'F');
+  }
+
+  function wrapText(text, x, y, maxW, fontSize, color, lineH) {
+    doc.setFontSize(fontSize);
+    doc.setTextColor(...color);
+    const lines = doc.splitTextToSize(text, maxW);
+    lines.forEach(line => {
+      if (y > H - 25) { doc.addPage(); y = 25; rect(0,0,W,H,C.bg); }
+      doc.text(line, x, y);
+      y += lineH || fontSize * 0.45;
+    });
+    return y;
+  }
+
+  // ══════ PAGE 1: COVER ══════
+  rect(0, 0, W, H, C.bg);
+  rect(0, 0, W, 3, C.violet);
+
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(28);
+  doc.setTextColor(...C.white);
+  doc.text('TECHNE', ML, 38);
+  doc.setTextColor(...C.violet);
+  doc.text(' AI', ML + doc.getTextWidth('TECHNE'), 38);
+
+  rect(ML, 46, 40, 0.5, C.violet);
+
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(24);
+  doc.setTextColor(...C.white);
+  doc.text('Illinois AI Compliance', ML, 65);
+  doc.text('Readiness Report', ML, 76);
+
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(11);
+  doc.setTextColor(...C.muted);
+  doc.text('Assessment results and compliance gap analysis', ML, 90);
+
+  const cx = W - MR - 30, cy = 65;
+  doc.setDrawColor(...(pct >= 80 ? C.emerald : pct >= 50 ? C.amber : C.crimson));
+  doc.setLineWidth(1.5);
+  doc.circle(cx, cy, 22);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(26);
+  doc.setTextColor(...(pct >= 80 ? C.emerald : pct >= 50 ? C.amber : C.crimson));
+  doc.text(pct + '%', cx, cy + 3, { align: 'center' });
+  doc.setFontSize(7);
+  doc.setTextColor(...C.muted);
+  doc.text('READINESS', cx, cy + 11, { align: 'center' });
+
+  let my = 108;
+  rect(ML, my, PW, 48, C.darkPurple, 3);
+  doc.setFontSize(9);
+  doc.setTextColor(...C.dim);
+  doc.text('Prepared for:', ML + 8, my + 10);
+  doc.text('Date:', ML + 8, my + 20);
+  doc.text('Risk Level:', ML + 8, my + 30);
+  doc.text('Assessment Scope:', ML + 8, my + 40);
+
+  doc.setTextColor(...C.text);
+  doc.setFont('helvetica','bold');
+  doc.text(userEmail, ML + 50, my + 10);
+  doc.setFont('helvetica','normal');
+  doc.text(today, ML + 50, my + 20);
+
+  const riskLabel = pct >= 80 ? 'LOW' : pct >= 50 ? 'MODERATE' : 'HIGH';
+  const riskColor = pct >= 80 ? C.emerald : pct >= 50 ? C.amber : C.crimson;
+  doc.setTextColor(...riskColor);
+  doc.setFont('helvetica','bold');
+  doc.text(riskLabel, ML + 50, my + 30);
+  doc.setTextColor(...C.text);
+  doc.setFont('helvetica','normal');
+  doc.text(totalQ + ' questions across ' + Object.keys(scores).filter(k=>Object.keys(scores[k]).length>0).length + ' compliance domains', ML + 50, my + 40);
+
+  my = 168;
+  const statsW = PW / 4;
+  [[yesCount, 'Compliant', C.emerald], [noCount, 'Gaps', C.crimson], [unsureCount, 'Uncertain', C.amber], [totalQ, 'Total Items', C.violet]].forEach(([val,label,clr], i) => {
+    const sx = ML + i * statsW;
+    rect(sx + 2, my, statsW - 4, 28, C.darkPurple, 2);
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(18);
+    doc.setTextColor(...clr);
+    doc.text(String(val), sx + statsW/2, my + 14, { align:'center' });
+    doc.setFont('helvetica','normal');
+    doc.setFontSize(7);
+    doc.setTextColor(...C.dim);
+    doc.text(label, sx + statsW/2, my + 22, { align:'center' });
+  });
+
+  my = 208;
+  doc.setFontSize(9);
+  doc.setTextColor(...C.muted);
+  doc.text('Risk Exposure', ML, my);
+  rect(ML, my + 4, PW, 4, C.darkPurple, 2);
+  if (riskPct > 0) rect(ML, my + 4, PW * riskPct / 100, 4, riskColor, 2);
+
+  my = 225;
+  rect(ML, my, PW, 20, C.darkPurple, 2);
+  doc.setFontSize(7.5);
+  doc.setTextColor(...C.dim);
+  const discLines = doc.splitTextToSize('This report is based on your self-assessment responses and provides a preliminary compliance gap analysis. It is not legal advice. Consult qualified legal counsel for implementation of any compliance measures. Data reflects Illinois AI legislation as of March 27, 2026.', PW - 16);
+  discLines.forEach((line, i) => doc.text(line, ML + 8, my + 8 + i * 3.5));
+
+  doc.setFontSize(7);
+  doc.setTextColor(...C.dim);
+  doc.text('TECHNE AI  ·  techne.ai  ·  strategy.techne.ai/illinois-AI-laws', W/2, H - 12, { align:'center' });
+  doc.text('Page 1', W - MR, H - 12, { align:'right' });
+
+  // ══════ PAGE 2+: GAP ANALYSIS ══════
+  doc.addPage();
+  rect(0, 0, W, H, C.bg);
+  rect(0, 0, W, 3, C.violet);
+
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(16);
+  doc.setTextColor(...C.white);
+  doc.text('Compliance Gap Analysis', ML, 22);
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(9);
+  doc.setTextColor(...C.muted);
+  doc.text('Items requiring attention, mapped to specific Illinois AI statutes', ML, 30);
+  rect(ML, 34, 30, 0.4, C.violet);
+
+  let py = 42;
+  let gapNum = 0;
+  let pageNum = 2;
+
+  const noAnswers = Object.entries(allScores).filter(([,v]) => v === 'no');
+  const unsureAnswers = Object.entries(allScores).filter(([,v]) => v === 'unsure');
+
+  if (noAnswers.length > 0) {
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(11);
+    doc.setTextColor(...C.crimson);
+    doc.text('IDENTIFIED GAPS', ML, py);
+    py += 8;
+
+    noAnswers.forEach(([qid]) => {
+      const m = QM[qid];
+      if (!m) return;
+      gapNum++;
+
+      if (py > H - 55) {
+        doc.setFontSize(7); doc.setTextColor(...C.dim);
+        doc.text('Page ' + pageNum, W - MR, H - 12, { align:'right' });
+        doc.text('TECHNE AI  ·  techne.ai', W/2, H - 12, { align:'center' });
+        doc.addPage(); rect(0,0,W,H,C.bg); rect(0,0,W,3,C.violet); py = 18; pageNum++;
+      }
+
+      const cardH = 42;
+      rect(ML, py, PW, cardH, C.darkPurple, 2);
+      rect(ML, py, 2, cardH, C.crimson);
+
+      doc.setFont('helvetica','bold');
+      doc.setFontSize(8);
+      doc.setTextColor(...C.crimson);
+      doc.text('GAP #' + gapNum + '  ·  ' + m.priority, ML + 8, py + 8);
+
+      doc.setFont('helvetica','normal');
+      doc.setFontSize(7);
+      doc.setTextColor(...C.violet);
+      doc.text(m.law + ' — ' + m.title, ML + 8, py + 14);
+
+      doc.setFont('helvetica','bold');
+      doc.setFontSize(9);
+      doc.setTextColor(...C.text);
+      const qLines = doc.splitTextToSize(m.q, PW - 16);
+      qLines.forEach((line, i) => doc.text(line, ML + 8, py + 21 + i * 4));
+
+      doc.setFont('helvetica','normal');
+      doc.setFontSize(7.5);
+      doc.setTextColor(...C.muted);
+      const fLines = doc.splitTextToSize('Remediation: ' + m.fix, PW - 16);
+      const fixY = py + 21 + qLines.length * 4 + 2;
+      fLines.forEach((line, i) => {
+        if (fixY + i * 3.2 < py + cardH - 2) doc.text(line, ML + 8, fixY + i * 3.2);
+      });
+
+      py += cardH + 6;
+    });
+  }
+
+  if (unsureAnswers.length > 0) {
+    if (py > H - 55) {
+      doc.setFontSize(7); doc.setTextColor(...C.dim);
+      doc.text('Page ' + pageNum, W - MR, H - 12, { align:'right' });
+      doc.addPage(); rect(0,0,W,H,C.bg); rect(0,0,W,3,C.violet); py = 18; pageNum++;
+    }
+
+    py += 4;
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(11);
+    doc.setTextColor(...C.amber);
+    doc.text('UNCERTAIN ITEMS — Requires Investigation', ML, py);
+    py += 8;
+
+    unsureAnswers.forEach(([qid]) => {
+      const m = QM[qid];
+      if (!m) return;
+      gapNum++;
+
+      if (py > H - 40) {
+        doc.setFontSize(7); doc.setTextColor(...C.dim);
+        doc.text('Page ' + pageNum, W - MR, H - 12, { align:'right' });
+        doc.text('TECHNE AI  ·  techne.ai', W/2, H - 12, { align:'center' });
+        doc.addPage(); rect(0,0,W,H,C.bg); rect(0,0,W,3,C.violet); py = 18; pageNum++;
+      }
+
+      rect(ML, py, PW, 24, C.darkPurple, 2);
+      rect(ML, py, 2, 24, C.amber);
+      doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(...C.amber);
+      doc.text('UNCERTAIN #' + gapNum + '  ·  ' + m.law, ML + 8, py + 8);
+      doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(...C.text);
+      const qL = doc.splitTextToSize(m.q, PW - 16);
+      qL.forEach((line, i) => doc.text(line, ML + 8, py + 15 + i * 3.8));
+      py += 30;
+    });
+  }
+
+  const yesAnswers = Object.entries(allScores).filter(([,v]) => v === 'yes');
+  if (yesAnswers.length > 0) {
+    if (py > H - 40) {
+      doc.setFontSize(7); doc.setTextColor(...C.dim);
+      doc.text('Page ' + pageNum, W - MR, H - 12, { align:'right' });
+      doc.addPage(); rect(0,0,W,H,C.bg); rect(0,0,W,3,C.violet); py = 18; pageNum++;
+    }
+    py += 4;
+    doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(...C.emerald);
+    doc.text('COMPLIANT ITEMS (' + yesAnswers.length + ')', ML, py);
+    py += 6;
+    yesAnswers.forEach(([qid]) => {
+      const m = QM[qid];
+      if (!m) return;
+      if (py > H - 20) {
+        doc.setFontSize(7); doc.setTextColor(...C.dim);
+        doc.text('Page ' + pageNum, W - MR, H - 12, { align:'right' });
+        doc.addPage(); rect(0,0,W,H,C.bg); rect(0,0,W,3,C.violet); py = 18; pageNum++;
+      }
+      doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(...C.emerald);
+      doc.text('✓', ML + 2, py + 3);
+      doc.setTextColor(...C.muted);
+      doc.text(m.law + ': ' + m.q, ML + 8, py + 3);
+      py += 6;
+    });
+  }
+
+  doc.setFontSize(7); doc.setTextColor(...C.dim);
+  doc.text('Page ' + pageNum, W - MR, H - 12, { align:'right' });
+  doc.text('TECHNE AI  ·  techne.ai', W/2, H - 12, { align:'center' });
+
+  // ══════ FINAL PAGE: CTA ══════
+  doc.addPage();
+  rect(0, 0, W, H, C.bg);
+  rect(0, 0, W, 3, C.violet);
+  pageNum++;
+
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(20);
+  doc.setTextColor(...C.white);
+  doc.text('What Happens Next', ML, 30);
+  rect(ML, 36, 30, 0.4, C.violet);
+
+  py = 48;
+
+  rect(ML, py, PW, 36, C.darkPurple, 3);
+  rect(ML, py, 3, 36, C.violet);
+  doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(...C.violet);
+  doc.text('1.  PERSONALIZED COMPLIANCE BRIEF', ML + 10, py + 10);
+  doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(...C.muted);
+  const s1 = doc.splitTextToSize('Complete our full assessment (3 minutes) and our team will deliver a deeper analysis covering your industry, organization size, vendor stack, and the specific intersection of statutes that create your exposure. Delivered to your email within 2 business days.', PW - 20);
+  s1.forEach((line, i) => doc.text(line, ML + 10, py + 17 + i * 3.8));
+  py += 44;
+
+  rect(ML, py, PW, 36, C.darkPurple, 3);
+  rect(ML, py, 3, 36, C.emerald);
+  doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(...C.emerald);
+  doc.text('2.  FREE 30-MINUTE CONSULTATION', ML + 10, py + 10);
+  doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(...C.muted);
+  const s2 = doc.splitTextToSize('Book a call with our team. We will walk through your assessment results, map your specific compliance obligations, and build a prioritized roadmap together. No obligation — just clarity on what you need to do and in what order.', PW - 20);
+  s2.forEach((line, i) => doc.text(line, ML + 10, py + 17 + i * 3.8));
+  py += 44;
+
+  rect(ML, py, PW, 28, C.darkPurple, 3);
+  rect(ML, py, 3, 28, C.amber);
+  doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(...C.amber);
+  doc.text('3.  ONGOING MONITORING', ML + 10, py + 10);
+  doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(...C.muted);
+  const s3 = doc.splitTextToSize('29 more bills are pending. We track every bill, every amendment, every committee vote — and alert you when something changes that affects your compliance posture.', PW - 20);
+  s3.forEach((line, i) => doc.text(line, ML + 10, py + 17 + i * 3.8));
+  py += 40;
+
+  py += 8;
+  rect(ML, py, PW, 44, [40, 30, 55], 3);
+  doc.setFont('helvetica','bold'); doc.setFontSize(14); doc.setTextColor(...C.white);
+  doc.text('Techne AI', ML + PW/2, py + 14, { align:'center' });
+  doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(...C.muted);
+  doc.text('techne.ai', ML + PW/2, py + 23, { align:'center' });
+  doc.text('strategy.techne.ai/illinois-AI-laws', ML + PW/2, py + 30, { align:'center' });
+  doc.setFontSize(8);
+  doc.text('Illinois AI Legislative Ecosystem Map', ML + PW/2, py + 38, { align:'center' });
+
+  doc.setFontSize(7); doc.setTextColor(...C.dim);
+  doc.text('Page ' + pageNum, W - MR, H - 12, { align:'right' });
+  doc.text('TECHNE AI  ·  techne.ai', W/2, H - 12, { align:'center' });
+  doc.setFontSize(6.5);
+  doc.text('This report is generated from a self-assessment tool and is not legal advice.', W/2, H - 8, { align:'center' });
+
+  doc.save('Illinois-AI-Compliance-Report_TechneAI.pdf');
+}
+
+// ── Tab nav ──
+document.querySelectorAll('.compliance-page .nav-tab').forEach(tab=>{tab.addEventListener('click',()=>{document.querySelectorAll('.compliance-page .nav-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.compliance-page .view-section').forEach(v=>v.classList.remove('active'));tab.classList.add('active');document.getElementById('view-'+tab.dataset.view).classList.add('active')})});
+
+function toggleAssess(id){document.getElementById(id).classList.toggle('open')}
+function toggleStake(id){document.getElementById(id).classList.toggle('open')}
+
+// ── Config banner visibility ──
+document.addEventListener('DOMContentLoaded',()=>{if(FORMS_URL!=='YOUR_FORMS_URL'&&BOOKINGS_URL!=='YOUR_BOOKINGS_URL')document.getElementById('configBanner').classList.add('hidden')});
+
+// ── Assessment scoring ──
+const scores={e:{},h:{},d:{},c:{}};
+const labels={e:'employer',h:'health',d:'edu',c:'creative'};
+
+function answer(btn,val,group){
+  const qg=btn.closest('.question-group'),qid=qg.id;
+  qg.querySelectorAll('.q-btn').forEach(b=>b.classList.remove('selected-yes','selected-no','selected-unsure'));
+  btn.classList.add('selected-'+val);
+  scores[group][qid]=val;
+  qg.classList.remove('answered-yes','answered-no');
+  const gap=qg.querySelector('.gap-reveal');
+  if(val==='no'||val==='unsure'){qg.classList.add('answered-no');gap.classList.add('visible')}
+  else{qg.classList.add('answered-yes');gap.classList.remove('visible')}
+  updateGroupScore(group);updateResults();
+}
+
+function updateGroupScore(group){
+  const answered=Object.keys(scores[group]).length;
+  if(!answered)return;
+  const yes=Object.values(scores[group]).filter(v=>v==='yes').length;
+  const pct=Math.round((yes/answered)*100);
+  const badge=document.getElementById('score-'+labels[group]);
+  let color,bg;
+  if(pct>=80){color='var(--accent-emerald)';bg='var(--accent-emerald-bg)'}
+  else if(pct>=50){color='var(--accent-amber)';bg='var(--accent-amber-bg)'}
+  else{color='var(--accent-crimson)';bg='var(--accent-crimson-bg)'}
+  badge.style.color=color;badge.style.background=bg;badge.textContent=pct+'% ready';
+}
+
+function updateResults(){
+  const all={...scores.e,...scores.h,...scores.d,...scores.c};
+  const total=Object.keys(all).length;
+  if(total<3)return;
+  const panel=document.getElementById('results-panel');panel.classList.add('visible');
+  const yes=Object.values(all).filter(v=>v==='yes').length;
+  const no=Object.values(all).filter(v=>v==='no').length;
+  const unsure=Object.values(all).filter(v=>v==='unsure').length;
+  const pct=Math.round((yes/total)*100);
+  const circle=document.getElementById('results-circle');
+  const scoreEl=document.getElementById('results-score');
+  const headline=document.getElementById('results-headline');
+  const body=document.getElementById('results-body');
+  scoreEl.textContent=pct+'%';
+  let color;
+  if(pct>=80){color='var(--accent-emerald)';headline.textContent='Solid Foundation';body.textContent='You\'re ahead of most. Focus on remaining gaps and monitor pending legislation.'}
+  else if(pct>=50){color='var(--accent-amber)';headline.textContent='Significant Gaps';body.textContent='Multiple workstreams need attention before IDHR enforcement rules are finalized. The gaps below create real liability.'}
+  else{color='var(--accent-crimson)';headline.textContent='Critical Exposure';body.textContent='Substantial compliance gaps across multiple active statutes. Some of these laws are already enforceable — immediate action needed.'}
+  circle.style.borderColor=color;scoreEl.style.color=color;
+
+  const riskPct=Math.min(100,Math.round(((no+unsure*.7)/total)*100));
+  const riskFill=document.getElementById('risk-fill');
+  riskFill.style.width=riskPct+'%';
+  riskFill.style.background=riskPct>=60?'var(--accent-crimson)':riskPct>=30?'var(--accent-amber)':'var(--accent-emerald)';
+
+  const risks=[];
+  if(scores.e['q-e1']!=='yes'&&scores.e['q-e1'])risks.push('IDHR complaint exposure — employees can file charges today for missing AI notices');
+  if(scores.e['q-e2']!=='yes'&&scores.e['q-e2'])risks.push('Disparate impact liability on every AI-assisted employment decision');
+  if(scores.e['q-e3']!=='yes'&&scores.e['q-e3'])risks.push('Zip code proxy discrimination — enumerated violation');
+  if(scores.h['q-h1']!=='yes'&&scores.h['q-h1'])risks.push('WOPR Act — AI potentially operating as independent therapist');
+  if(scores.h['q-h2']!=='yes'&&scores.h['q-h2'])risks.push('Prohibited emotion detection may be active in clinical tools');
+  if(scores.c['q-c1']!=='yes'&&scores.c['q-c1'])risks.push('Void contracts — AI likeness agreements without required specificity');
+  if(unsure>0)risks.push(unsure+' "Not Sure" answer'+(unsure>1?'s':'')+' — uncertainty itself is a risk indicator');
+  document.getElementById('risk-items').innerHTML=risks.map(r=>'<div class="risk-item">• '+r+'</div>').join('');
+
+  const gapsEl=document.getElementById('results-gaps');
+  const gaps=[];
+  Object.entries(all).forEach(([qid,val])=>{if(val==='no')gaps.push({icon:'x',qid});else if(val==='unsure')gaps.push({icon:'warn',qid})});
+  if(gaps.length){
+    gapsEl.innerHTML='<div style="font-size:13px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin:16px 0 10px">Gaps Identified</div>'+
+    gaps.map(g=>{const q=document.getElementById(g.qid);const t=q?q.querySelector('.question-text').textContent:'';const i=g.icon==='x'?'<span style="color:var(--accent-crimson);font-weight:700;flex-shrink:0">✗</span>':'<span style="color:var(--accent-amber);font-weight:700;flex-shrink:0">?</span>';return'<div class="results-gap-item">'+i+'<div>'+t+'</div></div>'}).join('');
+  }
+}
+</script>
+</body>
+</html>
