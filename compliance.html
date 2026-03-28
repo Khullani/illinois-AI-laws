@@ -164,7 +164,7 @@ body{background:#0c0a0f !important}
 .email-gate-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(12,10,15,.85);backdrop-filter:blur(6px);z-index:1000;align-items:center;justify-content:center;padding:24px}
 .email-gate-overlay.visible{display:flex;animation:fadeIn .2s ease}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.email-gate-modal{background:var(--surface);border:1px solid var(--border-accent);border-radius:var(--radius);padding:36px;max-width:460px;width:100%;position:relative;animation:slideUp .3s ease}
+.email-gate-modal{background:var(--surface);border:1px solid var(--border-accent);border-radius:var(--radius);padding:36px;max-width:500px;width:100%;position:relative;animation:slideUp .3s ease;max-height:90vh;overflow-y:auto}
 @keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 .email-gate-close{position:absolute;top:16px;right:16px;background:0;border:0;color:var(--text-dim);font-size:18px;cursor:pointer;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:4px}
 .email-gate-close:hover{color:var(--text);background:var(--surface-2)}
@@ -181,6 +181,14 @@ body{background:#0c0a0f !important}
 .gate-submit:hover{background:#b99dfc;transform:translateY(-1px)}
 .gate-submit:disabled{opacity:.5;cursor:not-allowed;transform:none}
 .gate-privacy{font-size:11px;color:var(--text-dim);text-align:center;margin-top:12px;line-height:1.5}
+.gate-row{display:flex;gap:10px;margin-bottom:10px}
+.gate-row .gate-field{flex:1}
+.gate-field{margin-bottom:10px}
+.gate-field label{display:block;font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:4px}
+.gate-input{width:100%;padding:12px 14px;background:var(--surface-2);border:1.5px solid var(--border-accent);border-radius:var(--radius-sm);color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border-color .2s}
+.gate-input:focus{border-color:var(--accent-violet)}
+.gate-input.error{border-color:var(--accent-crimson)}
+.gate-input.valid{border-color:var(--accent-emerald)}
 
 /* ── INLINE CTA ── */
 .inline-cta{margin-top:32px;padding:28px;background:linear-gradient(135deg,rgba(167,139,250,.06),rgba(167,139,250,.02));border:1px solid rgba(167,139,250,.18);border-radius:var(--radius);text-align:center}
@@ -350,14 +358,29 @@ body{background:#0c0a0f !important}
       <div class="cp-section-header"><span class="cp-section-number">01</span><span class="cp-section-title">How Exposed Are You?</span></div>
       <p class="cp-section-desc">Answer these questions to see where your compliance gaps are. Each maps to a specific Illinois AI statute. We'll tailor the assessment to your organization.</p>
 
+      <!-- Gate CTA — shown before lead info is captured -->
+      <div id="assessGateCTA" style="text-align:center;padding:40px 20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);">
+        <div style="font-size:40px;margin-bottom:16px">🛡️</div>
+        <h3 style="font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;margin-bottom:8px">Free Compliance Readiness Assessment</h3>
+        <p style="font-size:14px;color:var(--text-muted);max-width:480px;margin:0 auto 8px;line-height:1.65">35 questions across 7 compliance domains. Tailored to your organization. Takes about 5 minutes.</p>
+        <p style="font-size:13px;color:var(--text-dim);margin-bottom:24px">You'll receive an instant PDF gap report with your results, remediation steps, and a prioritized compliance roadmap.</p>
+        <button class="cp-btn" onclick="openLeadGate('assess')" style="font-size:15px;padding:16px 36px">Start the Assessment →</button>
+        <div style="display:flex;gap:20px;justify-content:center;margin-top:20px;font-size:11px;color:var(--text-dim);flex-wrap:wrap">
+          <span>🔒 Confidential</span>
+          <span>⏱ ~5 minutes</span>
+          <span>📄 Instant PDF report</span>
+          <span>🏢 Work email required</span>
+        </div>
+      </div>
+
       <!-- Wizard Progress -->
       <div class="wizard-progress" id="wizardProgress" style="display:none">
         <span class="wizard-progress-text" id="wizardProgressText">Step 1 of 5</span>
         <div class="wizard-progress-bar"><div class="wizard-progress-fill" id="wizardProgressFill" style="width:0%"></div></div>
       </div>
 
-      <!-- Wizard container — steps injected by JS -->
-      <div id="wizardContainer"></div>
+      <!-- Wizard container — steps injected by JS, hidden until lead captured -->
+      <div id="wizardContainer" style="display:none"></div>
     </div>
   </div>
 
@@ -465,24 +488,33 @@ body{background:#0c0a0f !important}
     </div>
   </div>
 
-  <!-- ═══ EMAIL GATE MODAL ═══ -->
+  <!-- ═══ LEAD CAPTURE GATE MODAL ═══ -->
   <div class="email-gate-overlay" id="emailGate">
     <div class="email-gate-modal">
       <button class="email-gate-close" onclick="closeEmailGate()">✕</button>
+
+      <!-- State 1: Lead capture (gates assessment start + PDF download) -->
       <div id="gateStep1">
-        <h3>Download your gap report</h3>
-        <p class="gate-sub">Enter your work email to instantly download a branded PDF report of your compliance readiness. We'll also prepare a deeper personalized brief within 2 business days.</p>
-        <div><input type="email" class="email-input" id="gateEmail" placeholder="you@yourcompany.com" autocomplete="email"></div>
+        <h3 id="gateTitle">Start your compliance assessment</h3>
+        <p class="gate-sub" id="gateSub">Tell us who you are so we can deliver your personalized compliance report. Takes 30 seconds.</p>
+        <div class="gate-row">
+          <div class="gate-field"><label for="gateFirst">First Name</label><input type="text" class="gate-input" id="gateFirst" placeholder="Jane" autocomplete="given-name"></div>
+          <div class="gate-field"><label for="gateLast">Last Name</label><input type="text" class="gate-input" id="gateLast" placeholder="Smith" autocomplete="family-name"></div>
+        </div>
+        <div class="gate-field"><label for="gateCompany">Company / Organization</label><input type="text" class="gate-input" id="gateCompany" placeholder="Acme Corp" autocomplete="organization"></div>
+        <div class="gate-field"><label for="gateEmail">Work Email</label><input type="email" class="gate-input" id="gateEmail" placeholder="jane.smith@acme.com" autocomplete="email"></div>
         <div class="email-error" id="gateError"></div>
-        <div class="email-hint">🏢 Work email required — we send reports to organizational addresses only.</div>
-        <button class="gate-submit" id="gateSubmit" onclick="submitEmailGate()">Generate & Download Report →</button>
-        <p class="gate-privacy">Your email is used solely to deliver your reports. We don't share, sell, or spam. <a href="https://techne.ai" target="_blank">Privacy policy</a>.</p>
+        <div class="email-hint">🏢 Personal emails (Gmail, Yahoo, etc.) and generic addresses (info@, admin@) are not accepted.</div>
+        <button class="gate-submit" id="gateSubmit" onclick="submitLeadGate()">Continue →</button>
+        <p class="gate-privacy">Your information is used solely to deliver your compliance report. We don't share, sell, or spam. <a href="https://techne.ai" target="_blank">Privacy policy</a>.</p>
       </div>
+
+      <!-- State 2: Post-download success (shown after PDF) -->
       <div id="gateStep2" style="display:none">
         <div style="text-align:center;margin-bottom:20px">
           <div style="width:56px;height:56px;border-radius:50%;background:var(--accent-emerald-bg);display:inline-flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:12px">✓</div>
           <h3 style="margin-bottom:4px">Report downloaded!</h3>
-          <p class="gate-sub" style="margin-bottom:0">Your instant gap report has been saved as a PDF.</p>
+          <p class="gate-sub" style="margin-bottom:0">Your compliance gap report has been saved as a PDF. Check your downloads folder.</p>
         </div>
         <div style="background:var(--surface-2);border-radius:var(--radius-sm);padding:18px;margin-bottom:16px">
           <p style="font-size:13px;font-weight:600;margin-bottom:6px">Want a deeper analysis?</p>
@@ -1003,15 +1035,13 @@ function renderResults() {
       </div>` : '<div class="results-gaps"><h4 style="color:var(--accent-emerald)">✓ No gaps identified across assessed domains</h4></div>'}
 
       <div class="lead-capture-box">
-        <h3>Get your compliance gap report.</h3>
-        <p class="lead-sub">Enter your work email to instantly download a branded PDF report with your readiness score, identified gaps, and statute-specific remediation steps.</p>
-        <p class="lead-detail"><strong>Instant PDF download</strong> + personalized follow-up brief. No obligation.</p>
+        <h3>Download your compliance gap report</h3>
+        <p class="lead-sub">Get a branded PDF report with your readiness score, identified gaps, statute-specific remediation steps, and a prioritized compliance roadmap.</p>
         <div class="lead-btns">
-          <a href="#" data-cta="form" class="cp-btn">Download My Gap Report →</a>
+          <button class="cp-btn" onclick="downloadPDFDirect()">Download Report (PDF) →</button>
           <a href="#" data-cta="book" target="_blank" class="cp-btn cp-btn-book">Book a Free 30-Min Consultation</a>
         </div>
         <div class="lead-trust">
-          <span>🏢 Work email required</span>
           <span>📄 Instant branded PDF</span>
           <span>🔒 Confidential</span>
           <span>📊 Personalized brief in 2 days</span>
@@ -1060,22 +1090,116 @@ const BLOCKED_DOMAINS = [
   'duck.com','hey.com'
 ];
 
+// Generic / role-based email prefixes that aren't real people
+const BLOCKED_PREFIXES = [
+  'info','admin','administrator','support','sales','contact','hello','team','office',
+  'hr','billing','marketing','press','media','general','webmaster','postmaster',
+  'noreply','no-reply','help','service','abuse','security','privacy','legal',
+  'feedback','enquiries','inquiries','reception','accounts','operations','careers',
+  'jobs','recruiting','compliance','it','tech','dev','engineering','finance',
+  'accounting','procurement','purchasing','orders','returns','shipping','customerservice',
+  'cs','helpdesk','mailroom','frontdesk','main','corporate','headquarters','hq',
+  'editor','news','pr','communications','comms','social','partnerships','events',
+  'training','learning','safety','quality','risk','audit','governance','board',
+  'secretary','registrar','admissions','enrollment','apply','donate','volunteer'
+];
+
+// Lead info state
+let leadInfo = null; // { firstName, lastName, company, email }
+let gateMode = 'assess'; // 'assess' = gate assessment start, 'pdf' = gate PDF download
+
 function isWorkEmail(email) {
   const e = email.trim().toLowerCase();
   if (!e || !e.includes('@')) return { valid: false, reason: 'Please enter a valid email address.' };
   const parts = e.split('@');
   if (parts.length !== 2 || !parts[1].includes('.')) return { valid: false, reason: 'Please enter a valid email address.' };
-  if (BLOCKED_DOMAINS.includes(parts[1])) return { valid: false, reason: 'Please use your work email. We send compliance briefs to organizational addresses only.' };
-  if (/^(test|asdf|fake|none|no|na|n\/a)@/.test(e)) return { valid: false, reason: 'Please enter your real work email address.' };
-  return { valid: true, domain: parts[1] };
+  const domain = parts[1];
+  const prefix = parts[0];
+  if (BLOCKED_DOMAINS.includes(domain)) return { valid: false, reason: 'Please use your work email — personal email providers are not accepted.' };
+  if (BLOCKED_PREFIXES.includes(prefix)) return { valid: false, reason: 'Please use your personal work email, not a shared address like ' + prefix + '@. We need to reach you directly.' };
+  if (/^(test|asdf|fake|none|no|na|n\/a|xxx|abc|aaa)@/.test(e)) return { valid: false, reason: 'Please enter your real work email address.' };
+  // Block single-letter or numeric-only prefixes
+  if (/^[a-z]$/.test(prefix) || /^\d+$/.test(prefix)) return { valid: false, reason: 'Please enter your full work email address.' };
+  return { valid: true, domain };
 }
 
-function openEmailGate() {
-  document.getElementById('emailGate').classList.add('visible');
+function validateLeadFields() {
+  const first = document.getElementById('gateFirst').value.trim();
+  const last = document.getElementById('gateLast').value.trim();
+  const company = document.getElementById('gateCompany').value.trim();
+  const email = document.getElementById('gateEmail').value.trim();
+  const error = document.getElementById('gateError');
+
+  // Clear previous errors
+  document.querySelectorAll('.gate-input').forEach(i => i.classList.remove('error'));
+  error.textContent = '';
+
+  if (!first || first.length < 2) {
+    document.getElementById('gateFirst').classList.add('error');
+    error.textContent = 'Please enter your first name.';
+    document.getElementById('gateFirst').focus();
+    return null;
+  }
+  if (!last || last.length < 2) {
+    document.getElementById('gateLast').classList.add('error');
+    error.textContent = 'Please enter your last name.';
+    document.getElementById('gateLast').focus();
+    return null;
+  }
+  if (!company || company.length < 2) {
+    document.getElementById('gateCompany').classList.add('error');
+    error.textContent = 'Please enter your company or organization name.';
+    document.getElementById('gateCompany').focus();
+    return null;
+  }
+  if (!email) {
+    document.getElementById('gateEmail').classList.add('error');
+    error.textContent = 'Please enter your work email address.';
+    document.getElementById('gateEmail').focus();
+    return null;
+  }
+  const emailCheck = isWorkEmail(email);
+  if (!emailCheck.valid) {
+    document.getElementById('gateEmail').classList.add('error');
+    error.textContent = emailCheck.reason;
+    document.getElementById('gateEmail').focus();
+    return null;
+  }
+
+  return { firstName: first, lastName: last, company, email };
+}
+
+function openLeadGate(mode) {
+  gateMode = mode || 'assess';
+  const overlay = document.getElementById('emailGate');
+  overlay.classList.add('visible');
   document.body.style.overflow = 'hidden';
   document.getElementById('gateStep1').style.display = 'block';
   document.getElementById('gateStep2').style.display = 'none';
-  setTimeout(() => document.getElementById('gateEmail').focus(), 100);
+
+  // Update title/sub based on mode
+  const title = document.getElementById('gateTitle');
+  const sub = document.getElementById('gateSub');
+  const btn = document.getElementById('gateSubmit');
+  if (mode === 'pdf') {
+    title.textContent = 'Download your compliance report';
+    sub.textContent = 'Confirm your details to generate and download your personalized PDF compliance report.';
+    btn.textContent = 'Generate & Download Report →';
+  } else {
+    title.textContent = 'Start your compliance assessment';
+    sub.textContent = 'Tell us who you are so we can deliver your personalized compliance report. Takes 30 seconds.';
+    btn.textContent = 'Continue to Assessment →';
+  }
+
+  // Pre-fill if we have saved info
+  if (leadInfo) {
+    document.getElementById('gateFirst').value = leadInfo.firstName || '';
+    document.getElementById('gateLast').value = leadInfo.lastName || '';
+    document.getElementById('gateCompany').value = leadInfo.company || '';
+    document.getElementById('gateEmail').value = leadInfo.email || '';
+  }
+
+  setTimeout(() => document.getElementById('gateFirst').focus(), 100);
 }
 
 function closeEmailGate() {
@@ -1083,51 +1207,48 @@ function closeEmailGate() {
   document.body.style.overflow = '';
 }
 
-function submitEmailGate() {
-  const input = document.getElementById('gateEmail');
-  const error = document.getElementById('gateError');
+function submitLeadGate() {
+  const info = validateLeadFields();
+  if (!info) return;
+
+  leadInfo = info;
+  sessionStorage.setItem('cp_lead', JSON.stringify(leadInfo));
+
   const btn = document.getElementById('gateSubmit');
-  const val = input.value.trim();
-  const check = isWorkEmail(val);
 
-  if (!check.valid) {
-    input.classList.add('error');
-    input.classList.remove('valid');
-    error.textContent = check.reason;
-    input.focus();
-    return;
-  }
+  if (gateMode === 'pdf') {
+    // Generate and download PDF
+    btn.disabled = true;
+    btn.textContent = 'Generating your report…';
 
-  input.classList.add('valid');
-  error.textContent = '';
-  btn.disabled = true;
-  btn.textContent = 'Generating your report…';
+    const hasAnswers = Object.keys(answers).length > 0;
+    if (!hasAnswers) {
+      btn.disabled = false;
+      btn.textContent = 'Generate & Download Report →';
+      const formUrl = FORMS_URL + (FORMS_URL.includes('?') ? '&' : '?') + 'email=' + encodeURIComponent(info.email);
+      closeEmailGate();
+      window.open(formUrl, '_blank');
+      return;
+    }
 
-  // Check if user has actually completed the assessment
-  const hasAnswers = Object.keys(answers).length > 0;
-
-  if (!hasAnswers) {
-    // No assessment taken — redirect to MS Form directly instead of generating empty PDF
-    btn.disabled = false;
-    btn.textContent = 'Generate & Download Report →';
-    const formUrl = FORMS_URL + (FORMS_URL.includes('?') ? '&' : '?') + 'email=' + encodeURIComponent(val);
+    setTimeout(() => {
+      try { generateCompliancePDF(info.email); } catch(err) { console.error('PDF generation error:', err); }
+      document.getElementById('gateStep1').style.display = 'none';
+      document.getElementById('gateStep2').style.display = 'block';
+      const formUrl = FORMS_URL + (FORMS_URL.includes('?') ? '&' : '?') + 'email=' + encodeURIComponent(info.email);
+      document.querySelectorAll('[data-cta="form-direct"]').forEach(a => a.href = formUrl);
+      btn.disabled = false;
+      btn.textContent = 'Generate & Download Report →';
+    }, 300);
+  } else {
+    // Assessment gate — close modal and let them proceed
     closeEmailGate();
-    window.open(formUrl, '_blank');
-    return;
+    document.getElementById('assessGateCTA').style.display = 'none';
+    document.getElementById('wizardContainer').style.display = 'block';
   }
-
-  setTimeout(() => {
-    try { generateCompliancePDF(val); } catch(err) { console.error('PDF generation error:', err); }
-    document.getElementById('gateStep1').style.display = 'none';
-    document.getElementById('gateStep2').style.display = 'block';
-    const formUrl = FORMS_URL + (FORMS_URL.includes('?') ? '&' : '?') + 'email=' + encodeURIComponent(val);
-    document.querySelectorAll('[data-cta="form-direct"]').forEach(a => a.href = formUrl);
-    btn.disabled = false;
-    btn.textContent = 'Generate & Download Report →';
-  }, 300);
 }
 
-// Email gate event listeners
+// Live validation on email input
 document.getElementById('gateEmail').addEventListener('input', function() {
   this.classList.remove('error', 'valid');
   document.getElementById('gateError').textContent = '';
@@ -1135,15 +1256,38 @@ document.getElementById('gateEmail').addEventListener('input', function() {
     if (isWorkEmail(this.value.trim()).valid) this.classList.add('valid');
   }
 });
-document.getElementById('gateEmail').addEventListener('keydown', (e) => { if (e.key === 'Enter') submitEmailGate(); });
+
+// Clear error on any input focus
+document.querySelectorAll('.gate-input').forEach(input => {
+  input.addEventListener('focus', function() { this.classList.remove('error'); });
+});
+
+// Enter key submits from last field
+document.getElementById('gateEmail').addEventListener('keydown', (e) => { if (e.key === 'Enter') submitLeadGate(); });
+
+// Close on overlay click or Escape
 document.getElementById('emailGate').addEventListener('click', (e) => { if (e.target === document.getElementById('emailGate')) closeEmailGate(); });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeEmailGate(); });
 
-// Intercept form CTA clicks
+// Intercept form CTA clicks — now opens lead gate in PDF mode (if already captured, skip to PDF)
 document.addEventListener('click', (e) => {
   const link = e.target.closest('[data-cta="form"]');
-  if (link) { e.preventDefault(); openEmailGate(); }
+  if (link) {
+    e.preventDefault();
+    if (leadInfo) {
+      // Already captured — go straight to PDF mode
+      openLeadGate('pdf');
+    } else {
+      openLeadGate('pdf');
+    }
+  }
 });
+
+// Direct PDF download — lead info already captured
+function downloadPDFDirect() {
+  if (!leadInfo) { openLeadGate('pdf'); return; }
+  try { generateCompliancePDF(leadInfo.email); } catch(err) { console.error('PDF error:', err); }
+}
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 //  PDF GENERATION
@@ -1217,24 +1361,27 @@ function generateCompliancePDF(userEmail) {
   doc.text(tier.tier.toUpperCase(), cx, cy + 20, {align:'center'});
 
   // Meta info
+  const prepName = leadInfo ? leadInfo.firstName + ' ' + leadInfo.lastName : userEmail;
+  const prepOrg = leadInfo ? leadInfo.company : '';
   let my = 108;
-  rect(ML, my, PW, 48, C.darkPurple, 3);
+  rect(ML, my, PW, 58, C.darkPurple, 3);
   doc.setFontSize(9); doc.setTextColor(...C.dim);
   doc.text('Prepared for:', ML+8, my+10);
-  doc.text('Date:', ML+8, my+20);
-  doc.text('Risk Level:', ML+8, my+30);
-  doc.text('Assessment Scope:', ML+8, my+40);
+  doc.text('Organization:', ML+8, my+20);
+  doc.text('Email:', ML+8, my+30);
+  doc.text('Date:', ML+8, my+40);
+  doc.text('Risk Level:', ML+8, my+50);
   doc.setTextColor(...C.text); doc.setFont('helvetica','bold');
-  doc.text(userEmail, ML+50, my+10);
+  doc.text(prepName, ML+50, my+10);
   doc.setFont('helvetica','normal');
-  doc.text(today, ML+50, my+20);
+  doc.text(prepOrg, ML+50, my+20);
+  doc.text(userEmail, ML+50, my+30);
+  doc.text(today, ML+50, my+40);
   doc.setTextColor(...tierC); doc.setFont('helvetica','bold');
-  doc.text(tier.tier.toUpperCase() + ' — ' + tier.label, ML+50, my+30);
-  doc.setTextColor(...C.text); doc.setFont('helvetica','normal');
-  doc.text(totalAnswered + ' questions across ' + applicableSections.length + ' compliance domains', ML+50, my+40);
+  doc.text(tier.tier.toUpperCase() + ' — ' + tier.label, ML+50, my+50);
 
   // Stats bar
-  my = 168;
+  my = 178;
   const stats = [[allYes.length,'Compliant',C.emerald],[allGaps.length,'Gaps',C.crimson],[allUnsure.length,'Uncertain',C.amber],[totalAnswered,'Total',C.violet]];
   const sw = PW/4;
   stats.forEach(([val,label,clr],i) => {
@@ -1247,7 +1394,7 @@ function generateCompliancePDF(userEmail) {
   });
 
   // Risk meter
-  my = 208;
+  my = 218;
   doc.setFontSize(9); doc.setTextColor(...C.muted);
   doc.text('Risk Exposure', ML, my);
   rect(ML, my+4, PW, 4, C.darkPurple, 2);
@@ -1255,7 +1402,7 @@ function generateCompliancePDF(userEmail) {
   if (riskPct > 0) rect(ML, my+4, PW*riskPct/100, 4, tierC, 2);
 
   // Disclaimer
-  my = 225;
+  my = 235;
   rect(ML, my, PW, 20, C.darkPurple, 2);
   doc.setFontSize(7.5); doc.setTextColor(...C.dim);
   const discLines = doc.splitTextToSize('This report is based on your self-assessment responses and provides a preliminary compliance gap analysis. It is not legal advice. Consult qualified legal counsel for implementation. Data reflects Illinois AI legislation as of March 28, 2026.', PW-16);
@@ -1560,11 +1707,26 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-cta="form"]').forEach(a => a.href = FORMS_URL);
   document.querySelectorAll('[data-cta="book"]').forEach(a => a.href = BOOKINGS_URL);
 
+  // Restore lead info from sessionStorage
+  try {
+    const savedLead = sessionStorage.getItem('cp_lead');
+    if (savedLead) leadInfo = JSON.parse(savedLead);
+  } catch(e) {}
+
   // Restore state or start fresh
   const hasState = loadState();
   buildWizard();
 
-  if (hasState && Object.keys(profile).length > 0 && profile.industry) {
+  // Show/hide wizard based on lead capture state
+  if (leadInfo) {
+    document.getElementById('assessGateCTA').style.display = 'none';
+    document.getElementById('wizardContainer').style.display = 'block';
+  } else {
+    document.getElementById('assessGateCTA').style.display = 'block';
+    document.getElementById('wizardContainer').style.display = 'none';
+  }
+
+  if (hasState && leadInfo && Object.keys(profile).length > 0 && profile.industry) {
     // Restore profile form
     document.getElementById('pf-industry').value = profile.industry || '';
     if (profile.orgSize) {
