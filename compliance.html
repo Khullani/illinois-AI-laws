@@ -727,26 +727,57 @@ function submitEmailGate() {
   gateSubmit.disabled = true;
   gateSubmit.textContent = 'Generating your report…';
 
+  // Check if user has answered any assessment questions
+  const allScores = {...scores.e, ...scores.h, ...scores.d, ...scores.c};
+  const totalAnswered = Object.keys(allScores).length;
+
+  if (totalAnswered < 3) {
+    // Not enough answers for a meaningful report — go straight to the Form
+    gateSubmit.disabled = false;
+    gateSubmit.textContent = '📄 Generate & Download Report →';
+    closeEmailGate();
+    window.open(FORMS_URL + (FORMS_URL.includes('?') ? '&' : '?') + 'email=' + encodeURIComponent(val), '_blank');
+    return;
+  }
+
   setTimeout(() => {
+    let pdfSuccess = false;
     try {
       generateCompliancePDF(val);
+      pdfSuccess = true;
     } catch(err) {
       console.error('PDF generation error:', err);
     }
-    document.getElementById('gateStep1').style.display = 'none';
-    document.getElementById('gateStep2').style.display = 'block';
-    const formUrl = FORMS_URL + (FORMS_URL.includes('?') ? '&' : '?') + 'email=' + encodeURIComponent(val);
-    document.querySelectorAll('[data-cta="form-direct"]').forEach(a => a.href = formUrl);
+
+    if (pdfSuccess) {
+      document.getElementById('gateStep1').style.display = 'none';
+      document.getElementById('gateStep2').style.display = 'block';
+      const formUrl = FORMS_URL + (FORMS_URL.includes('?') ? '&' : '?') + 'email=' + encodeURIComponent(val);
+      document.querySelectorAll('[data-cta="form-direct"]').forEach(a => a.href = formUrl);
+    } else {
+      gateError.textContent = 'PDF generation failed. Redirecting to the full assessment…';
+      setTimeout(() => {
+        closeEmailGate();
+        window.open(FORMS_URL, '_blank');
+      }, 1500);
+    }
     gateSubmit.disabled = false;
     gateSubmit.textContent = '📄 Generate & Download Report →';
   }, 300);
 }
 
-// ── Intercept all Form CTA clicks to show email gate ──
+// ── Intercept Form CTA clicks ──
 document.addEventListener('click', (e) => {
   const link = e.target.closest('[data-cta="form"]');
   if (link) {
     e.preventDefault();
+    // If user hasn't taken any assessment, go directly to the Form
+    const allScores = {...scores.e, ...scores.h, ...scores.d, ...scores.c};
+    if (Object.keys(allScores).length < 3) {
+      window.open(FORMS_URL, '_blank');
+      return;
+    }
+    // Otherwise show the email gate for PDF download
     document.getElementById('gateStep1').style.display = 'block';
     document.getElementById('gateStep2').style.display = 'none';
     openEmailGate();
