@@ -119,6 +119,7 @@ body{background:#0c0a0f !important}
 .q-btn.selected-yes{background:var(--accent-emerald-bg);border-color:var(--accent-emerald);color:var(--accent-emerald)}
 .q-btn.selected-no{background:var(--accent-crimson-bg);border-color:var(--accent-crimson);color:var(--accent-crimson)}
 .q-btn.selected-unsure{background:var(--accent-amber-bg);border-color:var(--accent-amber);color:var(--accent-amber)}
+.q-btn.selected-na{background:var(--surface-3);border-color:var(--text-dim);color:var(--text-dim)}
 .gap-reveal{display:none;margin-top:10px;padding:14px 16px;background:rgba(244,63,94,.04);border:1px solid rgba(244,63,94,.12);border-radius:var(--radius-sm);font-size:13px;color:var(--text-muted);line-height:1.6}
 .gap-reveal strong{color:var(--accent-crimson)}
 .gap-reveal.visible{display:block;animation:fadeSlide .3s ease}
@@ -556,6 +557,25 @@ body{background:#0c0a0f !important}
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const FORMS_URL = 'YOUR_FORMS_URL';
 const BOOKINGS_URL = 'YOUR_BOOKINGS_URL';
+const WEBHOOK_URL = 'YOUR_WEBHOOK_URL'; // Power Automate HTTP trigger URL
+
+// Industry → routing question defaults
+// Keys: pf-ai-employment, pf-healthcare, pf-k12, pf-ai-content, pf-chatbots, pf-lending
+const INDUSTRY_DEFAULTS = {
+  'Healthcare':                   { 'pf-ai-employment':'yes', 'pf-healthcare':'yes', 'pf-k12':'no', 'pf-ai-content':'no', 'pf-chatbots':'not-sure', 'pf-lending':'no' },
+  'Education (K-12)':             { 'pf-ai-employment':'yes', 'pf-healthcare':'no', 'pf-k12':'yes', 'pf-ai-content':'no', 'pf-chatbots':'no', 'pf-lending':'no' },
+  'Higher Education':             { 'pf-ai-employment':'yes', 'pf-healthcare':'no', 'pf-k12':'no', 'pf-ai-content':'not-sure', 'pf-chatbots':'not-sure', 'pf-lending':'no' },
+  'Financial Services':           { 'pf-ai-employment':'yes', 'pf-healthcare':'no', 'pf-k12':'no', 'pf-ai-content':'no', 'pf-chatbots':'not-sure', 'pf-lending':'yes' },
+  'Technology':                   { 'pf-ai-employment':'yes', 'pf-healthcare':'no', 'pf-k12':'no', 'pf-ai-content':'not-sure', 'pf-chatbots':'not-sure', 'pf-lending':'no' },
+  'Media & Entertainment':        { 'pf-ai-employment':'yes', 'pf-healthcare':'no', 'pf-k12':'no', 'pf-ai-content':'yes', 'pf-chatbots':'no', 'pf-lending':'no' },
+  'Government & Public Sector':   { 'pf-ai-employment':'yes', 'pf-healthcare':'no', 'pf-k12':'no', 'pf-ai-content':'no', 'pf-chatbots':'not-sure', 'pf-lending':'no' },
+  'Manufacturing':                { 'pf-ai-employment':'yes', 'pf-healthcare':'no', 'pf-k12':'no', 'pf-ai-content':'no', 'pf-chatbots':'no', 'pf-lending':'no' },
+  'Professional Services':        { 'pf-ai-employment':'yes', 'pf-healthcare':'no', 'pf-k12':'no', 'pf-ai-content':'no', 'pf-chatbots':'not-sure', 'pf-lending':'no' },
+  'Real Estate':                  { 'pf-ai-employment':'yes', 'pf-healthcare':'no', 'pf-k12':'no', 'pf-ai-content':'no', 'pf-chatbots':'no', 'pf-lending':'yes' },
+  'Retail & Hospitality':         { 'pf-ai-employment':'yes', 'pf-healthcare':'no', 'pf-k12':'no', 'pf-ai-content':'no', 'pf-chatbots':'not-sure', 'pf-lending':'not-sure' },
+  'Legal':                        { 'pf-ai-employment':'yes', 'pf-healthcare':'no', 'pf-k12':'no', 'pf-ai-content':'no', 'pf-chatbots':'no', 'pf-lending':'no' }
+  // 'Other' — no defaults, user fills manually
+};
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 //  QUESTION DATA — 35 scored questions across 7 sections
@@ -574,7 +594,7 @@ const SECTIONS = [
       { id:'S1-Q6', formId:'Q18', weight:2, law:'PA 103-0804', lawName:'AI Employment Discrimination Act', text:'Do your vendor contracts include AI anti-discrimination compliance clauses?', gap:'Vendor liability gap. Without contractual requirements, you bear full liability for vendor tool discrimination.', remediation:'Add AI anti-discrimination compliance clauses to all vendor and staffing agency contracts. Include audit rights and indemnification.', enforcement:'Organization bears full liability for vendor tool discrimination without contractual protections.', timeline:'30 days' },
       { id:'S1-Q7', formId:'Q19', weight:2, law:'PA 103-0804', lawName:'AI Employment Discrimination Act', text:'Have you sent due diligence questionnaires to all third-party AI vendors requesting bias testing documentation?', gap:'Vendor risk is unquantified. You cannot demonstrate compliance without vendor cooperation.', remediation:'Send due diligence questionnaires to all AI vendors requesting bias testing documentation, training data descriptions, and compliance certifications.', enforcement:'Cannot demonstrate reasonable compliance efforts without vendor documentation.', timeline:'30 days' },
       { id:'S1-Q8', formId:'Q20', weight:3, law:'PA 103-0804', lawName:'AI Employment Discrimination Act', text:'Have you trained HR staff, hiring managers, and recruiters on the AI employment law requirements?', gap:'People risk. Untrained managers making AI-assisted employment decisions are your most likely source of a compliance failure.', remediation:'Deliver training to all HR staff, hiring managers, and recruiters covering notice requirements, prohibited AI uses, and what constitutes disparate impact.', enforcement:'Untrained personnel create highest probability of a triggering violation.', timeline:'Immediate' },
-      { id:'S1-Q9', formId:'Q21', weight:2, law:'PA 101-0260', lawName:'AI Video Interview Act', text:'If you use AI-analyzed video interviews, do you provide written explanation and obtain documented consent before AI evaluation begins?', gap:'Six years of exposure. This law has been in effect since 2020 and is frequently overlooked.', remediation:'Verify all video interview platforms provide required written explanation of how AI evaluates candidates. Obtain documented consent before analysis begins.', enforcement:'In effect since 2020. Private right of action. Statutory damages.', timeline:'Immediate' },
+      { id:'S1-Q9', formId:'Q21', weight:2, law:'PA 101-0260', lawName:'AI Video Interview Act', text:'If you use AI-analyzed video interviews, do you provide written explanation and obtain documented consent before AI evaluation begins?', gap:'Six years of exposure. This law has been in effect since 2020 and is frequently overlooked.', remediation:'Verify all video interview platforms provide required written explanation of how AI evaluates candidates. Obtain documented consent before analysis begins.', enforcement:'In effect since 2020. Private right of action. Statutory damages.', timeline:'Immediate', hasNA: true },
       { id:'S1-Q10', formId:'Q22', weight:1, law:'PA 103-0804', lawName:'AI Employment Discrimination Act', text:'Do you have an annual audit cadence with documented testing protocols for AI employment tools?', gap:'No ongoing monitoring. Compliance is not a one-time event — tools drift, models update, data changes.', remediation:'Establish annual audit cadence with documented testing protocols for all AI employment tools.', enforcement:'Demonstrates ongoing compliance diligence to IDHR.', timeline:'60 days' }
     ]
   },
@@ -708,7 +728,8 @@ function buildProfileStep() {
       <p class="profile-sub">This determines which compliance areas apply to you. We'll skip sections that aren't relevant.</p>
       <div class="profile-field">
         <label>Industry</label>
-        <select id="pf-industry" onchange="updateProfile()">
+        <div class="field-hint">Selecting your industry will pre-fill the routing questions below. You can adjust any answer.</div>
+        <select id="pf-industry" onchange="applyIndustryDefaults()">
           <option value="">Select your industry...</option>
           ${industries.map(i => `<option value="${i}">${i}</option>`).join('')}
         </select>
@@ -765,6 +786,7 @@ function buildSectionStep(sec) {
         <button class="q-btn" onclick="answerQuestion('${q.id}','yes',this)">Yes</button>
         <button class="q-btn" onclick="answerQuestion('${q.id}','no',this)">No</button>
         <button class="q-btn" onclick="answerQuestion('${q.id}','unsure',this)">Not Sure</button>
+        ${q.hasNA ? `<button class="q-btn" onclick="answerQuestion('${q.id}','na',this)">N/A</button>` : ''}
       </div>
       <div class="gap-reveal" id="gap-${q.id}"><strong>${q.gap.split('.')[0]}.</strong> ${q.gap.split('.').slice(1).join('.')}</div>
     </div>`;
@@ -785,6 +807,18 @@ function buildSectionStep(sec) {
       <button class="cp-btn" onclick="nextStep()">Continue →</button>
     </div>
   </div>`;
+}
+
+function applyIndustryDefaults() {
+  const industry = document.getElementById('pf-industry').value;
+  const defaults = INDUSTRY_DEFAULTS[industry];
+  if (defaults) {
+    Object.entries(defaults).forEach(([name, val]) => {
+      const radio = document.querySelector(`input[name="${name}"][value="${val}"]`);
+      if (radio) radio.checked = true;
+    });
+  }
+  updateProfile();
 }
 
 function updateProfile() {
@@ -862,7 +896,8 @@ function showStep(idx) {
         if (answers[q.id]) {
           const qg = document.getElementById('qg-' + q.id);
           if (!qg) return;
-          const btn = qg.querySelector(`.q-btn:nth-child(${answers[q.id] === 'yes' ? 1 : answers[q.id] === 'no' ? 2 : 3})`);
+          const btnIdx = {yes:1, no:2, unsure:3, na:4}[answers[q.id]] || 3;
+          const btn = qg.querySelector(`.q-btn:nth-child(${btnIdx})`);
           if (btn) applyAnswer(q.id, answers[q.id], btn, false);
         }
       });
@@ -900,7 +935,7 @@ function applyAnswer(qId, val, btn, save) {
   const qg = document.getElementById('qg-' + qId);
   if (!qg) return;
 
-  qg.querySelectorAll('.q-btn').forEach(b => b.classList.remove('selected-yes', 'selected-no', 'selected-unsure'));
+  qg.querySelectorAll('.q-btn').forEach(b => b.classList.remove('selected-yes', 'selected-no', 'selected-unsure', 'selected-na'));
   btn.classList.add('selected-' + val);
   qg.classList.remove('answered-yes', 'answered-no');
 
@@ -909,7 +944,8 @@ function applyAnswer(qId, val, btn, save) {
     qg.classList.add('answered-no');
     if (gap) gap.classList.add('visible');
   } else {
-    qg.classList.add('answered-yes');
+    // 'yes' or 'na' — no gap
+    if (val === 'yes') qg.classList.add('answered-yes');
     if (gap) gap.classList.remove('visible');
   }
 
@@ -932,7 +968,7 @@ function computeScores() {
     }
     let earned = 0, possible = 0, answeredCount = 0;
     sec.questions.forEach(q => {
-      if (answers[q.id]) { // only count answered questions
+      if (answers[q.id] && answers[q.id] !== 'na') { // count answered, exclude N/A
         possible += q.weight;
         answeredCount++;
         if (answers[q.id] === 'yes') earned += q.weight;
@@ -1057,6 +1093,9 @@ function renderResults() {
   // Set CTA hrefs
   document.querySelectorAll('[data-cta="form"]').forEach(a => a.href = FORMS_URL);
   document.querySelectorAll('[data-cta="book"]').forEach(a => a.href = BOOKINGS_URL);
+
+  // POST results to Power Automate webhook
+  postToWebhook();
 }
 
 function generateNarrative(pct, gapSections, totalSections, criticalGaps, noCount, unsureCount) {
@@ -1279,6 +1318,69 @@ document.addEventListener('click', (e) => {
     openLeadGate('pdf');
   }
 });
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  WEBHOOK — POST scores + answers to Power Automate
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function postToWebhook() {
+  if (WEBHOOK_URL === 'YOUR_WEBHOOK_URL' || !leadInfo) return;
+
+  const { sectionScores, overallPct } = computeScores();
+  const tier = getTier(overallPct);
+
+  // Build section breakdown
+  const sections = {};
+  SECTIONS.forEach(sec => {
+    const ss = sectionScores[sec.id];
+    if (!ss || !ss.applicable) { sections[sec.id] = { applicable: false }; return; }
+    const gaps = [];
+    sec.questions.forEach(q => {
+      const a = answers[q.id];
+      if (a === 'no' || a === 'unsure') gaps.push({ questionId: q.id, formId: q.formId, question: q.text, answer: a, weight: q.weight, law: q.law });
+    });
+    sections[sec.id] = { title: sec.title, score: ss.pct, earned: ss.earned, possible: ss.possible, gaps };
+  });
+
+  // Count totals
+  let totalGaps = 0, criticalGaps = 0;
+  Object.values(sections).forEach(s => { if (s.gaps) { totalGaps += s.gaps.length; criticalGaps += s.gaps.filter(g => g.weight === 3).length; } });
+
+  const payload = {
+    timestamp: new Date().toISOString(),
+    lead: {
+      firstName: leadInfo.firstName,
+      lastName: leadInfo.lastName,
+      company: leadInfo.company,
+      email: leadInfo.email
+    },
+    profile: {
+      industry: profile.industry,
+      orgSize: profile.orgSize,
+      aiEmployment: profile.aiEmployment,
+      healthcare: profile.healthcare,
+      k12: profile.k12,
+      aiContent: profile.aiContent,
+      chatbots: profile.chatbots,
+      lending: profile.lending
+    },
+    results: {
+      overallScore: overallPct,
+      riskTier: tier.tier,
+      riskLabel: tier.label,
+      totalGaps,
+      criticalGaps,
+      sections
+    },
+    answers: { ...answers },
+    isPersonalEmail: false // already blocked by validation
+  };
+
+  fetch(WEBHOOK_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).catch(err => console.warn('Webhook POST failed:', err));
+}
 
 // Direct PDF download — lead info already captured
 function downloadPDFDirect() {
