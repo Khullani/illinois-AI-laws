@@ -550,7 +550,7 @@ body{background:#0c0a0f !important}
 //  CONFIGURATION
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const BOOKINGS_URL = 'https://outlook.office.com/bookwithme/user/c8a6ffe3a86d4f029b66d8d070b94ec7@techneaix1.onmicrosoft.com/meetingtype/Son9tVtnI0mUToDZK2jXhQ2?anonymous&ismsaljsauthenabled&ep=mlink';
-const WEBHOOK_URL = 'https://hook.us2.make.com/feft3viulj1q5kgr1dxw1erh94jlkkv6';
+const WEBHOOK_URL = 'YOUR_PROXY_URL/webhook'; // Replace with your Cloudflare Worker URL (see api/webhook-proxy/worker.js)
 
 // Industry → routing question defaults
 // Keys: pf-ai-employment, pf-healthcare, pf-k12, pf-ai-content, pf-chatbots, pf-lending
@@ -1303,7 +1303,7 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeEmail
 //  WEBHOOK — POST scores + answers to Power Automate
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function postToWebhook() {
-  if (WEBHOOK_URL === 'YOUR_WEBHOOK_URL' || !leadInfo) return;
+  if (WEBHOOK_URL.includes('YOUR_WEBHOOK_URL') || WEBHOOK_URL.includes('YOUR_PROXY_URL') || !leadInfo) return;
 
   const { sectionScores, overallPct } = computeScores();
   const tier = getTier(overallPct);
@@ -1846,7 +1846,7 @@ function toggleStake(id) { document.getElementById(id).classList.toggle('open');
 
 // Config banner
 document.addEventListener('DOMContentLoaded', () => {
-  if (WEBHOOK_URL === 'YOUR_WEBHOOK_URL') {
+  if (WEBHOOK_URL.includes('YOUR_WEBHOOK_URL') || WEBHOOK_URL.includes('YOUR_PROXY_URL')) {
     document.getElementById('configBanner').classList.remove('hidden');
   }
   // Set CTA hrefs
