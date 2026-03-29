@@ -320,7 +320,7 @@ body{background:#0c0a0f !important}
 <div class="cp-container">
 
   <!-- CONFIG BANNER -->
-  <div class="config-banner" id="configBanner">
+  <div class="config-banner hidden" id="configBanner">
     <span>⚙️</span>
     <div><strong>Setup required:</strong> Open this file and replace <code>YOUR_WEBHOOK_URL</code> at the top of the <code>&lt;script&gt;</code> block with your Power Automate HTTP trigger URL. See the setup guide for instructions.<span class="dismiss" onclick="this.closest('.config-banner').classList.add('hidden')"> ✕</span></div>
   </div>
@@ -1846,8 +1846,8 @@ function toggleStake(id) { document.getElementById(id).classList.toggle('open');
 
 // Config banner
 document.addEventListener('DOMContentLoaded', () => {
-  if (WEBHOOK_URL !== 'YOUR_WEBHOOK_URL') {
-    document.getElementById('configBanner').classList.add('hidden');
+  if (WEBHOOK_URL === 'YOUR_WEBHOOK_URL') {
+    document.getElementById('configBanner').classList.remove('hidden');
   }
   // Set CTA hrefs
   document.querySelectorAll('[data-cta="book"]').forEach(a => a.href = BOOKINGS_URL);
