@@ -26,7 +26,7 @@
       <a href="vectors.html">Regulatory Vectors</a>
       <a href="timeline.html">Timeline</a>
       <a href="compliance.html">Compliance</a>
-            <a href="docs/Khullani_Abdullahi_Written_Testimony_IL_Senate_AI_Hearings_April2026.pdf" target="_blank">Testimony</a>
+            <a href="testimony.html">Testimony</a>
       <a href="https://techne.ai/" target="_blank">Techne AI</a>
       <a href="https://www.linkedin.com/in/khullani/" target="_blank">LinkedIn</a>
 
@@ -255,7 +255,41 @@
         document.getElementById('effectiveDate').textContent = bill.effectiveIfPassed;
       }
 
-      document.getElementById('penalties').textContent = bill.penalties || 'N/A';
+      // Penalties — prefer structured penaltyDetail (enacted bills) over the legacy single-string
+      if (bill.penaltyDetail) {
+        var pd = bill.penaltyDetail;
+        var span = document.getElementById('penalties');
+        span.innerHTML = '';
+        var summary = document.createElement('div');
+        summary.style.cssText = 'margin-bottom: 6px;';
+        summary.textContent = pd.summary || bill.penalties || 'N/A';
+        span.appendChild(summary);
+        if (pd.enforcer) {
+          var enf = document.createElement('div');
+          enf.style.cssText = 'font-size: 0.78rem; color: var(--text-secondary); margin-top: 4px;';
+          enf.innerHTML = '<strong style="font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--purple); margin-right: 6px;">Enforcer</strong>' + pd.enforcer;
+          span.appendChild(enf);
+        }
+        if (pd.remedies && pd.remedies.length) {
+          var rem = document.createElement('details');
+          rem.style.cssText = 'margin-top: 8px;';
+          var remSummary = document.createElement('summary');
+          remSummary.style.cssText = 'cursor: pointer; font-size: 0.78rem; color: var(--purple); font-weight: 600;';
+          remSummary.textContent = 'Available remedies (' + pd.remedies.length + ')';
+          rem.appendChild(remSummary);
+          var ul = document.createElement('ul');
+          ul.style.cssText = 'margin: 8px 0 0; padding-left: 20px; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.6;';
+          pd.remedies.forEach(function(r) {
+            var li = document.createElement('li');
+            li.textContent = r;
+            ul.appendChild(li);
+          });
+          rem.appendChild(ul);
+          span.appendChild(rem);
+        }
+      } else {
+        document.getElementById('penalties').textContent = bill.penalties || 'N/A';
+      }
 
       // TL;DR (preferred over summary first-sentence chop)
       if (bill.tldr) {

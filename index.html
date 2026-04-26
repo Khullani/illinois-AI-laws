@@ -64,7 +64,7 @@
       </svg>
       Compliance
     </a>
-    <a href="docs/Khullani_Abdullahi_Written_Testimony_IL_Senate_AI_Hearings_April2026.pdf" target="_blank">
+    <a href="testimony.html">
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
         <polyline points="14 2 14 8 20 8"></polyline>
@@ -115,9 +115,21 @@
         <div class="stat-number">May 15</div>
         <div class="stat-label">3rd-Reading Deadline</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-number">$10K</div>
-        <div class="stat-label">Max Penalty</div>
+      <div class="stat-card" style="position: relative;">
+        <div class="stat-number" id="stat-penalty">$10K</div>
+        <div class="stat-label" id="stat-penalty-label">Per Violation</div>
+        <button
+          type="button"
+          id="stat-penalty-info"
+          aria-label="What does this number mean?"
+          style="position: absolute; top: 10px; right: 10px; width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--border); background: transparent; color: var(--text-secondary); font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; cursor: help; padding: 0; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">i</button>
+        <div
+          id="stat-penalty-tooltip"
+          role="tooltip"
+          style="display: none; position: absolute; top: 36px; right: 8px; left: 8px; z-index: 10; padding: 12px 14px; background: var(--darkest); color: var(--white); border-radius: 8px; font-size: 0.78rem; line-height: 1.5; text-align: left; box-shadow: 0 8px 24px rgba(0,0,0,0.18);">
+          <strong style="display: block; margin-bottom: 6px; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.7;">What this means</strong>
+          <span id="stat-penalty-caveat-text">Highest per-violation civil cap among enacted IL AI statutes. Other laws carry uncapped damages or felony classifications.</span>
+        </div>
       </div>
     </div>
 
@@ -225,6 +237,36 @@ function initDashboard() {
   document.getElementById('stat-enacted').textContent = billsData.stats.enacted;
   document.getElementById('stat-pending').textContent = billsData.stats.pending;
   document.getElementById('stat-vectors').textContent = billsData.stats.vectors;
+
+  // Penalty headline — derived from data (highest per-violation civil cap across enacted bills)
+  if (billsData.stats.maxPerViolationDisplay) {
+    document.getElementById('stat-penalty').textContent = billsData.stats.maxPerViolationDisplay;
+  }
+  if (billsData.stats.penaltyHeadlineLabel) {
+    document.getElementById('stat-penalty-label').textContent = billsData.stats.penaltyHeadlineLabel;
+  }
+  if (billsData.stats.penaltyCaveat) {
+    document.getElementById('stat-penalty-caveat-text').textContent = billsData.stats.penaltyCaveat;
+  }
+  // Tooltip behavior — toggle on click + show on focus/hover
+  (function() {
+    var btn = document.getElementById('stat-penalty-info');
+    var tip = document.getElementById('stat-penalty-tooltip');
+    if (!btn || !tip) return;
+    function show() { tip.style.display = 'block'; }
+    function hide() { tip.style.display = 'none'; }
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      tip.style.display = (tip.style.display === 'block') ? 'none' : 'block';
+    });
+    btn.addEventListener('mouseenter', show);
+    btn.addEventListener('focus', show);
+    btn.addEventListener('mouseleave', hide);
+    btn.addEventListener('blur', hide);
+    document.addEventListener('click', function(e) {
+      if (!btn.contains(e.target) && !tip.contains(e.target)) hide();
+    });
+  })();
 
   // Initialize charts
   initStatusChart();
