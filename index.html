@@ -64,6 +64,15 @@
       </svg>
       Compliance
     </a>
+    <a href="docs/Khullani_Abdullahi_Written_Testimony_IL_Senate_AI_Hearings_April2026.pdf" target="_blank">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
+        <line x1="8" y1="13" x2="16" y2="13"></line>
+        <line x1="8" y1="17" x2="16" y2="17"></line>
+      </svg>
+      Testimony
+    </a>
     <a href="https://techne.ai/" target="_blank">Techne AI</a>
     <a href="https://www.linkedin.com/in/khullani/" target="_blank">LinkedIn</a>
   </div>
@@ -76,10 +85,10 @@
     <h1 class="hero-title">Illinois AI Legislative <em>Ecosystem</em></h1>
     <p class="hero-sub">A comprehensive view of all AI-related bills, enacted statutes, regulatory vectors, and timelines shaping Illinois' AI policy landscape.</p>
     <div class="hero-meta">
-      <span><strong>Updated:</strong> <span id="meta-updated">March 27, 2026</span></span>
+      <span><strong>Updated:</strong> <span id="meta-updated">April 26, 2026</span></span>
       <span><strong>Enacted:</strong> <span id="meta-enacted">7 Statutes</span></span>
       <span><strong>Pending:</strong> <span id="meta-pending">29 Bills</span></span>
-      <span><strong>Committee Deadline:</strong> <span id="meta-deadline">Apr 24, 2026</span></span>
+      <span><strong>3rd-Reading Deadline:</strong> <span id="meta-deadline">May 15, 2026</span></span>
     </div>
   </div>
 </section>
@@ -103,8 +112,8 @@
         <div class="stat-label">Regulatory Vectors</div>
       </div>
       <div class="stat-card">
-        <div class="stat-number">Apr 24</div>
-        <div class="stat-label">Committee Deadline</div>
+        <div class="stat-number">May 15</div>
+        <div class="stat-label">3rd-Reading Deadline</div>
       </div>
       <div class="stat-card">
         <div class="stat-number">$10K</div>
@@ -181,7 +190,7 @@
 <!-- FOOTER -->
 <footer class="site-footer">
   <p><strong>Illinois AI Legislative Ecosystem</strong> — Powered by Technê AI</p>
-  <p>This dashboard aggregates data from <a href="https://ilga.gov" target="_blank">ilga.gov</a>. Updated: March 27, 2026. All bill information subject to change. Not legal advice.</p>
+  <p>This dashboard aggregates data from <a href="https://ilga.gov" target="_blank">ilga.gov</a>. Updated: April 26, 2026. All bill information subject to change. Not legal advice.</p>
 </footer>
 
 <script>
@@ -196,12 +205,21 @@ fetch('data/bills.json')
   })
   .catch(error => console.error('Error loading bills.json:', error));
 
+function formatLongDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (isNaN(d)) return iso;
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+}
+
 function initDashboard() {
   // Populate meta information
-  document.getElementById('meta-updated').textContent = billsData.meta.lastUpdated;
+  document.getElementById('meta-updated').textContent = formatLongDate(billsData.meta.lastUpdated);
   document.getElementById('meta-enacted').textContent = billsData.stats.enacted + ' Statutes';
   document.getElementById('meta-pending').textContent = billsData.stats.pending + ' Bills';
-  document.getElementById('meta-deadline').textContent = billsData.stats.committeeDeadline;
+  // Prefer the human-readable label if present (e.g. "May 15, 2026"); otherwise fall back to the short stat
+  const deadlineLabel = (billsData.meta.committeeDeadline ? formatLongDate(billsData.meta.committeeDeadline) : billsData.stats.committeeDeadline);
+  document.getElementById('meta-deadline').textContent = deadlineLabel;
 
   // Populate stats
   document.getElementById('stat-enacted').textContent = billsData.stats.enacted;
@@ -302,7 +320,10 @@ function initVectorChart() {
 }
 
 function populateKeyBills() {
-  const keyBillIds = ['SB3312', 'HB4980', 'SB3262', 'SB3261', 'SB3263', 'SB3364'];
+  // Active Senate AI committee bills with the May 15 third-reading deadline.
+  // HB 4980 dropped after Apr 17 floor-deadline bounceback; replaced by SB 2255 + SB 3384;
+  // SB 3444 (OpenAI-backed liability framework) added.
+  const keyBillIds = ['SB3262', 'SB3261', 'SB3312', 'SB3444', 'SB3263', 'SB2255', 'SB3384'];
   const tbody = document.getElementById('bills-table');
   tbody.innerHTML = '';
 
@@ -313,12 +334,15 @@ function populateKeyBills() {
         ? billsData.vectors.find(v => v.id === bill.vectorIds[0])?.shortName
         : 'N/A';
 
-      // Generate a concise TL;DR from the summary (first sentence or 120 chars)
-      const summary = bill.summary || '';
-      const firstSentence = summary.split('. ')[0];
-      const tldr = firstSentence.length > 120
-        ? firstSentence.substring(0, 117) + '...'
-        : firstSentence + (firstSentence.endsWith('.') ? '' : '.');
+      // Prefer the curated tldr field; fall back to first-sentence-of-summary for legacy entries
+      let tldr = bill.tldr;
+      if (!tldr) {
+        const summary = bill.summary || '';
+        const firstSentence = summary.split('. ')[0];
+        tldr = firstSentence.length > 120
+          ? firstSentence.substring(0, 117) + '...'
+          : firstSentence + (firstSentence.endsWith('.') ? '' : '.');
+      }
 
       const statusBadgeClass = `badge-${bill.statusClass}`;
       const row = document.createElement('tr');
