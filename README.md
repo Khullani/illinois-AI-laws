@@ -3,8 +3,12 @@
 A bill-by-bill map of every AI-related law and pending bill in Illinois' 104th General Assembly — with TL;DRs, full procedural history, amendment tracking, and an analyst view on where each bill is likely to land.
 
 **Live site:** [strategy.techne.ai/illinois-AI-laws](https://strategy.techne.ai/illinois-AI-laws/)
+<<<<<<< Updated upstream
 **Written testimony to the Illinois Senate (April 2026):**
 [Khullani Abdullahi — IL Senate AI Hearings](https://strategy.techne.ai/illinois-AI-laws/docs/Khullani_Abdullahi_Written_Testimony_IL_Senate_AI_Hearings_April2026.pdf)
+=======
+**Written testimony to the Illinois Senate (April 2026):** [Khullani Abdullahi — IL Senate AI Hearings](https://strategy.techne.ai/illinois-AI-laws/testimony.html)
+>>>>>>> Stashed changes
 
 ---
 

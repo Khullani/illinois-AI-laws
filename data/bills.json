@@ -16,7 +16,11 @@
     "statusCounts": {
       "In Committee": 13,
       "Re-referred": 17
-    }
+    },
+    "maxPerViolationCivil": 10000,
+    "maxPerViolationDisplay": "$10K",
+    "penaltyHeadlineLabel": "Per Violation",
+    "penaltyCaveat": "Highest per-violation civil cap among enacted IL AI statutes (WOPR Act / HB 1806). Other laws carry uncapped civil-rights damages (PA 103-0804), $1,000-floor statutory damages with actual damages + profits available (HB 4875), or felony classifications (HB 4623). See each bill's detail page for the full penalty regime."
   },
   "vectors": [
     {
@@ -150,7 +154,22 @@
         }
       ],
       "intent": "Illinois positioned itself as the national bellwether on AI in mental-health care; the bill passed with broad bipartisan support and the AG already issued enforcement guidance in early 2026.",
-      "amendments": []
+      "amendments": [],
+      "penaltyDetail": {
+        "type": "civil",
+        "civilCapPerViolation": 10000,
+        "criminalClassification": null,
+        "enforcer": "Illinois Department of Financial and Professional Regulation (IDFPR)",
+        "remedies": [
+          "Up to $10,000 civil penalty per violation",
+          "Cease-and-desist orders",
+          "Professional license sanctions for licensees"
+        ],
+        "summary": "Up to $10,000 per violation, enforced by IDFPR. Licensed professionals also face license sanctions. There is no aggregate cap, so multiple violations can compound substantially.",
+        "headlineNumber": "$10K",
+        "headlineFrame": "civil cap / violation"
+      },
+      "penalties": "Up to $10,000 per violation, enforced by IDFPR. Licensed professionals also face license sanctions. There is no aggregate cap, so multiple v"
     },
     {
       "id": "PA103-0804",
@@ -195,7 +214,25 @@
         }
       ],
       "intent": "The disparate-impact framing was contentious during negotiation but survived; expect AG enforcement guidance in 2026 and the first private suits within 12 months of the Jan 1, 2026 effective date.",
-      "amendments": []
+      "amendments": [],
+      "penaltyDetail": {
+        "type": "civil-rights",
+        "civilCapPerViolation": null,
+        "criminalClassification": null,
+        "enforcer": "Illinois Department of Human Rights (IDHR) → Illinois Human Rights Commission",
+        "remedies": [
+          "Actual damages (back pay, front pay, lost benefits)",
+          "Reinstatement or hiring",
+          "Compensatory damages for emotional distress",
+          "Punitive damages",
+          "Attorney fees and costs",
+          "Injunctive relief"
+        ],
+        "summary": "No statute-specific dollar cap. Enforced as an Illinois Human Rights Act violation through IDHR charges and Human Rights Commission proceedings. Total exposure is uncapped and includes back pay, reinstatement, emotional-distress damages, and punitive damages.",
+        "headlineNumber": "Uncapped",
+        "headlineFrame": "civil rights remedies"
+      },
+      "penalties": "No statute-specific dollar cap. Enforced as an Illinois Human Rights Act violation through IDHR charges and Human Rights Commission proceedi"
     },
     {
       "id": "HB4762",
@@ -230,7 +267,22 @@
         }
       ],
       "intent": "Aimed squarely at Hollywood AI-cloning contracts; companion to the SAG-AFTRA effort. Expected to influence multi-state right-of-publicity legislation in 2026-27.",
-      "amendments": []
+      "amendments": [],
+      "penaltyDetail": {
+        "type": "contractual + civil",
+        "civilCapPerViolation": null,
+        "criminalClassification": null,
+        "enforcer": "Private right of action (civil court)",
+        "remedies": [
+          "Contract is void and unenforceable",
+          "Actual damages",
+          "Equitable relief (injunctions)"
+        ],
+        "summary": "Non-compliant contracts are void as a matter of law. Performers and creators may pursue actual damages and injunctions through a private civil action. No statute-specific dollar cap.",
+        "headlineNumber": "Contracts void",
+        "headlineFrame": "voidance + private suit"
+      },
+      "penalties": "Non-compliant contracts are void as a matter of law. Performers and creators may pursue actual damages and injunctions through a private civ"
     },
     {
       "id": "HB4875",
@@ -265,7 +317,23 @@
         }
       ],
       "intent": "Closed a loophole in Illinois' Right of Publicity Act for synthetic media; broader than HB 4762 because it covers commercial use, not just consent in contracts.",
-      "amendments": []
+      "amendments": [],
+      "penaltyDetail": {
+        "type": "civil",
+        "civilCapPerViolation": 1000,
+        "criminalClassification": null,
+        "enforcer": "Private right of action under IL Right of Publicity Act § 40",
+        "remedies": [
+          "Statutory damages of $1,000 per violation OR actual damages + profits (whichever is greater)",
+          "Attorney fees and costs",
+          "Punitive damages where conduct is wanton and willful",
+          "Injunctive relief"
+        ],
+        "summary": "Statutory floor of $1,000 per violation, but plaintiffs may elect actual damages plus the defendant's profits — which in commercial AI-cloning cases routinely reaches five to seven figures. Attorney fees and punitive damages are also available.",
+        "headlineNumber": "$1K floor",
+        "headlineFrame": "actual damages + profits"
+      },
+      "penalties": "Statutory floor of $1,000 per violation, but plaintiffs may elect actual damages plus the defendant's profits — which in commercial AI-cloni"
     },
     {
       "id": "PA104-0399",
@@ -305,7 +373,21 @@
         }
       ],
       "intent": "Education-AI guardrails were notably less contentious than employment AI; ISBE's draft curriculum guidance is expected by mid-2026.",
-      "amendments": []
+      "amendments": [],
+      "penaltyDetail": {
+        "type": "regulatory",
+        "civilCapPerViolation": null,
+        "criminalClassification": null,
+        "enforcer": "Illinois State Board of Education (ISBE)",
+        "remedies": [
+          "ISBE guidance and curriculum mandates",
+          "School-district accountability through standard ISBE channels"
+        ],
+        "summary": "No direct monetary penalty. Compliance is enforced through ISBE guidance, the standard school-accountability framework, and curriculum-mandate review.",
+        "headlineNumber": "Regulatory",
+        "headlineFrame": "ISBE oversight"
+      },
+      "penalties": "No direct monetary penalty. Compliance is enforced through ISBE guidance, the standard school-accountability framework, and curriculum-manda"
     },
     {
       "id": "HB4623",
@@ -340,7 +422,22 @@
         }
       ],
       "intent": "Closes the AI-CSAM loophole; integrates with federal § 2256 framework. The civil-side adult-deepfake provisions are still being tested in early case law.",
-      "amendments": []
+      "amendments": [],
+      "penaltyDetail": {
+        "type": "criminal + civil",
+        "civilCapPerViolation": null,
+        "criminalClassification": "Class 1 felony (AI-generated CSAM); Class 4 felony (lower-severity offenses); civil for adult deepfakes",
+        "enforcer": "State's Attorney (criminal); private right of action (civil for adult deepfakes)",
+        "remedies": [
+          "Criminal: Class 1 felony — 4–15 years imprisonment",
+          "Criminal: Class 4 felony — 1–3 years imprisonment + fines",
+          "Civil: economic + non-economic damages, attorney fees, equitable relief"
+        ],
+        "summary": "AI-generated child sexual-abuse material is a Class 1 or Class 4 felony depending on severity. Nonconsensual AI sexual deepfakes of adults carry a private civil right of action with damages including emotional distress. This is the highest-exposure statute in the IL AI portfolio.",
+        "headlineNumber": "Felony",
+        "headlineFrame": "criminal + civil"
+      },
+      "penalties": "AI-generated child sexual-abuse material is a Class 1 or Class 4 felony depending on severity. Nonconsensual AI sexual deepfakes of adults c"
     },
     {
       "id": "AIVI",
@@ -375,7 +472,22 @@
         }
       ],
       "intent": "First-mover state law on AI employment that became a template; the law has limited remedies (notice/consent only) which is why HB 3773's substantive disparate-impact provisions matter.",
-      "amendments": []
+      "amendments": [],
+      "penaltyDetail": {
+        "type": "employment / regulatory",
+        "civilCapPerViolation": null,
+        "criminalClassification": null,
+        "enforcer": "Illinois Department of Labor (IDOL) and standard employment-law remedies",
+        "remedies": [
+          "No statute-specific monetary cap",
+          "Subject to general IL employment-law remedies",
+          "Reportable to IDOL for failure to provide notice/consent"
+        ],
+        "summary": "The statute itself does not specify monetary penalties. Compliance failures are subject to general employment-law enforcement (IDOL) and may support employment discrimination or wrongful-action claims under separate statutes.",
+        "headlineNumber": "No specific cap",
+        "headlineFrame": "employment-law remedies"
+      },
+      "penalties": "The statute itself does not specify monetary penalties. Compliance failures are subject to general employment-law enforcement (IDOL) and may"
     }
   ],
   "pending": [
