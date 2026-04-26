@@ -2,16 +2,21 @@
   "meta": {
     "title": "Illinois AI Legislative Ecosystem",
     "session": "104th General Assembly (2025-2026)",
-    "lastUpdated": "2026-03-27",
-    "committeeDeadline": "2026-04-24",
-    "source": "Illinois General Assembly (ilga.gov)"
+    "lastUpdated": "2026-04-26",
+    "committeeDeadline": "2026-05-15",
+    "source": "Illinois General Assembly (ilga.gov)",
+    "committeeDeadlineLabel": "May 15, 2026 (Senate AI committee 3rd-reading deadline)"
   },
   "stats": {
     "enacted": 7,
-    "pending": 29,
+    "pending": 30,
     "vectors": 6,
-    "committeeDeadline": "Apr 24, 2026",
-    "maxPenalty": "$10K"
+    "committeeDeadline": "May 15",
+    "maxPenalty": "$10K",
+    "statusCounts": {
+      "In Committee": 13,
+      "Re-referred": 17
+    }
   },
   "vectors": [
     {
@@ -21,7 +26,13 @@
       "shortName": "Frontier Risk",
       "color": "#bd47e6",
       "description": "Competing frameworks target the developers of the largest AI models — mandating safety frameworks, incident reporting to the Attorney General, and civil penalties for noncompliance. Includes creation of ILCompute, a public cloud computing resource.",
-      "billIds": ["SB3312", "HB4799", "SB3261", "HB3529"]
+      "billIds": [
+        "SB3312",
+        "SB3444",
+        "HB4799",
+        "SB3261",
+        "HB3529"
+      ]
     },
     {
       "id": "v2",
@@ -30,7 +41,10 @@
       "shortName": "Discrimination",
       "color": "#270d37",
       "description": "Extends anti-discrimination protections beyond employment into housing, credit, and public accommodations. Bans surveillance-based dynamic pricing and algorithmic wage discrimination.",
-      "billIds": ["SB3364", "SB2255"]
+      "billIds": [
+        "SB3364",
+        "SB2255"
+      ]
     },
     {
       "id": "v3",
@@ -39,7 +53,14 @@
       "shortName": "Transparency",
       "color": "#431558",
       "description": "Mandates digital watermarking on all AI-generated media, professional disclosure requirements, strict synthetic content labels in political advertising, and consumer notification when interacting with AI systems.",
-      "billIds": ["SB3601", "SB3263", "HB4711", "SB0150", "SB1929", "HB3021"]
+      "billIds": [
+        "SB3601",
+        "SB3263",
+        "HB4711",
+        "SB0150",
+        "SB1929",
+        "HB3021"
+      ]
     },
     {
       "id": "v4",
@@ -48,7 +69,13 @@
       "shortName": "Youth Safety",
       "color": "#67247d",
       "description": "First-of-its-kind regulation of emotionally adaptive AI companions. Requires crisis intervention protocols, persistent machine-disclosure, parental consent for minors, and suicide/self-harm detection.",
-      "billIds": ["SB3262", "SB3368", "SB3261", "HB4705", "SB3384"]
+      "billIds": [
+        "SB3262",
+        "SB3368",
+        "SB3261",
+        "HB4705",
+        "SB3384"
+      ]
     },
     {
       "id": "v5",
@@ -57,7 +84,11 @@
       "shortName": "Data Privacy",
       "color": "#969696",
       "description": "Institutes default opt-out for AI model training on user data. Creates comprehensive data broker registry. Extends privacy protections to neural and biometric data from consumer devices.",
-      "billIds": ["SB3180", "SB3890", "SB2994"]
+      "billIds": [
+        "SB3180",
+        "SB3890",
+        "SB2994"
+      ]
     },
     {
       "id": "v6",
@@ -66,7 +97,18 @@
       "shortName": "Public Sector",
       "color": "#7d7d7d",
       "description": "Prohibits public agencies from deploying automated decision systems without meaningful human review. Bans AI in teacher evaluations. Creates state AI governance task force and frameworks for state procurement of AI.",
-      "billIds": ["HB4980", "HB3646", "SB2117", "SB1677", "HB4988", "SB1366", "HB3720", "HB3567", "HB2655", "HB0496"]
+      "billIds": [
+        "HB4980",
+        "HB3646",
+        "SB2117",
+        "SB1677",
+        "HB4988",
+        "SB1366",
+        "HB3720",
+        "HB3567",
+        "HB2655",
+        "HB0496"
+      ]
     }
   ],
   "enacted": [
@@ -83,7 +125,32 @@
       "coreMechanism": "Prohibits AI as independent therapist; bans emotion detection; mandates human oversight in clinical settings",
       "sector": "Healthcare",
       "sectorColor": "#bd47e6",
-      "ilgaUrl": "https://ilga.gov/Legislation/BillStatus?DocNum=1806&GAID=18&DocTypeID=HB&LegId=159219&SessionID=114"
+      "ilgaUrl": "https://ilga.gov/Legislation/BillStatus?DocNum=1806&GAID=18&DocTypeID=HB&LegId=159219&SessionID=114",
+      "tldr": "AI can't act as your therapist in Illinois. Only licensed humans can deliver mental-health treatment, and tools can't claim to read patients' emotions in clinical settings.",
+      "history": [
+        {
+          "date": "2025-01-09",
+          "action": "Filed by Rep. Bob Morgan (HB 1806); referred to Rules Committee",
+          "note": ""
+        },
+        {
+          "date": "2025-04-04",
+          "action": "Passed House 105-3-1",
+          "note": "Strong bipartisan support"
+        },
+        {
+          "date": "2025-05-29",
+          "action": "Passed Senate 49-7",
+          "note": ""
+        },
+        {
+          "date": "2025-08-04",
+          "action": "Signed by Gov. Pritzker as PA 104-0054",
+          "note": "Effective immediately — first state in U.S. to comprehensively regulate AI in mental-health care"
+        }
+      ],
+      "intent": "Illinois positioned itself as the national bellwether on AI in mental-health care; the bill passed with broad bipartisan support and the AG already issued enforcement guidance in early 2026.",
+      "amendments": []
     },
     {
       "id": "PA103-0804",
@@ -98,7 +165,37 @@
       "coreMechanism": "Bans disparate impact in hiring; prohibits zip code proxy targeting; mandates transparency notices",
       "sector": "Employment",
       "sectorColor": "#67247d",
-      "ilgaUrl": "https://www.ilga.gov/legislation/publicacts/103/PDF/103-0804.pdf"
+      "ilgaUrl": "https://www.ilga.gov/legislation/publicacts/103/PDF/103-0804.pdf",
+      "tldr": "Employers can't use AI in hiring, firing, or promotion decisions in ways that discriminate, and ZIP codes can't be used as a proxy for race. Workers and applicants must be notified when AI is in the loop.",
+      "history": [
+        {
+          "date": "2024-02-09",
+          "action": "HB 3773 introduced by Rep. Mussman",
+          "note": ""
+        },
+        {
+          "date": "2024-04-19",
+          "action": "Passed House 81-27-2",
+          "note": ""
+        },
+        {
+          "date": "2024-05-25",
+          "action": "Passed Senate 33-19-2",
+          "note": ""
+        },
+        {
+          "date": "2024-08-09",
+          "action": "Signed by Gov. Pritzker as PA 103-0804",
+          "note": ""
+        },
+        {
+          "date": "2026-01-01",
+          "action": "Took effect",
+          "note": "Second state (after Colorado) to regulate algorithmic discrimination in private-sector AI employment"
+        }
+      ],
+      "intent": "The disparate-impact framing was contentious during negotiation but survived; expect AG enforcement guidance in 2026 and the first private suits within 12 months of the Jan 1, 2026 effective date.",
+      "amendments": []
     },
     {
       "id": "HB4762",
@@ -113,7 +210,27 @@
       "coreMechanism": "Voids contracts allowing AI voice/likeness duplication without detailed explanation and legal representation",
       "sector": "IP / Creative",
       "sectorColor": "#431558",
-      "ilgaUrl": "https://www.ilga.gov/legislation/103/HB/10300HB4762.htm"
+      "ilgaUrl": "https://www.ilga.gov/legislation/103/HB/10300HB4762.htm",
+      "tldr": "Contracts that let companies clone your voice or face with AI are void unless the deal was clearly explained and you had a lawyer.",
+      "history": [
+        {
+          "date": "2024-02-08",
+          "action": "Introduced as HB 4762",
+          "note": ""
+        },
+        {
+          "date": "2024-05-29",
+          "action": "Passed both chambers",
+          "note": ""
+        },
+        {
+          "date": "2024-08-09",
+          "action": "Signed by Gov. Pritzker as PA 103-0882; effective immediately",
+          "note": ""
+        }
+      ],
+      "intent": "Aimed squarely at Hollywood AI-cloning contracts; companion to the SAG-AFTRA effort. Expected to influence multi-state right-of-publicity legislation in 2026-27.",
+      "amendments": []
     },
     {
       "id": "HB4875",
@@ -128,7 +245,27 @@
       "coreMechanism": "Prohibits AI duplication of voice/image/likeness for commercial purposes without explicit consent",
       "sector": "IP / Creative",
       "sectorColor": "#431558",
-      "ilgaUrl": "https://www.ilga.gov/legislation/103/HB/10300HB4875.htm"
+      "ilgaUrl": "https://www.ilga.gov/legislation/103/HB/10300HB4875.htm",
+      "tldr": "You can sue if someone uses your AI-generated voice or likeness in a song, video, or ad without your consent. News, documentaries, and satire are carved out.",
+      "history": [
+        {
+          "date": "2024-02-08",
+          "action": "Introduced as HB 4875 (Right of Publicity Act amendment)",
+          "note": ""
+        },
+        {
+          "date": "2024-05-29",
+          "action": "Passed both chambers",
+          "note": ""
+        },
+        {
+          "date": "2024-08-09",
+          "action": "Signed by Gov. Pritzker as PA 103-0880; effective immediately",
+          "note": ""
+        }
+      ],
+      "intent": "Closed a loophole in Illinois' Right of Publicity Act for synthetic media; broader than HB 4762 because it covers commercial use, not just consent in contracts.",
+      "amendments": []
     },
     {
       "id": "PA104-0399",
@@ -143,7 +280,32 @@
       "coreMechanism": "Mandates ISBE guidance on AI use; requires curriculum on recognizing deepfakes",
       "sector": "Education",
       "sectorColor": "#270d37",
-      "ilgaUrl": "https://www.ilga.gov/legislation/publicacts/104/PDF/104-0399.pdf"
+      "ilgaUrl": "https://www.ilga.gov/legislation/publicacts/104/PDF/104-0399.pdf",
+      "tldr": "Public schools have to teach students to recognize deepfakes, and the State Board of Education has to issue guidance on AI in classrooms.",
+      "history": [
+        {
+          "date": "2025-02",
+          "action": "Introduced as part of education-AI package",
+          "note": ""
+        },
+        {
+          "date": "2025-05-31",
+          "action": "Passed both chambers in spring session",
+          "note": ""
+        },
+        {
+          "date": "2025-08",
+          "action": "Signed by Gov. Pritzker as PA 104-0399",
+          "note": ""
+        },
+        {
+          "date": "2026-01-01",
+          "action": "Took effect",
+          "note": ""
+        }
+      ],
+      "intent": "Education-AI guardrails were notably less contentious than employment AI; ISBE's draft curriculum guidance is expected by mid-2026.",
+      "amendments": []
     },
     {
       "id": "HB4623",
@@ -158,7 +320,27 @@
       "coreMechanism": "Extends child pornography laws to cover AI-generated imagery; prohibits nonconsensual AI sexual deepfakes",
       "sector": "Criminal / Child Safety",
       "sectorColor": "#c0392b",
-      "ilgaUrl": "https://www.ilga.gov/legislation/BillStatus.asp?DocNum=4623&GAID=17&DocTypeID=HB&SessionID=112&GA=103"
+      "ilgaUrl": "https://www.ilga.gov/legislation/BillStatus.asp?DocNum=4623&GAID=17&DocTypeID=HB&SessionID=112&GA=103",
+      "tldr": "AI-generated sexual images of children are treated as child pornography under Illinois law, and nonconsensual AI sexual deepfakes of adults are illegal.",
+      "history": [
+        {
+          "date": "2024-01-31",
+          "action": "Introduced by Rep. Jennifer Gong-Gershowitz",
+          "note": ""
+        },
+        {
+          "date": "2024-05-29",
+          "action": "Passed both chambers",
+          "note": ""
+        },
+        {
+          "date": "2024-08-09",
+          "action": "Signed by Gov. Pritzker as PA 103-0806; effective immediately",
+          "note": "Illinois became the 19th state to specifically address AI-generated CSAM"
+        }
+      ],
+      "intent": "Closes the AI-CSAM loophole; integrates with federal § 2256 framework. The civil-side adult-deepfake provisions are still being tested in early case law.",
+      "amendments": []
     },
     {
       "id": "AIVI",
@@ -173,7 +355,27 @@
       "coreMechanism": "Mandates notice, explanation, and consent when AI analyzes job applicant video interviews",
       "sector": "Employment",
       "sectorColor": "#67247d",
-      "ilgaUrl": "https://www.ilga.gov/legislation/ilcs/ilcs3.asp?ActID=4015"
+      "ilgaUrl": "https://www.ilga.gov/legislation/ilcs/ilcs3.asp?ActID=4015",
+      "tldr": "If an Illinois employer uses AI to score your video interview, they have to tell you it's happening, explain how the tool works, and get your consent first.",
+      "history": [
+        {
+          "date": "2019-02",
+          "action": "Introduced as HB 2557 (later 820 ILCS 42)",
+          "note": ""
+        },
+        {
+          "date": "2019-08",
+          "action": "Signed by Gov. Pritzker as PA 101-0260",
+          "note": ""
+        },
+        {
+          "date": "2020-01-01",
+          "action": "Took effect",
+          "note": "One of the first state-level AI employment regulations in the U.S."
+        }
+      ],
+      "intent": "First-mover state law on AI employment that became a template; the law has limited remedies (notice/consent only) which is why HB 3773's substantive disparate-impact provisions matter.",
+      "amendments": []
     }
   ],
   "pending": [
@@ -185,13 +387,133 @@
       "committee": "AI and Social Media",
       "status": "In Committee",
       "statusClass": "committee",
-      "lastAction": "2026-02-18",
-      "lastActionText": "Referred to AI and Social Media",
+      "lastAction": "2026-04-24",
+      "lastActionText": "Rule 2-10 Committee/3rd Reading Deadline Established As May 15, 2026",
       "summary": "Establishes requirements for frontier AI developers to implement safety frameworks addressing catastrophic risks, transparency, and cybersecurity. Mandates reporting critical safety incidents to Illinois emergency management agencies. Creates ILCompute, a public cloud computing resource.",
-      "vectorIds": ["v1"],
+      "vectorIds": [
+        "v1"
+      ],
       "effectiveIfPassed": "2027-01-01",
       "penalties": "Civil penalties for noncompliance",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3312&GAID=18&DocTypeID=SB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3312&GAID=18&DocTypeID=SB&SessionID=114&GA=104",
+      "tldr": "Anyone training the largest AI models would have to publish a safety framework, report critical incidents to the state, and face civil penalties if they don't. Also creates ILCompute, a public-cloud research resource.",
+      "history": [
+        {
+          "date": "2026-02-03",
+          "action": "Filed with Secretary by Sen. Mary Edly-Allen; First Reading; Referred to Assignments",
+          "note": ""
+        },
+        {
+          "date": "2026-02-17",
+          "action": "Assigned to Executive",
+          "note": ""
+        },
+        {
+          "date": "2026-02-18",
+          "action": "To AI and Social Media",
+          "note": ""
+        },
+        {
+          "date": "2026-03-13",
+          "action": "Rule 2-10 Committee Deadline Established As March 27, 2026",
+          "note": ""
+        },
+        {
+          "date": "2026-03-27",
+          "action": "Rule 2-10 Committee Deadline Established As April 24, 2026",
+          "note": "First extension"
+        },
+        {
+          "date": "2026-04-10",
+          "action": "Added as Co-Sponsor Sen. Rachel Ventura",
+          "note": "Subject-matter hearing day"
+        },
+        {
+          "date": "2026-04-14",
+          "action": "Added as Co-Sponsors Sens. Loughran Cappel and Walker",
+          "note": ""
+        },
+        {
+          "date": "2026-04-15",
+          "action": "Added as Co-Sponsor Sen. Suzy Glowiak Hilton",
+          "note": ""
+        },
+        {
+          "date": "2026-04-24",
+          "action": "Rule 2-10 Committee/3rd Reading Deadline Established As May 15, 2026",
+          "note": "Second extension; bill remains alive but did not get a committee vote on the Apr 24 deadline"
+        }
+      ],
+      "amendments": [],
+      "intent": "The Apr 24 deadline came and went without a committee vote, but the deadline was rolled forward to May 15 and Edly-Allen added four high-profile co-sponsors during the hearings window — signaling negotiations are still active rather than dying. Likely landing spot: a substantively narrowed substitute amendment in early May to harmonize with the OpenAI-backed SB 3444 liability framework before any floor vote."
+    },
+    {
+      "id": "SB3444",
+      "bill": "SB 3444",
+      "name": "Artificial Intelligence Safety Act (Frontier Liability Framework)",
+      "sponsor": "Sen. Bill Cunningham",
+      "committee": "AI and Social Media",
+      "status": "In Committee",
+      "statusClass": "committee",
+      "lastAction": "2026-04-24",
+      "lastActionText": "Rule 2-10 Committee/3rd Reading Deadline Established As May 15, 2026",
+      "tldr": "Frontier AI developers (any model trained with $100M+ in compute) would have to publish a safety framework and report 'critical harms' — but would NOT be liable for mass-casualty events of 100+ deaths, $1B+ property damage, or CBRN-weapon misuse caused by their models. OpenAI is backing it; Anthropic is opposing.",
+      "summary": "Establishes a 'critical harm' liability framework for frontier AI developers: defines critical harms as events causing death/serious injury to 100+ people, $1B+ in property damage, or use of AI to develop chemical, biological, radiological or nuclear weapons. Coverage tied to a $100M training-compute threshold. Mandates published safety frameworks and incident reporting, but creates a liability shield against mass-casualty claims for compliant developers.",
+      "vectorIds": [
+        "v1"
+      ],
+      "effectiveIfPassed": "2027-01-01",
+      "penalties": "Civil penalties for safety-framework violations; liability shield for compliant developers",
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3444&GAID=18&DocTypeID=SB&SessionID=114&GA=104",
+      "history": [
+        {
+          "date": "2026-02-04",
+          "action": "Filed by Sen. Bill Cunningham; First Reading; Referred to Assignments",
+          "note": "Same filing day as Edly-Allen's safety bills — competing Senate frameworks"
+        },
+        {
+          "date": "2026-02-17",
+          "action": "Assigned to Executive",
+          "note": ""
+        },
+        {
+          "date": "2026-02-18",
+          "action": "To AI and Social Media",
+          "note": ""
+        },
+        {
+          "date": "2026-03-13",
+          "action": "Rule 2-10 Committee Deadline Established As March 27, 2026",
+          "note": ""
+        },
+        {
+          "date": "2026-03-27",
+          "action": "Rule 2-10 Committee Deadline Established As April 24, 2026",
+          "note": "First extension"
+        },
+        {
+          "date": "2026-04-09",
+          "action": "OpenAI testifies in support at Senate AI subject-matter hearing",
+          "note": "First-ever direct testimony by an AI lab in front of an Illinois committee"
+        },
+        {
+          "date": "2026-04-15",
+          "action": "Anthropic publicly opposes the bill; lobbies Sen. Cunningham to revise or reject",
+          "note": "Frontier-lab split signals the liability-shield language is the wedge issue"
+        },
+        {
+          "date": "2026-04-17",
+          "action": "Fortune publishes 'Illinois is OpenAI and Anthropic's latest battleground'",
+          "note": "National media attention may slow the bill as legislators reassess"
+        },
+        {
+          "date": "2026-04-24",
+          "action": "Rule 2-10 Committee/3rd Reading Deadline Established As May 15, 2026",
+          "note": "Second extension; survives without committee vote"
+        }
+      ],
+      "amendments": [],
+      "intent": "Cunningham's bill is the OpenAI-aligned counterweight to the Edly-Allen / Anthropic-aligned SB 3261 / SB 3262 framework — they file the same day and compete for the same Senate AI committee window. The liability shield is the politically toxic provision; expect a substantive substitute amendment in early May that strips or substantially narrows the shield to make it palatable to the progressive caucus, OR the bill stalls and the safety-framework language gets folded into SB 3312. Watch what happens between Cunningham and Edly-Allen by May 8."
     },
     {
       "id": "HB4799",
@@ -199,15 +521,32 @@
       "name": "Transparency in Frontier AI Act",
       "sponsor": "Rep. Kimberly Du Buclet",
       "committee": "Rules Committee",
-      "status": "In Committee",
-      "statusClass": "committee",
+      "status": "Re-referred",
+      "statusClass": "stalled",
       "lastAction": "2026-02-06",
-      "lastActionText": "First Reading; Referred to Rules Committee",
+      "lastActionText": "Referred to Rules Committee",
       "summary": "Requires large frontier AI developers to adopt and publish frameworks addressing catastrophic risk management, transparency, and cybersecurity. Mandates incident reporting to Attorney General with civil penalties. Creates ILCompute public cloud computing resource.",
-      "vectorIds": ["v1"],
+      "vectorIds": [
+        "v1"
+      ],
       "effectiveIfPassed": "2027-01-01",
       "penalties": "Civil penalties",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=4799&GAID=18&DocTypeID=HB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=4799&GAID=18&DocTypeID=HB&SessionID=114&GA=104",
+      "tldr": "House companion to the frontier-AI safety framework — large model developers publish risk frameworks, report incidents to the AG, and face civil penalties.",
+      "history": [
+        {
+          "date": "2026-02-02",
+          "action": "Filed by Rep. Du Buclet",
+          "note": ""
+        },
+        {
+          "date": "2026-02-06",
+          "action": "First Reading; Referred to Rules Committee",
+          "note": ""
+        }
+      ],
+      "amendments": [],
+      "intent": "House companion to Edly-Allen's SB 3312 frontier-AI safety framework but never assigned out of Rules — Du Buclet is the chief co-sponsor of the more advanced HB 4705, and HB 4799 is functioning as a placeholder while the Senate works the issue."
     },
     {
       "id": "SB3261",
@@ -217,13 +556,76 @@
       "committee": "AI and Social Media",
       "status": "In Committee",
       "statusClass": "committee",
-      "lastAction": "2026-02-18",
-      "lastActionText": "Referred to AI and Social Media",
+      "lastAction": "2026-04-24",
+      "lastActionText": "Rule 2-10 Committee/3rd Reading Deadline Established As May 15, 2026",
       "summary": "Mandates that frontier AI model developers and large chatbot providers establish and publish public safety and child protection plans. Creates reporting mechanism for safety incidents, whistleblower protections, third-party audits. Attorney General enforcement with civil penalties.",
-      "vectorIds": ["v1", "v4"],
+      "vectorIds": [
+        "v1",
+        "v4"
+      ],
       "effectiveIfPassed": "2027-01-01",
       "penalties": "Civil penalties (AG enforcement)",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3261&GAID=18&DocTypeID=SB&LegId=166031&SessionID=114"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3261&GAID=18&DocTypeID=SB&LegId=166031&SessionID=114",
+      "tldr": "Frontier AI developers and big chatbot platforms would have to publish public-safety and child-protection plans, with whistleblower protections and AG enforcement.",
+      "history": [
+        {
+          "date": "2026-02-03",
+          "action": "Filed by Sen. Edly-Allen; First Reading; Referred to Assignments",
+          "note": ""
+        },
+        {
+          "date": "2026-02-17",
+          "action": "Assigned to Executive",
+          "note": ""
+        },
+        {
+          "date": "2026-02-18",
+          "action": "To AI and Social Media",
+          "note": ""
+        },
+        {
+          "date": "2026-02-26",
+          "action": "Six co-sponsors added (Walker, Guzmán, Johnson, Ellman, Joyce, D. Turner)",
+          "note": "Bipartisan signal — Sen. Rezin (R) added next day"
+        },
+        {
+          "date": "2026-02-27",
+          "action": "Added as Co-Sponsor Sen. Sue Rezin",
+          "note": "Republican co-sponsor"
+        },
+        {
+          "date": "2026-03-12",
+          "action": "Added co-sponsors Porfirio and Ventura",
+          "note": ""
+        },
+        {
+          "date": "2026-03-13",
+          "action": "Rule 2-10 Committee Deadline Established As March 27, 2026",
+          "note": ""
+        },
+        {
+          "date": "2026-03-27",
+          "action": "Rule 2-10 Committee Deadline Established As April 24, 2026",
+          "note": "First extension"
+        },
+        {
+          "date": "2026-04-14",
+          "action": "Added Co-Sponsor Sen. Loughran Cappel",
+          "note": ""
+        },
+        {
+          "date": "2026-04-15",
+          "action": "Added Co-Sponsor Sen. Glowiak Hilton",
+          "note": ""
+        },
+        {
+          "date": "2026-04-24",
+          "action": "Rule 2-10 Committee/3rd Reading Deadline Established As May 15, 2026",
+          "note": "Second extension"
+        }
+      ],
+      "amendments": [],
+      "intent": "Now has at least 12 co-sponsors including bipartisan support (Sen. Rezin), and benefits from active media coverage (Sun-Times op-ed Apr 17) framing it as a child-safety measure. Path of least resistance: this bill is the leading Senate vehicle for kid/chatbot transparency and is the most likely to be merged with SB 3262 / SB 3384 in a substitute before clearing committee in May."
     },
     {
       "id": "HB3529",
@@ -236,10 +638,37 @@
       "lastAction": "2025-03-21",
       "lastActionText": "Rule 19(a) / Re-referred to Rules Committee",
       "summary": "Requires DOIT to adopt rules for businesses using AI systems to comply with 5 AI governance principles. Mandates public reports on AI usage. Applies to businesses with 10+ employees. Civil penalties for noncompliance.",
-      "vectorIds": ["v1"],
+      "vectorIds": [
+        "v1"
+      ],
       "effectiveIfPassed": "2026-01-01",
       "penalties": "Civil penalties",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3529&GAID=18&DocTypeID=HB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3529&GAID=18&DocTypeID=HB&SessionID=114&GA=104",
+      "tldr": "Businesses with 10+ employees that use AI would have to follow five governance principles, file public reports on AI use, and risk civil penalties for violations.",
+      "history": [
+        {
+          "date": "2025-02-07",
+          "action": "Filed by Rep. Yang Rohr",
+          "note": ""
+        },
+        {
+          "date": "2025-02-18",
+          "action": "First Reading; Referred to Rules Committee",
+          "note": ""
+        },
+        {
+          "date": "2025-03-11",
+          "action": "Assigned to Cybersecurity, Data Analytics, & IT Committee",
+          "note": ""
+        },
+        {
+          "date": "2025-03-21",
+          "action": "Rule 19(a) / Re-referred to Rules Committee",
+          "note": ""
+        }
+      ],
+      "amendments": [],
+      "intent": "High-impact-AI governance bill never made it past committee in 2025 and has been dormant in 2026. Yang Rohr signed onto HB 4980 in 2026 instead — meaning her energy migrated to Rashid's vehicle and HB 3529 is effectively abandoned."
     },
     {
       "id": "SB3364",
@@ -249,13 +678,72 @@
       "committee": "AI and Social Media",
       "status": "In Committee",
       "statusClass": "committee",
-      "lastAction": "2026-02-18",
-      "lastActionText": "Referred to AI and Social Media",
+      "lastAction": "2026-04-24",
+      "lastActionText": "Rule 2-10 Committee/3rd Reading Deadline Established As May 15, 2026",
       "summary": "Amends Illinois Human Rights Act to establish civil rights violations related to AI use. Requires disclosure when AI is used in real estate transactions, loan/credit applications, and public accommodations decisions.",
-      "vectorIds": ["v2"],
+      "vectorIds": [
+        "v2"
+      ],
       "effectiveIfPassed": "2027-01-01",
       "penalties": "Civil rights enforcement",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3364&GAID=18&DocTypeID=SB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3364&GAID=18&DocTypeID=SB&SessionID=114&GA=104",
+      "tldr": "Adds AI-driven discrimination to the Illinois Human Rights Act, with disclosure required when AI is used in real-estate, lending, or public-accommodations decisions.",
+      "history": [
+        {
+          "date": "2026-02-04",
+          "action": "Filed by Sen. Ventura; First Reading; Referred to Assignments",
+          "note": ""
+        },
+        {
+          "date": "2026-02-17",
+          "action": "Assigned to Executive",
+          "note": ""
+        },
+        {
+          "date": "2026-02-18",
+          "action": "To AI and Social Media",
+          "note": ""
+        },
+        {
+          "date": "2026-03-06",
+          "action": "Senate Committee Amendment No. 1 filed",
+          "note": "Sponsor moving to narrow scope before hearing"
+        },
+        {
+          "date": "2026-03-10",
+          "action": "SCA No. 1 Assignments Refers to Executive",
+          "note": ""
+        },
+        {
+          "date": "2026-03-11",
+          "action": "SCA No. 1 To AI and Social Media",
+          "note": ""
+        },
+        {
+          "date": "2026-03-13",
+          "action": "Rule 2-10 Committee Deadline Established As March 27, 2026",
+          "note": ""
+        },
+        {
+          "date": "2026-03-27",
+          "action": "Rule 2-10 Committee Deadline Established As April 24, 2026",
+          "note": ""
+        },
+        {
+          "date": "2026-04-24",
+          "action": "Rule 2-10 Committee/3rd Reading Deadline Established As May 15, 2026",
+          "note": ""
+        }
+      ],
+      "amendments": [
+        {
+          "number": "1",
+          "date": "2026-03-06",
+          "summary": "Senate Committee Amendment No. 1 filed by sponsor Ventura before any committee vote (typical pattern for Ventura bills); narrowing or refining the Human Rights Act scope around AI in real estate/lending/public accommodations notice",
+          "adopted": false
+        }
+      ],
+      "intent": "No co-sponsors have joined — sole sponsor with an amendment that hasn't been adopted suggests the bill is still in technical-drafting limbo and will need to be merged into SB 2255 / SB 3601 disclosure framework to advance. Lower probability of passing this session standalone."
     },
     {
       "id": "SB2255",
@@ -265,13 +753,92 @@
       "committee": "AI and Social Media",
       "status": "In Committee",
       "statusClass": "committee",
-      "lastAction": "2026-03-04",
-      "lastActionText": "Referred to AI and Social Media",
+      "lastAction": "2026-04-24",
+      "lastActionText": "Rule 2-10 Committee/3rd Reading Deadline Established As May 15, 2026",
       "summary": "Prohibits using surveillance data in automated decision systems to determine individualized pricing for consumers or wage determinations for employees. AG enforcement with private right of action.",
-      "vectorIds": ["v2"],
+      "vectorIds": [
+        "v2"
+      ],
       "effectiveIfPassed": "2027-01-01",
       "penalties": "AG enforcement + private right of action",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=2255&GAID=18&DocTypeID=SB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=2255&GAID=18&DocTypeID=SB&SessionID=114&GA=104",
+      "tldr": "Companies couldn't use surveillance data to set personalized prices for shoppers or to drive different wage offers to workers. Both AG enforcement and a private right of action.",
+      "history": [
+        {
+          "date": "2025-02-07",
+          "action": "Filed by Sen. Peters; First Reading; Referred to Assignments",
+          "note": "Filed in 2025 — full-cycle bill"
+        },
+        {
+          "date": "2025-03-12",
+          "action": "Assigned to Executive",
+          "note": ""
+        },
+        {
+          "date": "2025-03-19",
+          "action": "To AI and Social Media",
+          "note": ""
+        },
+        {
+          "date": "2025-04-11",
+          "action": "Re-referred to Assignments (Rule 3-9(a))",
+          "note": "Stalled in 2025 spring session"
+        },
+        {
+          "date": "2026-01-14",
+          "action": "Added Chief Co-Sponsor Sen. Villanueva",
+          "note": "Bill revived for 2026"
+        },
+        {
+          "date": "2026-01-27",
+          "action": "Re-assigned to Executive",
+          "note": ""
+        },
+        {
+          "date": "2026-02-04",
+          "action": "To AI and Social Media",
+          "note": ""
+        },
+        {
+          "date": "2026-02-24",
+          "action": "Senate Committee Amendment No. 1 filed",
+          "note": "Peters refiled an amendment to address industry concerns"
+        },
+        {
+          "date": "2026-03-04",
+          "action": "SCA 1 To AI and Social Media",
+          "note": ""
+        },
+        {
+          "date": "2026-03-13",
+          "action": "Rule 2-10 Committee Deadline Established As March 27, 2026",
+          "note": ""
+        },
+        {
+          "date": "2026-03-23 to 2026-04-22",
+          "action": "Co-sponsors added: Edly-Allen, Porfirio, Koehler, Belt, Collins (and earlier Halpin, Faraci, Guzmán, Ventura)",
+          "note": "Heavy progressive-caucus organizing"
+        },
+        {
+          "date": "2026-03-27",
+          "action": "Rule 2-10 Committee Deadline Established As April 24, 2026",
+          "note": ""
+        },
+        {
+          "date": "2026-04-24",
+          "action": "Rule 2-10 Committee/3rd Reading Deadline Established As May 15, 2026",
+          "note": ""
+        }
+      ],
+      "amendments": [
+        {
+          "number": "1",
+          "date": "2026-02-24",
+          "summary": "Senate Committee Amendment No. 1 by Peters — narrowing scope of 'surveillance data' and clarifying private right of action; heard but not adopted as of Apr 24",
+          "adopted": false
+        }
+      ],
+      "intent": "Second-cycle bill that picked up 11+ co-sponsors and a refining amendment in 2026 — signals the sponsor and progressive caucus are committed to pushing through despite tech-industry pushback at the Apr 9 hearing. Expected landing spot: amendment adopted in early May with a wholesaler/B2B carve-out before committee passage."
     },
     {
       "id": "SB3601",
@@ -281,13 +848,50 @@
       "committee": "AI and Social Media",
       "status": "In Committee",
       "statusClass": "committee",
-      "lastAction": "2026-02-18",
-      "lastActionText": "Referred to AI and Social Media",
+      "lastAction": "2026-04-24",
+      "lastActionText": "Rule 2-10 Committee/3rd Reading Deadline Established As May 15, 2026",
       "summary": "Mandates licensees clearly disclose when customers interact with AI rather than humans. Civil penalties up to $2,500 per offense. Amends consumer fraud statutes.",
-      "vectorIds": ["v3"],
+      "vectorIds": [
+        "v3"
+      ],
       "effectiveIfPassed": "2027-01-01",
       "penalties": "Up to $2,500/offense",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3601&GAID=18&DocTypeID=SB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3601&GAID=18&DocTypeID=SB&SessionID=114&GA=104",
+      "tldr": "Licensed professionals using AI tools with customers would have to disclose it clearly, with up to $2,500 in civil penalties per offense.",
+      "history": [
+        {
+          "date": "2026-02-05",
+          "action": "Filed by Sen. Stadelman; First Reading; Referred to Assignments",
+          "note": ""
+        },
+        {
+          "date": "2026-02-17",
+          "action": "Assigned to Executive",
+          "note": ""
+        },
+        {
+          "date": "2026-02-18",
+          "action": "To AI and Social Media",
+          "note": ""
+        },
+        {
+          "date": "2026-03-13",
+          "action": "Rule 2-10 Committee Deadline Established As March 27, 2026",
+          "note": ""
+        },
+        {
+          "date": "2026-03-27",
+          "action": "Rule 2-10 Committee Deadline Established As April 24, 2026",
+          "note": ""
+        },
+        {
+          "date": "2026-04-24",
+          "action": "Rule 2-10 Committee/3rd Reading Deadline Established As May 15, 2026",
+          "note": ""
+        }
+      ],
+      "amendments": [],
+      "intent": "Stadelman is the sole sponsor and no co-sponsors have signed on through the entire hearings window — suggests this professional-licensee disclosure bill is duplicative of broader SB 3262/SB 3368 chatbot-disclosure language and will likely be folded into one of them rather than advancing on its own."
     },
     {
       "id": "SB3263",
@@ -297,13 +901,65 @@
       "committee": "AI and Social Media",
       "status": "In Committee",
       "statusClass": "committee",
-      "lastAction": "2026-02-18",
-      "lastActionText": "Referred to AI and Social Media",
+      "lastAction": "2026-04-24",
+      "lastActionText": "Rule 2-10 Committee/3rd Reading Deadline Established As May 15, 2026",
       "summary": "Requires AI tool providers to include provenance labels in AI-generated images, videos, and audio. Mandates free access to label-reading tools. Sets obligations for platforms, device manufacturers, and licensees.",
-      "vectorIds": ["v3"],
+      "vectorIds": [
+        "v3"
+      ],
       "effectiveIfPassed": "2027-01-01",
       "penalties": "Civil penalties",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3263&GAID=18&DocTypeID=SB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3263&GAID=18&DocTypeID=SB&SessionID=114&GA=104",
+      "tldr": "AI tools would have to embed provenance labels into images, video, and audio they generate, and platforms would have to make label-reading tools free and easy to use.",
+      "history": [
+        {
+          "date": "2026-02-03",
+          "action": "Filed by Sen. Edly-Allen; First Reading; Referred to Assignments",
+          "note": ""
+        },
+        {
+          "date": "2026-02-17",
+          "action": "Assigned to Executive",
+          "note": ""
+        },
+        {
+          "date": "2026-02-18",
+          "action": "To AI and Social Media",
+          "note": ""
+        },
+        {
+          "date": "2026-03-13",
+          "action": "Rule 2-10 Committee Deadline Established As March 27, 2026",
+          "note": ""
+        },
+        {
+          "date": "2026-03-27",
+          "action": "Rule 2-10 Committee Deadline Established As April 24, 2026",
+          "note": ""
+        },
+        {
+          "date": "2026-04-10",
+          "action": "Added as Co-Sponsor Sen. Ventura",
+          "note": ""
+        },
+        {
+          "date": "2026-04-14",
+          "action": "Added Chief Co-Sponsor Sen. Ventura plus Co-Sponsors Martwick, Guzmán, Villa, Walker",
+          "note": "Ventura elevated from co- to chief co-sponsor"
+        },
+        {
+          "date": "2026-04-15",
+          "action": "Added Co-Sponsor Sen. Adriane Johnson",
+          "note": ""
+        },
+        {
+          "date": "2026-04-24",
+          "action": "Rule 2-10 Committee/3rd Reading Deadline Established As May 15, 2026",
+          "note": ""
+        }
+      ],
+      "amendments": [],
+      "intent": "Provenance/watermarking is technically tractable and aligns with what California, Texas and Arizona have already approved, so the real fight is just industry compliance scope. Ventura's elevation to chief co-sponsor (Apr 14) signals an intent to shepherd this to committee adoption with a likely amendment carving out hosting platforms and capture-device manufacturers."
     },
     {
       "id": "HB4711",
@@ -316,10 +972,37 @@
       "lastAction": "2026-03-27",
       "lastActionText": "Rule 19(a) / Re-referred to Rules Committee",
       "summary": "Establishes requirements for generative AI tool providers to apply provenance data to synthetic content. Sets obligations for AI providers, large online platforms, and capture device manufacturers.",
-      "vectorIds": ["v3"],
+      "vectorIds": [
+        "v3"
+      ],
       "effectiveIfPassed": "2027-01-01",
       "penalties": "Civil penalties",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=4711&GAID=18&DocTypeID=HB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=4711&GAID=18&DocTypeID=HB&SessionID=114&GA=104",
+      "tldr": "House provenance-data bill — generative AI tools would have to label synthetic content, with corresponding obligations for large platforms and capture-device makers.",
+      "history": [
+        {
+          "date": "2026-01-30",
+          "action": "Filed by Rep. Scherer",
+          "note": ""
+        },
+        {
+          "date": "2026-02-06",
+          "action": "First Reading; Referred to Rules Committee",
+          "note": ""
+        },
+        {
+          "date": "2026-02-17",
+          "action": "Assigned to Cybersecurity, Data Analytics, & IT Committee",
+          "note": ""
+        },
+        {
+          "date": "2026-03-27",
+          "action": "Rule 19(a) / Re-referred to Rules Committee",
+          "note": ""
+        }
+      ],
+      "amendments": [],
+      "intent": "House provenance bill missed the Mar 27 deadline and was kicked back to Rules — Senate companion SB 3263 (Edly-Allen) is the live vehicle, so HB 4711 is now a backup that will move only if Senate side fails."
     },
     {
       "id": "SB0150",
@@ -332,10 +1015,47 @@
       "lastAction": "2025-04-11",
       "lastActionText": "Rule 3-9(a) / Re-referred to Assignments",
       "summary": "Amends Election Code to require qualified political advertisements created or distributed using AI to include clear and conspicuous disclosure. Provides for civil penalties.",
-      "vectorIds": ["v3"],
+      "vectorIds": [
+        "v3"
+      ],
       "effectiveIfPassed": "Upon passage",
       "penalties": "Civil penalties",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=150&GAID=18&DocTypeID=SB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=150&GAID=18&DocTypeID=SB&SessionID=114&GA=104",
+      "tldr": "Political ads created or distributed using AI would have to carry a clear disclosure label.",
+      "history": [
+        {
+          "date": "2025-01-17",
+          "action": "Filed by Sen. Stadelman; First Reading; Referred to Assignments",
+          "note": ""
+        },
+        {
+          "date": "2025-02-25",
+          "action": "Added Chief Co-Sponsor Sen. Sally J. Turner (R)",
+          "note": "Bipartisan"
+        },
+        {
+          "date": "2025-03-12",
+          "action": "Assigned to Executive",
+          "note": ""
+        },
+        {
+          "date": "2025-03-19",
+          "action": "To AI and Social Media",
+          "note": ""
+        },
+        {
+          "date": "2025-03-27",
+          "action": "Added Chief Co-Sponsor Sen. Mary Edly-Allen",
+          "note": ""
+        },
+        {
+          "date": "2025-04-11",
+          "action": "Rule 3-9(a) / Re-referred to Assignments",
+          "note": "Effectively stalled — no movement since"
+        }
+      ],
+      "amendments": [],
+      "intent": "AI-political-advertising disclosure was bipartisan but stalled at the 2025 deadline and has had no action in 2026. Likely overtaken by federal pre-emption posture and by deepfake-specific bills filed elsewhere; will need a re-file in the next GA to revive."
     },
     {
       "id": "SB1929",
@@ -348,10 +1068,37 @@
       "lastAction": "2025-04-11",
       "lastActionText": "Rule 3-9(a) / Re-referred to Assignments",
       "summary": "Senate companion to provenance data legislation. Mandates that generative AI tool providers apply provenance data to synthetic content they generate. Sets requirements for AI providers, platforms, and device manufacturers.",
-      "vectorIds": ["v3"],
+      "vectorIds": [
+        "v3"
+      ],
       "effectiveIfPassed": "2027-01-01",
       "penalties": "Civil penalties",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=1929&GAID=18&DocTypeID=SB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=1929&GAID=18&DocTypeID=SB&SessionID=114&GA=104",
+      "tldr": "2025 Senate provenance-data bill — required generative-AI providers to embed provenance metadata in synthetic content. Superseded by SB 3263.",
+      "history": [
+        {
+          "date": "2025-02-06",
+          "action": "Filed by Sen. Edly-Allen; First Reading; Referred to Assignments",
+          "note": ""
+        },
+        {
+          "date": "2025-03-12",
+          "action": "Assigned to Executive",
+          "note": ""
+        },
+        {
+          "date": "2025-03-19",
+          "action": "To AI and Social Media",
+          "note": ""
+        },
+        {
+          "date": "2025-04-11",
+          "action": "Rule 3-9(a) / Re-referred to Assignments",
+          "note": "Stalled"
+        }
+      ],
+      "amendments": [],
+      "intent": "Edly-Allen replaced this 2025 provenance-data bill with the more comprehensive SB 3263 in 2026 — treat SB 1929 as superseded; sponsor's energy is now on SB 3263."
     },
     {
       "id": "HB3021",
@@ -359,15 +1106,74 @@
       "name": "Consumer Fraud — AI Deception",
       "sponsor": "Rep. Abdelnasser Rashid",
       "committee": "Consumer Protection",
-      "status": "2nd Reading",
-      "statusClass": "pending",
-      "lastAction": "2026-02-24",
-      "lastActionText": "Rules Committee approved for consideration (5-0-0); Placed on Calendar 2nd Reading",
+      "status": "Re-referred",
+      "statusClass": "stalled",
+      "lastAction": "2026-04-17",
+      "lastActionText": "Rule 19(a) / Re-referred to Rules Committee",
       "summary": "Amends Consumer Fraud Act to prohibit businesses from deploying chatbots or AI agents that mislead consumers into believing they are communicating with a human without clear and conspicuous disclosure.",
-      "vectorIds": ["v3"],
+      "vectorIds": [
+        "v3"
+      ],
       "effectiveIfPassed": "2026-01-01",
       "penalties": "Consumer fraud enforcement",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3021&GAID=18&DocTypeID=HB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3021&GAID=18&DocTypeID=HB&SessionID=114&GA=104",
+      "tldr": "Businesses using chatbots that try to pass as human would commit consumer fraud unless they disclose clearly that the user is talking to AI.",
+      "history": [
+        {
+          "date": "2025-02-06",
+          "action": "Filed by Rep. Rashid; First Reading; Referred to Rules Committee",
+          "note": ""
+        },
+        {
+          "date": "2025-03-04",
+          "action": "Assigned to Consumer Protection Committee",
+          "note": ""
+        },
+        {
+          "date": "2025-03-18",
+          "action": "Do Pass / Short Debate Consumer Protection Committee 6-3-0",
+          "note": "Passed first committee in 2025"
+        },
+        {
+          "date": "2025-03-26",
+          "action": "Second Reading - Short Debate; Held on Calendar",
+          "note": ""
+        },
+        {
+          "date": "2025-04-07",
+          "action": "House Floor Amendment No. 1 Filed by Rep. Rashid",
+          "note": ""
+        },
+        {
+          "date": "2025-04-08",
+          "action": "HFA No. 1 Recommends Be Adopted Consumer Protection Committee 5-3-1",
+          "note": ""
+        },
+        {
+          "date": "2025-04-11",
+          "action": "Rule 19(a) / Re-referred to Rules; HFA 1 Re-referred",
+          "note": "Stalled at end of 2025 spring"
+        },
+        {
+          "date": "2026-02-24",
+          "action": "Approved for Consideration Rules Committee 5-0-0; Placed on Calendar 2nd Reading; HFA 1 Recommends Be Adopted 5-0-0",
+          "note": "Revived in 2026 — Rules unanimously approved both bill and amendment for floor"
+        },
+        {
+          "date": "2026-04-17",
+          "action": "Rule 19(a) / Re-referred to Rules Committee; HFA 1 Re-referred",
+          "note": "Bill held on 2nd reading through Apr 4 deadline and was kicked back"
+        }
+      ],
+      "amendments": [
+        {
+          "number": "1",
+          "date": "2025-04-08",
+          "summary": "House Floor Amendment No. 1 by Rep. Rashid (Consumer Fraud-AI Deception) — adjusting scope of 'reasonable consumer' standard and notification requirements; adopted in committee 5-3-1, then 5-0-0 in Rules in 2026, but never adopted on House floor",
+          "adopted": false
+        }
+      ],
+      "intent": "Bill was revived in Feb 2026 with unanimous Rules approval, but the sponsor never called it for a 3rd-reading vote before the Apr 4 House deadline — typical 'parked' pattern when sponsor is negotiating with Attorney General's office or industry. Likely returns in May with negotiated language; passage probability is moderate-high given the unanimous Rules vote."
     },
     {
       "id": "SB3262",
@@ -377,13 +1183,65 @@
       "committee": "AI and Social Media",
       "status": "In Committee",
       "statusClass": "committee",
-      "lastAction": "2026-02-18",
-      "lastActionText": "Referred to AI and Social Media",
+      "lastAction": "2026-04-24",
+      "lastActionText": "Rule 2-10 Committee/3rd Reading Deadline Established As May 15, 2026",
       "summary": "Establishes protections for users of companion AI products. Prohibits operators from deploying AI systems with specified harmful features. Mandates crisis intervention protocols, persistent machine-disclosure, and user safeguards.",
-      "vectorIds": ["v4"],
+      "vectorIds": [
+        "v4"
+      ],
       "effectiveIfPassed": "2027-01-01",
       "penalties": "Liability and enforcement provisions",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3262&GAID=18&DocTypeID=SB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3262&GAID=18&DocTypeID=SB&SessionID=114&GA=104",
+      "tldr": "AI 'companion' apps couldn't be designed with the most addictive or harmful features, would have to give crisis-intervention referrals, and would have to make clear they aren't human — every session.",
+      "history": [
+        {
+          "date": "2026-02-03",
+          "action": "Filed by Sen. Edly-Allen; First Reading; Referred to Assignments",
+          "note": ""
+        },
+        {
+          "date": "2026-02-17",
+          "action": "Assigned to Executive",
+          "note": ""
+        },
+        {
+          "date": "2026-02-18",
+          "action": "To AI and Social Media",
+          "note": ""
+        },
+        {
+          "date": "2026-03-13",
+          "action": "Rule 2-10 Committee Deadline Established As March 27, 2026",
+          "note": ""
+        },
+        {
+          "date": "2026-03-27",
+          "action": "Rule 2-10 Committee Deadline Established As April 24, 2026",
+          "note": ""
+        },
+        {
+          "date": "2026-04-10",
+          "action": "Added as Co-Sponsor All Senators (en bloc)",
+          "note": "Mass co-sponsor add — companion-AI safety polled well at the Apr 9-10 subject-matter hearing"
+        },
+        {
+          "date": "2026-04-14",
+          "action": "Added Co-Sponsors: Loughran Cappel, Collins, Guzmán, Martwick, Villa, Walker",
+          "note": ""
+        },
+        {
+          "date": "2026-04-15",
+          "action": "Added Co-Sponsor Sen. Glowiak Hilton",
+          "note": ""
+        },
+        {
+          "date": "2026-04-24",
+          "action": "Rule 2-10 Committee/3rd Reading Deadline Established As May 15, 2026",
+          "note": ""
+        }
+      ],
+      "amendments": [],
+      "intent": "The Apr 10 'All Senators' co-sponsor action is unusual procedurally and signals the chamber is treating companion-AI/child-safety as a near-consensus vehicle. Highly likely to clear committee in May, possibly absorbing SB 3261 and SB 3384 provisions; this is the strongest bet to actually become law in the chatbot-safety category."
     },
     {
       "id": "SB3368",
@@ -393,13 +1251,50 @@
       "committee": "AI and Social Media",
       "status": "In Committee",
       "statusClass": "committee",
-      "lastAction": "2026-02-18",
-      "lastActionText": "Referred to AI and Social Media",
+      "lastAction": "2026-04-24",
+      "lastActionText": "Rule 2-10 Committee/3rd Reading Deadline Established As May 15, 2026",
       "summary": "Prevents chatbot proprietors from disclaiming responsibility for materially misleading, incorrect, or harmful information. Mandates parental consent for minors using companion chatbots. AG compliance standards.",
-      "vectorIds": ["v4"],
+      "vectorIds": [
+        "v4"
+      ],
       "effectiveIfPassed": "2027-01-01",
       "penalties": "AG enforcement",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3368&GAID=18&DocTypeID=SB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3368&GAID=18&DocTypeID=SB&SessionID=114&GA=104",
+      "tldr": "Chatbot companies couldn't disclaim responsibility for harmful or misleading bot output, and minors using companion chatbots would need parental consent.",
+      "history": [
+        {
+          "date": "2026-02-04",
+          "action": "Filed by Sen. Sue Rezin; First Reading; Referred to Assignments",
+          "note": "Republican-sponsored chatbot liability bill"
+        },
+        {
+          "date": "2026-02-17",
+          "action": "Assigned to Executive",
+          "note": ""
+        },
+        {
+          "date": "2026-02-18",
+          "action": "To AI and Social Media",
+          "note": ""
+        },
+        {
+          "date": "2026-03-13",
+          "action": "Rule 2-10 Committee Deadline Established As March 27, 2026",
+          "note": ""
+        },
+        {
+          "date": "2026-03-27",
+          "action": "Rule 2-10 Committee Deadline Established As April 24, 2026",
+          "note": ""
+        },
+        {
+          "date": "2026-04-24",
+          "action": "Rule 2-10 Committee/3rd Reading Deadline Established As May 15, 2026",
+          "note": ""
+        }
+      ],
+      "amendments": [],
+      "intent": "Rezin (R) testified strongly at the Apr 9 hearing in favor of liability for AI providers — a notable bipartisan crack from the dominant industry-friendly GOP position, but with no Democratic co-sponsors yet, the more likely path is for its substantive language to be absorbed into Edly-Allen's SB 3261/SB 3262 vehicle in May."
     },
     {
       "id": "HB4705",
@@ -412,10 +1307,53 @@
       "lastAction": "2026-03-27",
       "lastActionText": "Rule 19(a) / Re-referred to Rules Committee",
       "summary": "Requires frontier AI model developers and large chatbot providers to create and post safety and child protection plans. Whistleblower protections, third-party audits, civil penalties. House companion to SB 3261.",
-      "vectorIds": ["v1", "v4"],
+      "vectorIds": [
+        "v1",
+        "v4"
+      ],
       "effectiveIfPassed": "2027-01-01",
       "penalties": "Civil penalties",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=4705&GAID=18&DocTypeID=HB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=4705&GAID=18&DocTypeID=HB&SessionID=114&GA=104",
+      "tldr": "House companion to SB 3261 — frontier AI developers and big chatbot providers post safety and child-protection plans, with whistleblower protections and audits.",
+      "history": [
+        {
+          "date": "2026-01-29",
+          "action": "Filed by Rep. Didech",
+          "note": ""
+        },
+        {
+          "date": "2026-02-04",
+          "action": "Added Chief Co-Sponsor Rep. Du Buclet",
+          "note": ""
+        },
+        {
+          "date": "2026-02-06",
+          "action": "First Reading; Referred to Rules",
+          "note": ""
+        },
+        {
+          "date": "2026-02-11",
+          "action": "Added Co-Sponsor Rep. Mayfield",
+          "note": ""
+        },
+        {
+          "date": "2026-02-19",
+          "action": "Added Co-Sponsor Rep. Cochran",
+          "note": ""
+        },
+        {
+          "date": "2026-03-04",
+          "action": "Assigned to Judiciary - Civil Committee",
+          "note": ""
+        },
+        {
+          "date": "2026-03-27",
+          "action": "Rule 19(a) / Re-referred to Rules Committee",
+          "note": ""
+        }
+      ],
+      "amendments": [],
+      "intent": "House companion to Senate SB 3261 (kid/chatbot transparency); Senate version is the lead vehicle and has 12+ co-sponsors. HB 4705 is now functionally a backup — will only advance if Senate stalls."
     },
     {
       "id": "SB3384",
@@ -425,13 +1363,55 @@
       "committee": "AI and Social Media",
       "status": "In Committee",
       "statusClass": "committee",
-      "lastAction": "2026-02-18",
-      "lastActionText": "Assigned to AI and Social Media",
+      "lastAction": "2026-04-24",
+      "lastActionText": "Rule 2-10 Committee/3rd Reading Deadline Established As May 15, 2026",
       "summary": "Requires AI companion operators to detect and address user suicidal ideation or self-harm expressions. Mandates clear notifications that users are not communicating with humans. Civil penalties fund the Statewide 9-8-8 Trust Fund.",
-      "vectorIds": ["v4"],
+      "vectorIds": [
+        "v4"
+      ],
       "effectiveIfPassed": "2027-01-01",
       "penalties": "Civil penalties (fund 9-8-8 Trust Fund)",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3384&GAID=18&DocTypeID=SB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3384&GAID=18&DocTypeID=SB&SessionID=114&GA=104",
+      "tldr": "Companion AI apps would have to detect users expressing suicidal thoughts or self-harm and route them to help, with civil penalties feeding the 9-8-8 Trust Fund.",
+      "history": [
+        {
+          "date": "2026-02-04",
+          "action": "Filed by Sen. Ellman; First Reading; Referred to Assignments",
+          "note": ""
+        },
+        {
+          "date": "2026-02-17",
+          "action": "Assigned to Executive",
+          "note": ""
+        },
+        {
+          "date": "2026-02-18",
+          "action": "To AI and Social Media",
+          "note": ""
+        },
+        {
+          "date": "2026-03-13",
+          "action": "Rule 2-10 Committee Deadline Established As March 27, 2026",
+          "note": ""
+        },
+        {
+          "date": "2026-03-27",
+          "action": "Rule 2-10 Committee Deadline Established As April 24, 2026",
+          "note": ""
+        },
+        {
+          "date": "2026-04-10",
+          "action": "Added as Co-Sponsor Sen. Ventura",
+          "note": ""
+        },
+        {
+          "date": "2026-04-24",
+          "action": "Rule 2-10 Committee/3rd Reading Deadline Established As May 15, 2026",
+          "note": ""
+        }
+      ],
+      "amendments": [],
+      "intent": "Ventura joining as co-sponsor on Apr 10 (right after the subject-matter hearing) suggests the Edly-Allen/Ellman/Ventura camp is consolidating around a single companion-AI safety vehicle. Highest probability path is for SB 3384's suicide/self-harm protocol language to be merged into SB 3262 before committee vote in May."
     },
     {
       "id": "SB3180",
@@ -441,13 +1421,50 @@
       "committee": "AI and Social Media",
       "status": "In Committee",
       "statusClass": "committee",
-      "lastAction": "2026-02-18",
-      "lastActionText": "Referred to AI and Social Media",
+      "lastAction": "2026-04-24",
+      "lastActionText": "Rule 2-10 Committee/3rd Reading Deadline Established As May 15, 2026",
       "summary": "Restricts deployers from indefinitely retaining AI training data without meeting specific requirements. Establishes private right of action. Violations classified as unlawful practices under consumer protection law.",
-      "vectorIds": ["v5"],
+      "vectorIds": [
+        "v5"
+      ],
       "effectiveIfPassed": "2027-01-01",
       "penalties": "Private right of action + consumer protection",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3180&GAID=18&DocTypeID=SB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3180&GAID=18&DocTypeID=SB&SessionID=114&GA=104",
+      "tldr": "AI deployers couldn't keep training data forever; consumers get a private right of action against violators.",
+      "history": [
+        {
+          "date": "2026-02-02",
+          "action": "Filed by Sen. Ventura; First Reading; Referred to Assignments",
+          "note": ""
+        },
+        {
+          "date": "2026-02-10",
+          "action": "Assigned to Executive",
+          "note": ""
+        },
+        {
+          "date": "2026-02-18",
+          "action": "To AI and Social Media",
+          "note": ""
+        },
+        {
+          "date": "2026-03-13",
+          "action": "Rule 2-10 Committee Deadline Established As March 27, 2026",
+          "note": ""
+        },
+        {
+          "date": "2026-03-27",
+          "action": "Rule 2-10 Committee Deadline Established As April 24, 2026",
+          "note": ""
+        },
+        {
+          "date": "2026-04-24",
+          "action": "Rule 2-10 Committee/3rd Reading Deadline Established As May 15, 2026",
+          "note": ""
+        }
+      ],
+      "amendments": [],
+      "intent": "Sole-sponsor (Ventura) bill with no co-sponsors and no amendments through three deadline cycles — competing with the broader SB 3890 data-privacy framework also from Ventura. Expected to be subsumed into SB 3890 rather than advance independently; treat as a placeholder."
     },
     {
       "id": "SB3890",
@@ -457,13 +1474,50 @@
       "committee": "AI and Social Media",
       "status": "In Committee",
       "statusClass": "committee",
-      "lastAction": "2026-02-25",
-      "lastActionText": "Assigned to AI and Social Media",
+      "lastAction": "2026-04-24",
+      "lastActionText": "Rule 2-10 Committee/3rd Reading Deadline Established As May 15, 2026",
       "summary": "Comprehensive data privacy protections for entities handling 100K+ Illinois consumers' data. Consumer rights include data access, correction, and profiling inquiries. Creates data broker registry with Attorney General.",
-      "vectorIds": ["v5"],
+      "vectorIds": [
+        "v5"
+      ],
       "effectiveIfPassed": "2027-01-01",
       "penalties": "AG enforcement with civil penalties",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3890&GAID=18&DocTypeID=SB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3890&GAID=18&DocTypeID=SB&SessionID=114&GA=104",
+      "tldr": "Illinois' answer to the CCPA: comprehensive consumer data-privacy rights for any company handling 100k+ Illinois residents' data, plus a state data-broker registry.",
+      "history": [
+        {
+          "date": "2026-02-06",
+          "action": "Filed by Sen. Ventura; First Reading; Referred to Assignments",
+          "note": ""
+        },
+        {
+          "date": "2026-02-24",
+          "action": "Assigned to Executive",
+          "note": ""
+        },
+        {
+          "date": "2026-02-25",
+          "action": "To AI and Social Media",
+          "note": ""
+        },
+        {
+          "date": "2026-03-13",
+          "action": "Rule 2-10 Committee Deadline Established As March 27, 2026",
+          "note": ""
+        },
+        {
+          "date": "2026-03-27",
+          "action": "Rule 2-10 Committee Deadline Established As April 24, 2026",
+          "note": ""
+        },
+        {
+          "date": "2026-04-24",
+          "action": "Rule 2-10 Committee/3rd Reading Deadline Established As May 15, 2026",
+          "note": ""
+        }
+      ],
+      "amendments": [],
+      "intent": "Comprehensive consumer-data-privacy bill (the 'Illinois CCPA') with the same 100k-consumer threshold language as other states; Ventura is sole sponsor and the lack of co-sponsors despite being a marquee bill signals heavy business-coalition resistance. Most likely to need a substantive substitute amendment before any committee vote — passing this session is a stretch."
     },
     {
       "id": "SB2994",
@@ -473,13 +1527,72 @@
       "committee": "AI and Social Media",
       "status": "In Committee",
       "statusClass": "committee",
-      "lastAction": "2026-02-18",
-      "lastActionText": "Referred to AI and Social Media",
+      "lastAction": "2026-04-24",
+      "lastActionText": "Rule 2-10 Committee/3rd Reading Deadline Established As May 15, 2026",
       "summary": "Expands Genetic Information Privacy Act to cover neurotechnology data. Prohibits insurers from using neurodata for underwriting. Restricts employers from requesting neurotechnology data in employment decisions. New consent and security standards.",
-      "vectorIds": ["v5"],
+      "vectorIds": [
+        "v5"
+      ],
       "effectiveIfPassed": "2027-01-01",
       "penalties": "Existing GIPA enforcement",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=2994&GAID=18&DocTypeID=SB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=2994&GAID=18&DocTypeID=SB&SessionID=114&GA=104",
+      "tldr": "Extends Illinois' Genetic Information Privacy Act to brain-computer-interface and neurotech data — insurers couldn't use it for underwriting and employers couldn't request it.",
+      "history": [
+        {
+          "date": "2026-01-29",
+          "action": "Filed by Sen. Ventura; First Reading; Referred to Assignments",
+          "note": ""
+        },
+        {
+          "date": "2026-02-10",
+          "action": "Assigned to Executive",
+          "note": ""
+        },
+        {
+          "date": "2026-02-18",
+          "action": "To AI and Social Media",
+          "note": ""
+        },
+        {
+          "date": "2026-03-05",
+          "action": "Senate Committee Amendment No. 1 filed",
+          "note": ""
+        },
+        {
+          "date": "2026-03-10",
+          "action": "SCA 1 Assignments Refers to Executive",
+          "note": ""
+        },
+        {
+          "date": "2026-03-11",
+          "action": "SCA 1 To AI and Social Media",
+          "note": ""
+        },
+        {
+          "date": "2026-03-13",
+          "action": "Rule 2-10 Committee Deadline Established As March 27, 2026",
+          "note": ""
+        },
+        {
+          "date": "2026-03-27",
+          "action": "Rule 2-10 Committee Deadline Established As April 24, 2026",
+          "note": ""
+        },
+        {
+          "date": "2026-04-24",
+          "action": "Rule 2-10 Committee/3rd Reading Deadline Established As May 15, 2026",
+          "note": ""
+        }
+      ],
+      "amendments": [
+        {
+          "number": "1",
+          "date": "2026-03-05",
+          "summary": "Senate Committee Amendment No. 1 by Ventura — refining definitions of 'neurotechnology' and 'neurotechnology data' and adjusting employer/insurer scope; heard but not yet adopted",
+          "adopted": false
+        }
+      ],
+      "intent": "Niche but non-controversial expansion of GIPA to neurotech data; the early amendment indicates Ventura is pre-negotiating with insurance/employer stakeholders. Reasonable chance of clearing committee in May with amendment adopted, since there is no organized industry opposition to neurotech privacy specifically."
     },
     {
       "id": "HB4980",
@@ -487,15 +1600,79 @@
       "name": "Meaningful Human Control of AI Act",
       "sponsor": "Rep. Abdelnasser Rashid",
       "committee": "Labor & Commerce",
-      "status": "2nd Reading",
-      "statusClass": "pending",
-      "lastAction": "2026-03-20",
-      "lastActionText": "Placed on Calendar 2nd Reading - Short Debate; Amendment No. 1 adopted",
+      "status": "Re-referred",
+      "statusClass": "stalled",
+      "lastAction": "2026-04-17",
+      "lastActionText": "Rule 19(a) / Re-referred to Rules Committee",
       "summary": "Prohibits public employers from using automated decision systems without meaningful and continuing human review. Mandates impact assessments and biennial reassessments. Anti-retaliation protections. Private right of action.",
-      "vectorIds": ["v6"],
+      "vectorIds": [
+        "v6"
+      ],
       "effectiveIfPassed": "2027-01-01",
       "penalties": "Dept of Labor enforcement + private right of action",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=4980&GAID=18&DocTypeID=HB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=4980&GAID=18&DocTypeID=HB&SessionID=114&GA=104",
+      "tldr": "Public employers couldn't use automated decision systems to make consequential decisions about employees without continuing, meaningful human review. Includes impact assessments and a private right of action.",
+      "history": [
+        {
+          "date": "2026-02-04",
+          "action": "Filed by Rep. Rashid",
+          "note": ""
+        },
+        {
+          "date": "2026-02-06",
+          "action": "First Reading; Referred to Rules Committee",
+          "note": ""
+        },
+        {
+          "date": "2026-02-25",
+          "action": "20+ co-sponsors added (Sheehan, Kifowit, Blair-Sherlock, Crawford, Davis, Ortíz, Jiménez, Williams, Avelar, Hirschauer, Yang Rohr, Gordon-Booth, González, Andrade)",
+          "note": "Massive coalition build"
+        },
+        {
+          "date": "2026-02-26",
+          "action": "More co-sponsors (West II, Grasse, Guzzardi, Cassidy)",
+          "note": ""
+        },
+        {
+          "date": "2026-03-04",
+          "action": "Assigned to Labor & Commerce Committee",
+          "note": ""
+        },
+        {
+          "date": "2026-03-09",
+          "action": "House Committee Amendment No. 1 filed by Rep. Rashid",
+          "note": ""
+        },
+        {
+          "date": "2026-03-19",
+          "action": "HCA No. 1 Adopted in Labor & Commerce by Voice Vote; Do Pass as Amended 18-9-0",
+          "note": "Passed committee on party lines"
+        },
+        {
+          "date": "2026-03-20",
+          "action": "Placed on Calendar 2nd Reading",
+          "note": ""
+        },
+        {
+          "date": "2026-04-10",
+          "action": "Second Reading - Short Debate; Held on Calendar Order of Second Reading",
+          "note": "Reached floor but not advanced"
+        },
+        {
+          "date": "2026-04-17",
+          "action": "Rule 19(a) / Re-referred to Rules Committee",
+          "note": "Missed 3rd-reading deadline; sent back to Rules"
+        }
+      ],
+      "amendments": [
+        {
+          "number": "1",
+          "date": "2026-03-09",
+          "summary": "House Committee Amendment No. 1 by Rep. Rashid — extends 'employee' definition to include employee candidates and corrects a citation; adopted by voice vote on Mar 19",
+          "adopted": true
+        }
+      ],
+      "intent": "Cleared committee 18-9 (party line) with an adopted amendment and was held on 2nd reading for a week before getting kicked back to Rules at the Apr 17 deadline — a classic 'whip count came up short' signal. Despite the 25+ co-sponsor coalition, Rashid couldn't get a floor majority for a public-employer ADS mandate. Expected to return in May with a narrower substitute (likely cabinet-only or with civil-service exemptions), but passage this session is now uncertain."
     },
     {
       "id": "HB3646",
@@ -506,12 +1683,59 @@
       "status": "Re-referred",
       "statusClass": "stalled",
       "lastAction": "2025-06-02",
-      "lastActionText": "Rule 3-9(a) / Re-referred to Assignments",
+      "lastActionText": "Rule 3-9(a) / Re-referred to Assignments (Senate)",
       "summary": "Amends DOIT Act to allow Generative AI Task Force hybrid meetings and require periodic reports. Passed House unanimously (111-0).",
-      "vectorIds": ["v6"],
+      "vectorIds": [
+        "v6"
+      ],
       "effectiveIfPassed": "Upon passage",
       "penalties": "N/A (governance)",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3646&GAID=18&DocTypeID=HB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3646&GAID=18&DocTypeID=HB&SessionID=114&GA=104",
+      "tldr": "Lets the state's Generative AI Task Force meet in hybrid format and requires periodic public reports.",
+      "history": [
+        {
+          "date": "2025-02-07",
+          "action": "Filed by Rep. Rashid (later changed to Rep. Hernandez)",
+          "note": ""
+        },
+        {
+          "date": "2025-02-18",
+          "action": "First Reading; Referred to Rules Committee",
+          "note": ""
+        },
+        {
+          "date": "2025-03-11",
+          "action": "Assigned to Cybersecurity, Data Analytics, & IT Committee",
+          "note": ""
+        },
+        {
+          "date": "2025-03-20",
+          "action": "Do Pass / Short Debate Cybersecurity Committee 12-0-0",
+          "note": ""
+        },
+        {
+          "date": "2025-04-11",
+          "action": "Third Reading - Short Debate - Passed 111-000-000",
+          "note": "Unanimous House passage"
+        },
+        {
+          "date": "2025-04-14",
+          "action": "Arrived in Senate; First Reading; Sen. Peters chief sponsor",
+          "note": ""
+        },
+        {
+          "date": "2025-04-29",
+          "action": "Assigned to Executive (Senate)",
+          "note": ""
+        },
+        {
+          "date": "2025-06-02",
+          "action": "Rule 3-9(a) / Re-referred to Senate Assignments",
+          "note": "Stalled in Senate"
+        }
+      ],
+      "amendments": [],
+      "intent": "House passed unanimously (111-0) but the Senate has parked it through two deadline cycles — typical pattern when the upper chamber wants to bundle the task force expansion with broader AI legislation. Likely revived in May 2026 as a vehicle for amendments combining other DOIT/AI provisions, since it has clean House passage as a starting point."
     },
     {
       "id": "SB2117",
@@ -519,15 +1743,32 @@
       "name": "State Government AI Procurement",
       "sponsor": "Sen. Sally J. Turner",
       "committee": "Assignments",
-      "status": "In Committee",
-      "statusClass": "committee",
-      "lastAction": "2025-02-07",
-      "lastActionText": "Referred to Assignments",
+      "status": "Re-referred",
+      "statusClass": "stalled",
+      "lastAction": "2025-02-26",
+      "lastActionText": "Added as Co-Sponsor Sen. Terri Bryant",
       "summary": "Directs Generative AI Task Force to recommend policies for state procurement and deployment of AI systems, identify prohibited AI uses, and assess current AI implementation across agencies.",
-      "vectorIds": ["v6"],
+      "vectorIds": [
+        "v6"
+      ],
       "effectiveIfPassed": "Immediately",
       "penalties": "N/A (governance)",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=2117&GAID=18&DocTypeID=SB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=2117&GAID=18&DocTypeID=SB&SessionID=114&GA=104",
+      "tldr": "Directs the state's Generative AI Task Force to recommend procurement and prohibited-use rules for state agency AI.",
+      "history": [
+        {
+          "date": "2025-02-07",
+          "action": "Filed by Sen. Sally J. Turner; First Reading; Referred to Assignments",
+          "note": ""
+        },
+        {
+          "date": "2025-02-26",
+          "action": "Added Co-Sponsor Sen. Terri Bryant (R)",
+          "note": ""
+        }
+      ],
+      "amendments": [],
+      "intent": "Republican-sponsored task-force-procurement bill never received an Executive Committee assignment; with the Senate AI committee now centered on Democratic-priority bills, this is dead-letter unless attached as an amendment to a vehicle bill in fall veto session."
     },
     {
       "id": "SB1677",
@@ -540,10 +1781,42 @@
       "lastAction": "2025-04-11",
       "lastActionText": "Rule 3-9(a) / Re-referred to Assignments",
       "summary": "Amends School Code to prohibit evaluators from utilizing artificial intelligence tools when conducting teacher evaluations.",
-      "vectorIds": ["v6"],
+      "vectorIds": [
+        "v6"
+      ],
       "effectiveIfPassed": "Upon passage",
       "penalties": "School Code enforcement",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=1677&GAID=18&DocTypeID=SB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=1677&GAID=18&DocTypeID=SB&SessionID=114&GA=104",
+      "tldr": "Bans the use of AI tools in evaluating Illinois public-school teachers.",
+      "history": [
+        {
+          "date": "2025-02-05",
+          "action": "Filed by Sen. Belt; First Reading; Referred to Assignments",
+          "note": ""
+        },
+        {
+          "date": "2025-02-18",
+          "action": "Added Co-Sponsor Sen. Adriane Johnson",
+          "note": ""
+        },
+        {
+          "date": "2025-03-12",
+          "action": "Assigned to Executive",
+          "note": ""
+        },
+        {
+          "date": "2025-03-19",
+          "action": "To AI and Social Media",
+          "note": ""
+        },
+        {
+          "date": "2025-04-11",
+          "action": "Rule 3-9(a) / Re-referred to Assignments",
+          "note": ""
+        }
+      ],
+      "amendments": [],
+      "intent": "AI-ban-in-teacher-evaluations: stalled in 2025 spring deadline and not revived. Likely overtaken by broader IEA/IFT-driven workforce bills like HB 4980 (meaningful human review) which capture similar policy goals more broadly."
     },
     {
       "id": "HB4988",
@@ -551,15 +1824,42 @@
       "name": "AI Use Notification Act",
       "sponsor": "Multiple",
       "committee": "Rules Committee",
-      "status": "In Committee",
-      "statusClass": "committee",
-      "lastAction": "2026-02-06",
-      "lastActionText": "Referred to Rules Committee",
+      "status": "Re-referred",
+      "statusClass": "stalled",
+      "lastAction": "2026-03-27",
+      "lastActionText": "Rule 19(a) / Re-referred to Rules Committee",
       "summary": "Requires AI operators to display notifications when consumers interact with AI systems. Addresses deceptive business practices related to undisclosed AI use.",
-      "vectorIds": ["v6"],
+      "vectorIds": [
+        "v6"
+      ],
       "effectiveIfPassed": "2027-01-01",
       "penalties": "Consumer fraud provisions",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=4988&GAID=18&DocTypeID=HB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=4988&GAID=18&DocTypeID=HB&SessionID=114&GA=104",
+      "tldr": "Businesses would have to display a clear notice when consumers are interacting with AI rather than a human.",
+      "history": [
+        {
+          "date": "2026-02-04",
+          "action": "Filed by Rep. Syed",
+          "note": ""
+        },
+        {
+          "date": "2026-02-06",
+          "action": "First Reading; Referred to Rules Committee",
+          "note": ""
+        },
+        {
+          "date": "2026-03-18",
+          "action": "Assigned to Consumer Protection Committee",
+          "note": "Late assignment"
+        },
+        {
+          "date": "2026-03-27",
+          "action": "Rule 19(a) / Re-referred to Rules Committee",
+          "note": "Never got a hearing"
+        }
+      ],
+      "amendments": [],
+      "intent": "Generative-AI warning-label bill assigned to committee only 9 days before deadline and was bounced back without a hearing — a typical sign the chair did not prioritize it. Effectively dead this session unless attached as a floor amendment to a related consumer-protection vehicle."
     },
     {
       "id": "SB1366",
@@ -567,15 +1867,32 @@
       "name": "State Government AI Act",
       "sponsor": "Sen. Sally J. Turner",
       "committee": "Assignments",
-      "status": "In Committee",
-      "statusClass": "committee",
-      "lastAction": "2025-01-29",
-      "lastActionText": "Referred to Assignments",
+      "status": "Re-referred",
+      "statusClass": "stalled",
+      "lastAction": "2025-02-26",
+      "lastActionText": "Added as Co-Sponsor Sen. Terri Bryant",
       "summary": "Creates the State Government AI Act. Requires DOIT to adopt rules by Jan 1, 2028 governing how state agencies develop, procure, deploy, use, and evaluate AI systems. Prohibits agency AI deployment unless permitted under department regulations. Mandates impact assessment reports.",
-      "vectorIds": ["v6"],
+      "vectorIds": [
+        "v6"
+      ],
       "effectiveIfPassed": "Immediately",
       "penalties": "N/A (governance framework)",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=1366&GAID=18&DocTypeID=SB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=1366&GAID=18&DocTypeID=SB&SessionID=114&GA=104",
+      "tldr": "By Jan 2028, the Department of Innovation & Technology would have to issue rules governing how every Illinois state agency develops, buys, and uses AI.",
+      "history": [
+        {
+          "date": "2025-01-29",
+          "action": "Filed by Sen. Sally J. Turner; First Reading; Referred to Assignments",
+          "note": ""
+        },
+        {
+          "date": "2025-02-26",
+          "action": "Added Co-Sponsor Sen. Terri Bryant (R)",
+          "note": ""
+        }
+      ],
+      "amendments": [],
+      "intent": "Same fate as SB 2117 — never assigned out of Assignments; the Democratic majority has chosen not to advance Republican-led 'state-government AI' framework bills. Effectively dead this GA."
     },
     {
       "id": "HB3720",
@@ -588,10 +1905,37 @@
       "lastAction": "2025-03-21",
       "lastActionText": "Rule 19(a) / Re-referred to Rules Committee",
       "summary": "Requires state agencies to maintain continuous meaningful human review before deploying automated decision-making systems. Mandates impact assessments covering system objectives, effectiveness evaluation, testing protocols, and notification procedures.",
-      "vectorIds": ["v6"],
+      "vectorIds": [
+        "v6"
+      ],
       "effectiveIfPassed": "Upon passage",
       "penalties": "Administrative enforcement",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3720&GAID=18&DocTypeID=HB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3720&GAID=18&DocTypeID=HB&SessionID=114&GA=104",
+      "tldr": "State agencies couldn't deploy automated decision systems for high-impact uses without continuing meaningful human review and an impact assessment.",
+      "history": [
+        {
+          "date": "2025-02-07",
+          "action": "Filed by Rep. Rashid",
+          "note": ""
+        },
+        {
+          "date": "2025-02-18",
+          "action": "First Reading; Referred to Rules Committee",
+          "note": ""
+        },
+        {
+          "date": "2025-03-11",
+          "action": "Assigned to Cybersecurity, Data Analytics, & IT Committee",
+          "note": ""
+        },
+        {
+          "date": "2025-03-21",
+          "action": "Rule 19(a) / Re-referred to Rules Committee",
+          "note": ""
+        }
+      ],
+      "amendments": [],
+      "intent": "Rashid's 2025 state-agency 'meaningful human review' bill — superseded by HB 4980 in 2026 (which focuses on public-employer ADS); HB 3720 is now functionally retired."
     },
     {
       "id": "HB3567",
@@ -604,10 +1948,52 @@
       "lastAction": "2026-03-27",
       "lastActionText": "Rule 19(a) / Re-referred to Rules Committee",
       "summary": "Requires state agencies to maintain continuous meaningful human review when automated decision systems perform specified functions. Mandates impact assessments submitted to Governor and General Assembly. 23 co-sponsors from both parties.",
-      "vectorIds": ["v6"],
+      "vectorIds": [
+        "v6"
+      ],
       "effectiveIfPassed": "Upon passage",
       "penalties": "Administrative enforcement",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3567&GAID=18&DocTypeID=HB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=3567&GAID=18&DocTypeID=HB&SessionID=114&GA=104",
+      "tldr": "State agencies would have to maintain meaningful human review of any automated decision systems that perform specified high-impact functions, and submit impact assessments to the Governor and General Assembly.",
+      "history": [
+        {
+          "date": "2025-02-07",
+          "action": "Filed by Rep. Briel",
+          "note": ""
+        },
+        {
+          "date": "2025-02-18",
+          "action": "First Reading; Referred to Rules",
+          "note": ""
+        },
+        {
+          "date": "2025-03-11",
+          "action": "Assigned to Cybersecurity, Data Analytics, & IT Committee",
+          "note": ""
+        },
+        {
+          "date": "2025-03-12 to 2025-03-19",
+          "action": "Massive co-sponsor add (Rashid, Hernandez, Huynh, Johnson, Ryan, Crawford, Davis, Benton, Olickal, Cassidy, Guzzardi, Morris, Ortíz, Grasse, Deuter, West II, Hanson, Faver Dias, Lilly, Du Buclet, Stuart, Crespo, Canty, Avelar — 24+ co-sponsors)",
+          "note": ""
+        },
+        {
+          "date": "2025-03-21",
+          "action": "Rule 19(a) / Re-referred to Rules Committee",
+          "note": "Stalled in 2025"
+        },
+        {
+          "date": "2026-03-12",
+          "action": "Assigned to Cybersecurity, Data Analytics, & IT Committee (revived for 2026)",
+          "note": ""
+        },
+        {
+          "date": "2026-03-27",
+          "action": "Rule 19(a) / Re-referred to Rules Committee",
+          "note": "Bounced again"
+        }
+      ],
+      "amendments": [],
+      "intent": "Despite 24+ co-sponsors, the bill has now stalled in committee in two consecutive deadline cycles — this is the state-agency analog of HB 4980 (which got further). The legislative energy has clearly migrated to Rashid's HB 4980; HB 3567 is the placeholder that's expected to be reconciled with HB 4980's substitute amendment in May."
     },
     {
       "id": "HB2655",
@@ -620,10 +2006,42 @@
       "lastAction": "2025-03-21",
       "lastActionText": "Rule 19(a) / Re-referred to Rules Committee",
       "summary": "Requires Board of Higher Education to prepare a report on the state of AI education and development in public and private institutions and submit findings to General Assembly. Requirement expires 2 years after enactment.",
-      "vectorIds": ["v6"],
+      "vectorIds": [
+        "v6"
+      ],
       "effectiveIfPassed": "Upon passage",
       "penalties": "N/A (reporting)",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=2655&GAID=18&DocTypeID=HB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=2655&GAID=18&DocTypeID=HB&SessionID=114&GA=104",
+      "tldr": "The Board of Higher Education would have to file a one-time report on AI education in Illinois public and private institutions.",
+      "history": [
+        {
+          "date": "2025-02-04",
+          "action": "Filed by Rep. Rashid",
+          "note": ""
+        },
+        {
+          "date": "2025-02-06",
+          "action": "First Reading; Referred to Rules",
+          "note": ""
+        },
+        {
+          "date": "2025-02-13 to 2025-02-26",
+          "action": "Co-sponsors added: Blair-Sherlock, Crawford, Olickal",
+          "note": ""
+        },
+        {
+          "date": "2025-03-04",
+          "action": "Assigned to Higher Education Committee",
+          "note": ""
+        },
+        {
+          "date": "2025-03-21",
+          "action": "Rule 19(a) / Re-referred to Rules Committee",
+          "note": ""
+        }
+      ],
+      "amendments": [],
+      "intent": "Higher-Ed AI report bill never got a hearing and has not been revived in 2026 — Rashid's energy moved to HB 4980. Effectively dead this GA."
     },
     {
       "id": "HB0496",
@@ -636,10 +2054,52 @@
       "lastAction": "2025-05-31",
       "lastActionText": "Rule 19(a) / Re-referred to Rules Committee",
       "summary": "Technical amendment to the Artificial Intelligence Video Interview Act (820 ILCS 42). Modifies short title provisions. Shell bill that could be amended with substantive AI employment provisions.",
-      "vectorIds": ["v6"],
+      "vectorIds": [
+        "v6"
+      ],
       "effectiveIfPassed": "Upon passage",
       "penalties": "N/A (technical)",
-      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=496&GAID=18&DocTypeID=HB&SessionID=114&GA=104"
+      "ilgaUrl": "https://www.ilga.gov/Legislation/BillStatus?DocNum=496&GAID=18&DocTypeID=HB&SessionID=114&GA=104",
+      "tldr": "Speaker Welch's technical amendment to the AI Video Interview Act — currently a placeholder vehicle for any negotiated AI-employment language.",
+      "history": [
+        {
+          "date": "2024-12-17",
+          "action": "Prefiled by Speaker Welch",
+          "note": ""
+        },
+        {
+          "date": "2025-01-09",
+          "action": "First Reading; Referred to Rules",
+          "note": ""
+        },
+        {
+          "date": "2025-03-04",
+          "action": "Assigned to Executive Committee",
+          "note": ""
+        },
+        {
+          "date": "2025-03-12",
+          "action": "Do Pass / Short Debate Executive Committee 12-0-0",
+          "note": "Unanimous"
+        },
+        {
+          "date": "2025-03-25",
+          "action": "Second Reading - Short Debate; Held on Calendar",
+          "note": ""
+        },
+        {
+          "date": "2025-04-11",
+          "action": "Third Reading Deadline Extended-Rule May 31, 2025",
+          "note": ""
+        },
+        {
+          "date": "2025-05-31",
+          "action": "Rule 19(a) / Re-referred to Rules Committee",
+          "note": ""
+        }
+      ],
+      "amendments": [],
+      "intent": "Speaker Welch's technical-only amendment to the AI Video Interview Act passed Executive Committee 12-0 then sat on 2nd reading for two months before being kicked back to Rules — highly unusual for a Speaker bill and signals it's a placeholder vehicle being held in case a substantive AI hiring amendment is needed later. Will likely return as a substitute vehicle for negotiated language in 2026 spring session."
     }
   ],
   "timeline": [
@@ -648,7 +2108,9 @@
       "dateDisplay": "January 1, 2020",
       "title": "AI Video Interview Act Takes Effect",
       "description": "Illinois becomes one of the first states to regulate AI in employment with the AI Video Interview Act (820 ILCS 42), requiring notice and consent for AI analysis of job interviews.",
-      "billIds": ["AIVI"],
+      "billIds": [
+        "AIVI"
+      ],
       "type": "enacted",
       "past": true
     },
@@ -657,7 +2119,12 @@
       "dateDisplay": "August 9, 2024",
       "title": "Four AI Bills Signed into Law",
       "description": "Governor Pritzker signs HB 4762, HB 4875, HB 4623, and HB 3773 — establishing digital likeness protections, AI-generated CSAM prohibition, and the AI Employment Discrimination Act.",
-      "billIds": ["HB4762", "HB4875", "HB4623", "PA103-0804"],
+      "billIds": [
+        "HB4762",
+        "HB4875",
+        "HB4623",
+        "PA103-0804"
+      ],
       "type": "enacted",
       "past": true
     },
@@ -666,7 +2133,9 @@
       "dateDisplay": "August 4, 2025",
       "title": "WOPR Act Signed into Law",
       "description": "Governor Pritzker signs HB 1806, making Illinois the first state to comprehensively regulate AI in mental health care.",
-      "billIds": ["HB1806"],
+      "billIds": [
+        "HB1806"
+      ],
       "type": "enacted",
       "past": true
     },
@@ -675,7 +2144,10 @@
       "dateDisplay": "January 1, 2026",
       "title": "AI Employment & Education Acts Take Effect",
       "description": "PA 103-0804 and PA 104-0399 become enforceable, activating employer transparency mandates and public school AI curriculum requirements.",
-      "billIds": ["PA103-0804", "PA104-0399"],
+      "billIds": [
+        "PA103-0804",
+        "PA104-0399"
+      ],
       "type": "enacted",
       "past": true
     },
@@ -698,11 +2170,71 @@
       "past": true
     },
     {
+      "date": "2026-04-09",
+      "dateDisplay": "April 9, 2026",
+      "title": "OpenAI vs. Anthropic at Illinois Senate AI Hearing",
+      "description": "OpenAI testifies in support of SB 3444 — the catastrophe-liability framework that would shield frontier AI developers from mass-casualty claims. Anthropic publicly opposes and lobbies Sen. Cunningham to revise. First time the major AI labs have squared off directly before a state legislature.",
+      "billIds": [
+        "SB3444",
+        "SB3261",
+        "SB3312"
+      ],
+      "type": "legislative",
+      "past": true
+    },
+    {
+      "date": "2026-04-17",
+      "dateDisplay": "April 17, 2026",
+      "title": "House AI Bills Held on 2nd Reading",
+      "description": "HB 4980 (Meaningful Human Control of AI Act, Rashid) and HB 3021 (AI Consumer Fraud Deception, Rashid) were both bounced back to Rules Committee after being held on 2nd Reading — a 'whip count came up short' signal. Despite a 25+ co-sponsor coalition for HB 4980 and unanimous Rules approval for HB 3021, neither sponsor called the bill for a floor vote before the deadline.",
+      "billIds": [
+        "HB4980",
+        "HB3021"
+      ],
+      "type": "deadline",
+      "past": true
+    },
+    {
       "date": "2026-04-24",
       "dateDisplay": "April 24, 2026",
-      "title": "Extended Committee Deadline",
-      "description": "New deadline for AI and Social Media committee. Bills that don't pass committee by this date face significant procedural hurdles. 13 Senate AI bills pending in this committee.",
-      "billIds": [],
+      "title": "Senate AI Committee Deadline Extended",
+      "description": "All 12 priority Senate AI bills survive the AI and Social Media committee deadline — but none received a 'Do Pass' vote. The committee chair extended the deadline to May 15 across the board, signaling continued negotiation rather than enactment. SB 3262 (Companion AI Protection) had 'All Senators' added en bloc as co-sponsor on April 10, an unusually strong consensus signal.",
+      "billIds": [
+        "SB3312",
+        "SB3261",
+        "SB3262",
+        "SB3263",
+        "SB3364",
+        "SB2255",
+        "SB3601",
+        "SB3368",
+        "SB3384",
+        "SB3180",
+        "SB3890",
+        "SB2994"
+      ],
+      "type": "deadline",
+      "past": true
+    },
+    {
+      "date": "2026-05-15",
+      "dateDisplay": "May 15, 2026",
+      "title": "Senate 3rd-Reading Deadline (Extended)",
+      "description": "New deadline for the AI and Social Media committee. Bills must clear committee with a 'Do Pass' vote AND advance to 3rd Reading by this date or face significant procedural hurdles. SB 3262 (Companion AI Protection) is the strongest bet to clear; SB 3263 (Provenance) and SB 2255 (Surveillance Pricing) have active amendments.",
+      "billIds": [
+        "SB3312",
+        "SB3261",
+        "SB3262",
+        "SB3263",
+        "SB3601",
+        "SB3368",
+        "SB3384",
+        "SB3180",
+        "SB3890",
+        "SB2994",
+        "SB3364",
+        "SB2255"
+      ],
       "type": "deadline",
       "past": false
     },
@@ -717,29 +2249,191 @@
     }
   ],
   "committees": [
-    {"id": "ai-social-media", "name": "AI and Social Media", "chamber": "Senate", "billCount": 13},
-    {"id": "rules-house", "name": "Rules Committee", "chamber": "House", "billCount": 9},
-    {"id": "labor-commerce", "name": "Labor & Commerce", "chamber": "House", "billCount": 1},
-    {"id": "assignments", "name": "Assignments", "chamber": "Senate", "billCount": 4},
-    {"id": "cyber-it", "name": "Cybersecurity, Data Analytics, & IT", "chamber": "House", "billCount": 1},
-    {"id": "consumer-protection", "name": "Consumer Protection", "chamber": "House", "billCount": 1}
+    {
+      "id": "ai-social-media",
+      "name": "AI and Social Media",
+      "chamber": "Senate",
+      "billCount": 13
+    },
+    {
+      "id": "rules-house",
+      "name": "Rules Committee",
+      "chamber": "House",
+      "billCount": 9
+    },
+    {
+      "id": "labor-commerce",
+      "name": "Labor & Commerce",
+      "chamber": "House",
+      "billCount": 1
+    },
+    {
+      "id": "assignments",
+      "name": "Assignments",
+      "chamber": "Senate",
+      "billCount": 4
+    },
+    {
+      "id": "cyber-it",
+      "name": "Cybersecurity, Data Analytics, & IT",
+      "chamber": "House",
+      "billCount": 1
+    },
+    {
+      "id": "consumer-protection",
+      "name": "Consumer Protection",
+      "chamber": "House",
+      "billCount": 1
+    }
   ],
   "sponsors": [
-    {"name": "Sen. Mary Edly-Allen", "party": "D", "chamber": "Senate", "billIds": ["SB3261", "SB3262", "SB3263", "SB3312", "SB1929"]},
-    {"name": "Sen. Rachel Ventura", "party": "D", "chamber": "Senate", "billIds": ["SB3364", "SB3180", "SB3890", "SB2994"]},
-    {"name": "Sen. Robert Peters", "party": "D", "chamber": "Senate", "billIds": ["SB2255"]},
-    {"name": "Sen. Steve Stadelman", "party": "D", "chamber": "Senate", "billIds": ["SB3601", "SB0150"]},
-    {"name": "Sen. Sue Rezin", "party": "R", "chamber": "Senate", "billIds": ["SB3368"]},
-    {"name": "Sen. Sally J. Turner", "party": "R", "chamber": "Senate", "billIds": ["SB2117", "SB1366"]},
-    {"name": "Sen. Christopher Belt", "party": "D", "chamber": "Senate", "billIds": ["SB1677"]},
-    {"name": "Sen. Laura Ellman", "party": "D", "chamber": "Senate", "billIds": ["SB3384"]},
-    {"name": "Rep. Kimberly Du Buclet", "party": "D", "chamber": "House", "billIds": ["HB4799"]},
-    {"name": "Rep. Daniel Didech", "party": "D", "chamber": "House", "billIds": ["HB4705"]},
-    {"name": "Rep. Sue Scherer", "party": "D", "chamber": "House", "billIds": ["HB4711"]},
-    {"name": "Rep. Abdelnasser Rashid", "party": "D", "chamber": "House", "billIds": ["HB4980", "HB3720", "HB3021", "HB2655"]},
-    {"name": "Rep. Norma Hernandez", "party": "D", "chamber": "House", "billIds": ["HB3646"]},
-    {"name": "Rep. Janet Yang Rohr", "party": "D", "chamber": "House", "billIds": ["HB3529"]},
-    {"name": "Rep. Amy Briel", "party": "D", "chamber": "House", "billIds": ["HB3567"]},
-    {"name": "Rep. Emanuel Welch", "party": "D", "chamber": "House", "billIds": ["HB0496"]}
+    {
+      "name": "Sen. Mary Edly-Allen",
+      "party": "D",
+      "chamber": "Senate",
+      "billIds": [
+        "SB3261",
+        "SB3262",
+        "SB3263",
+        "SB3312",
+        "SB1929"
+      ]
+    },
+    {
+      "name": "Sen. Rachel Ventura",
+      "party": "D",
+      "chamber": "Senate",
+      "billIds": [
+        "SB3364",
+        "SB3180",
+        "SB3890",
+        "SB2994"
+      ]
+    },
+    {
+      "name": "Sen. Robert Peters",
+      "party": "D",
+      "chamber": "Senate",
+      "billIds": [
+        "SB2255"
+      ]
+    },
+    {
+      "name": "Sen. Steve Stadelman",
+      "party": "D",
+      "chamber": "Senate",
+      "billIds": [
+        "SB3601",
+        "SB0150"
+      ]
+    },
+    {
+      "name": "Sen. Sue Rezin",
+      "party": "R",
+      "chamber": "Senate",
+      "billIds": [
+        "SB3368"
+      ]
+    },
+    {
+      "name": "Sen. Sally J. Turner",
+      "party": "R",
+      "chamber": "Senate",
+      "billIds": [
+        "SB2117",
+        "SB1366"
+      ]
+    },
+    {
+      "name": "Sen. Christopher Belt",
+      "party": "D",
+      "chamber": "Senate",
+      "billIds": [
+        "SB1677"
+      ]
+    },
+    {
+      "name": "Sen. Laura Ellman",
+      "party": "D",
+      "chamber": "Senate",
+      "billIds": [
+        "SB3384"
+      ]
+    },
+    {
+      "name": "Rep. Kimberly Du Buclet",
+      "party": "D",
+      "chamber": "House",
+      "billIds": [
+        "HB4799"
+      ]
+    },
+    {
+      "name": "Rep. Daniel Didech",
+      "party": "D",
+      "chamber": "House",
+      "billIds": [
+        "HB4705"
+      ]
+    },
+    {
+      "name": "Rep. Sue Scherer",
+      "party": "D",
+      "chamber": "House",
+      "billIds": [
+        "HB4711"
+      ]
+    },
+    {
+      "name": "Rep. Abdelnasser Rashid",
+      "party": "D",
+      "chamber": "House",
+      "billIds": [
+        "HB4980",
+        "HB3720",
+        "HB3021",
+        "HB2655"
+      ]
+    },
+    {
+      "name": "Rep. Norma Hernandez",
+      "party": "D",
+      "chamber": "House",
+      "billIds": [
+        "HB3646"
+      ]
+    },
+    {
+      "name": "Rep. Janet Yang Rohr",
+      "party": "D",
+      "chamber": "House",
+      "billIds": [
+        "HB3529"
+      ]
+    },
+    {
+      "name": "Rep. Amy Briel",
+      "party": "D",
+      "chamber": "House",
+      "billIds": [
+        "HB3567"
+      ]
+    },
+    {
+      "name": "Rep. Emanuel Welch",
+      "party": "D",
+      "chamber": "House",
+      "billIds": [
+        "HB0496"
+      ]
+    },
+    {
+      "name": "Sen. Bill Cunningham",
+      "party": "D",
+      "chamber": "Senate",
+      "billIds": [
+        "SB3444"
+      ]
+    }
   ]
 }

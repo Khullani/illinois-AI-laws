@@ -260,7 +260,7 @@
   <!-- FOOTER -->
   <footer class="site-footer">
     <p>Illinois AI Ecosystem Map — A project of Technê AI<br>
-    <strong>Last updated:</strong> March 27, 2026 | <strong>Data source:</strong> Illinois General Assembly (ilga.gov)</p>
+    <strong>Last updated:</strong> April 26, 2026 | <strong>Data source:</strong> Illinois General Assembly (ilga.gov)</p>
   </footer>
 
   <script>
@@ -443,7 +443,8 @@
             bill.name,
             bill.fullName || bill.name,
             bill.sponsor,
-            bill.summary
+            bill.summary,
+            bill.tldr || ''
           ].map(f => String(f).toLowerCase());
 
           if (!searchableFields.some(field => field.includes(query))) {

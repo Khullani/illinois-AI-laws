@@ -89,10 +89,28 @@
           </div>
         </div>
 
+        <!-- TL;DR -->
+        <div id="tldrSection" style="margin-bottom: 28px; display: none; padding: 16px 20px; background: linear-gradient(135deg, rgba(189,71,230,0.06), rgba(189,71,230,0.02)); border-left: 4px solid var(--purple); border-radius: 8px;">
+          <div style="font-family: var(--font-mono); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; color: var(--purple); margin-bottom: 6px;">TL;DR</div>
+          <p id="tldr" style="color: var(--text); line-height: 1.55; font-size: 1.0rem; margin: 0;"></p>
+        </div>
+
         <!-- Summary -->
         <div style="margin-bottom: 28px;">
           <h2 style="font-family: var(--font-display); font-size: 1.1rem; font-weight: 500; color: var(--darkest); margin-bottom: 12px;">Summary</h2>
           <p id="summary" style="color: var(--text-secondary); line-height: 1.7;">Loading summary...</p>
+        </div>
+
+        <!-- Analyst Intent Note -->
+        <div id="intentSection" style="margin-bottom: 28px; display: none; padding: 16px 20px; background: var(--surface); border: 1px dashed var(--border); border-radius: 8px;">
+          <div style="font-family: var(--font-mono); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; color: var(--text-secondary); margin-bottom: 6px;">ANALYST VIEW · LIKELY LANDING</div>
+          <p id="intent" style="color: var(--text); line-height: 1.65; font-size: 0.92rem; margin: 0;"></p>
+        </div>
+
+        <!-- Amendments -->
+        <div id="amendmentsSection" style="margin-bottom: 32px; display: none;">
+          <h2 style="font-family: var(--font-display); font-size: 1.1rem; font-weight: 500; color: var(--darkest); margin-bottom: 14px;">Amendments</h2>
+          <div id="amendmentsList" style="display: grid; gap: 12px;"></div>
         </div>
 
         <!-- Regulatory Vectors -->
@@ -101,10 +119,17 @@
           <div id="vectorCards" style="display: flex; flex-wrap: wrap; gap: 12px;"></div>
         </div>
 
+        <!-- Legislative History -->
+        <div id="historySection" style="margin-bottom: 28px; display: none;">
+          <h2 style="font-family: var(--font-display); font-size: 1.1rem; font-weight: 500; color: var(--darkest); margin-bottom: 6px;">Legislative History</h2>
+          <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 18px;">Procedural trail from introduction through today, with notes on what each move signals about negotiation and intent.</p>
+          <div id="historyTimeline" class="timeline"></div>
+        </div>
+
         <!-- ILGA Link -->
         <div style="margin-bottom: 28px;">
           <a id="ilgaLink" href="#" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; color: var(--purple); font-weight: 600; padding: 10px 16px; border: 1px solid var(--border); border-radius: 8px; transition: all 0.2s;" onmouseover="this.style.backgroundColor='var(--purple-glow)'" onmouseout="this.style.backgroundColor='transparent'">
-            → View on Illinois General Assembly
+            → View full action history on Illinois General Assembly
           </a>
         </div>
       </div>
@@ -130,7 +155,7 @@
 
   <!-- Footer -->
   <footer class="site-footer">
-    <p>Illinois AI Ecosystem Map — Last updated <strong id="lastUpdated">March 2026</strong></p>
+    <p>Illinois AI Ecosystem Map — Last updated <strong id="lastUpdated">April 2026</strong></p>
     <p style="margin-top: 8px; font-size: 0.75rem;">Data sourced from <strong>Illinois General Assembly (ilga.gov)</strong></p>
   </footer>
 
@@ -231,8 +256,67 @@
 
       document.getElementById('penalties').textContent = bill.penalties || 'N/A';
 
+      // TL;DR (preferred over summary first-sentence chop)
+      if (bill.tldr) {
+        document.getElementById('tldrSection').style.display = 'block';
+        document.getElementById('tldr').textContent = bill.tldr;
+      }
+
       // Summary
       document.getElementById('summary').textContent = bill.summary;
+
+      // Analyst intent note
+      if (bill.intent && bill.intent.trim().length > 0) {
+        document.getElementById('intentSection').style.display = 'block';
+        document.getElementById('intent').textContent = bill.intent;
+      }
+
+      // Amendments
+      if (bill.amendments && bill.amendments.length > 0) {
+        document.getElementById('amendmentsSection').style.display = 'block';
+        const amList = document.getElementById('amendmentsList');
+        amList.innerHTML = '';
+        bill.amendments.forEach(am => {
+          const card = document.createElement('div');
+          card.style.cssText = `padding: 14px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px;`;
+          const adoptedBadge = am.adopted
+            ? `<span class="badge badge-enacted" style="margin-left: 8px;">Adopted</span>`
+            : `<span class="badge badge-committee" style="margin-left: 8px;">Filed</span>`;
+          const dateStr = am.date ? formatDate(am.date) : '';
+          card.innerHTML = `
+            <div style="display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:6px;">
+              <strong style="font-family: var(--font-display); color: var(--darkest);">Amendment No. ${am.number}</strong>
+              ${dateStr ? `<span style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-secondary);">${dateStr}</span>` : ''}
+              ${adoptedBadge}
+            </div>
+            <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.55;">${am.summary || ''}</div>
+          `;
+          amList.appendChild(card);
+        });
+      }
+
+      // Legislative history timeline
+      if (bill.history && bill.history.length > 0) {
+        document.getElementById('historySection').style.display = 'block';
+        const timeline = document.getElementById('historyTimeline');
+        timeline.innerHTML = '';
+        // Reverse-chronological so newest is first
+        const items = [...bill.history].reverse();
+        items.forEach((event, idx) => {
+          const item = document.createElement('div');
+          // Most recent action gets the "current" dot styling; others "past"
+          item.className = 'tl-item ' + (idx === 0 ? 'current' : 'past');
+          const dateStr = event.date ? formatDate(event.date) : event.date;
+          const noteHtml = event.note && event.note.trim().length > 0
+            ? `<div style="margin-top: 6px; font-size: 0.82rem; color: var(--purple); font-style: italic;">${event.note}</div>`
+            : '';
+          item.innerHTML = `
+            <div class="tl-date">${dateStr}</div>
+            <div class="tl-desc">${event.action}${noteHtml}</div>
+          `;
+          timeline.appendChild(item);
+        });
+      }
 
       // Regulatory vectors (for pending bills)
       if (bill.vectorIds && bill.vectorIds.length > 0) {
@@ -255,7 +339,7 @@
       document.getElementById('ilgaLink').href = bill.ilgaUrl;
 
       // Update last updated date
-      document.getElementById('lastUpdated').textContent = data.meta.lastUpdated ? formatDate(data.meta.lastUpdated) : 'March 2026';
+      document.getElementById('lastUpdated').textContent = data.meta.lastUpdated ? formatDate(data.meta.lastUpdated) : 'April 2026';
     }
 
     function createVectorCard(vector) {
