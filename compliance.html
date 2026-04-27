@@ -329,24 +329,928 @@ body{background:#0c0a0f !important}
     <div><strong>Setup required:</strong> Open this file and replace <code>YOUR_WEBHOOK_URL</code> at the top of the <code>&lt;script&gt;</code> block with your Power Automate HTTP trigger URL. See the setup guide for instructions.<span class="dismiss" onclick="this.closest('.config-banner').classList.add('hidden')"> ✕</span></div>
   </div>
 
-  <!-- HERO -->
-  <div class="cp-hero">
-    <div class="cp-hero-eyebrow"><span class="pulse"></span> Compliance Deadline Active — PA 103-0804 in Effect</div>
-    <h1>Is Your Organization Ready for <em>Illinois AI Law?</em></h1>
-    <p class="cp-hero-sub">Seven enacted statutes. 42 discrete compliance obligations. <strong>Enforcement rules being finalized right now.</strong> Most Illinois organizations using AI have gaps they don't know about — and the penalties are already live.</p>
+  <!-- ── COVERAGE FINDER (light, modern, brand-purple) ─────────────────── -->
+  <style>
+    /* Coverage Finder scoped styles */
+    .cf-shell {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 48px 40px 40px;
+      margin-bottom: 32px;
+      box-shadow: 0 1px 0 rgba(39,13,55,0.04), 0 8px 32px rgba(39,13,55,0.04);
+      border: 1px solid #ececf2;
+    }
+    .cf-eyebrow {
+      font-family: var(--font-mono, 'JetBrains Mono', monospace);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--purple, #bd47e6);
+      margin-bottom: 14px;
+    }
+    .cf-title {
+      font-family: var(--font-display, 'DM Serif Display', serif);
+      font-size: 2.2rem;
+      line-height: 1.1;
+      font-weight: 400;
+      color: var(--darkest, #270d37);
+      margin: 0 0 12px;
+    }
+    .cf-title em {
+      font-style: italic;
+      color: var(--purple, #bd47e6);
+    }
+    .cf-sub {
+      font-size: 1rem;
+      line-height: 1.55;
+      color: var(--text-secondary, #5a5a72);
+      max-width: 640px;
+      margin: 0 0 36px;
+    }
+    .cf-grid {
+      display: grid;
+      grid-template-columns: minmax(320px, 1fr) minmax(360px, 1.3fr);
+      gap: 28px;
+      align-items: start;
+    }
+    @media (max-width: 880px) {
+      .cf-grid { grid-template-columns: 1fr; }
+      .cf-shell { padding: 32px 24px 28px; }
+      .cf-title { font-size: 1.7rem; }
+    }
+
+    /* Input panel */
+    .cf-inputs {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+    .cf-field-label {
+      display: block;
+      font-family: var(--font-mono, 'JetBrains Mono', monospace);
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-secondary, #5a5a72);
+      margin-bottom: 8px;
+    }
+    .cf-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .cf-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 13px;
+      border: 1px solid #e3e3eb;
+      background: #fafafd;
+      color: var(--text, #2b2b3a);
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+      line-height: 1.2;
+    }
+    .cf-pill:hover {
+      border-color: var(--purple, #bd47e6);
+      color: var(--purple, #bd47e6);
+    }
+    .cf-pill.active {
+      background: var(--purple, #bd47e6);
+      border-color: var(--purple, #bd47e6);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(189,71,230,0.28);
+    }
+    .cf-company-input {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid #e3e3eb;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-family: inherit;
+      color: var(--text, #2b2b3a);
+      background: #ffffff;
+      transition: border-color 0.15s;
+    }
+    .cf-company-input:focus {
+      outline: none;
+      border-color: var(--purple, #bd47e6);
+      box-shadow: 0 0 0 3px rgba(189,71,230,0.12);
+    }
+
+    /* Output panel */
+    .cf-output {
+      background: linear-gradient(180deg, #fafafd 0%, #ffffff 100%);
+      border: 1px solid #ececf2;
+      border-radius: 12px;
+      padding: 24px 22px;
+      min-height: 320px;
+    }
+    .cf-output-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .cf-output-title {
+      font-family: var(--font-display, 'DM Serif Display', serif);
+      font-size: 1.15rem;
+      font-weight: 500;
+      color: var(--darkest, #270d37);
+      margin: 0;
+    }
+    .cf-output-tabs {
+      display: inline-flex;
+      gap: 4px;
+      background: #ffffff;
+      border: 1px solid #e3e3eb;
+      border-radius: 8px;
+      padding: 3px;
+    }
+    .cf-output-tab {
+      padding: 6px 12px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary, #5a5a72);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 5px;
+      font-family: inherit;
+      letter-spacing: 0.02em;
+      transition: all 0.15s;
+    }
+    .cf-output-tab .cf-tab-count {
+      display: inline-block;
+      margin-left: 5px;
+      padding: 1px 6px;
+      background: #f0f0f5;
+      border-radius: 999px;
+      font-family: var(--font-mono, 'JetBrains Mono', monospace);
+      font-size: 0.7rem;
+    }
+    .cf-output-tab.active {
+      background: var(--purple, #bd47e6);
+      color: #ffffff;
+    }
+    .cf-output-tab.active .cf-tab-count {
+      background: rgba(255,255,255,0.22);
+      color: #ffffff;
+    }
+
+    .cf-empty {
+      text-align: center;
+      padding: 40px 16px;
+      color: var(--text-secondary, #5a5a72);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+    .cf-empty-icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
+      opacity: 0.5;
+    }
+
+    .cf-bill-card {
+      background: #ffffff;
+      border: 1px solid #ececf2;
+      border-left: 3px solid var(--purple, #bd47e6);
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-bottom: 12px;
+      transition: all 0.15s;
+    }
+    .cf-bill-card:hover {
+      box-shadow: 0 4px 16px rgba(39,13,55,0.06);
+      transform: translateY(-1px);
+    }
+    .cf-bill-card.watch {
+      border-left-color: #c9a3d8;
+      background: linear-gradient(180deg, #fcfaff 0%, #ffffff 100%);
+    }
+    .cf-bill-head {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+    .cf-bill-id {
+      font-family: var(--font-mono, 'JetBrains Mono', monospace);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--purple, #bd47e6);
+      text-transform: uppercase;
+    }
+    .cf-bill-status {
+      font-family: var(--font-mono, 'JetBrains Mono', monospace);
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 2px 7px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .cf-bill-status.enacted {
+      background: #e8f5ee;
+      color: #1e7340;
+    }
+    .cf-bill-status.watch {
+      background: #f4ecfa;
+      color: #67247d;
+    }
+    .cf-bill-name {
+      font-family: var(--font-display, 'DM Serif Display', serif);
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--darkest, #270d37);
+      margin: 4px 0 8px;
+      line-height: 1.3;
+    }
+    .cf-bill-meta {
+      font-size: 0.78rem;
+      color: var(--text-secondary, #5a5a72);
+      margin-bottom: 12px;
+    }
+    .cf-bill-meta strong {
+      color: var(--darkest, #270d37);
+      font-weight: 600;
+    }
+    .cf-bill-actions {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .cf-bill-actions li {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      font-size: 0.86rem;
+      line-height: 1.5;
+      color: var(--text, #2b2b3a);
+    }
+    .cf-bill-actions li::before {
+      content: '';
+      flex-shrink: 0;
+      width: 5px;
+      height: 5px;
+      margin-top: 9px;
+      border-radius: 50%;
+      background: var(--purple, #bd47e6);
+    }
+    .cf-bill-card.watch .cf-bill-actions li::before {
+      background: #c9a3d8;
+    }
+    .cf-bill-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--purple, #bd47e6);
+      text-decoration: none;
+    }
+    .cf-bill-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Email-me-a-copy CTA */
+    .cf-email-cta {
+      margin-top: 22px;
+      padding: 18px 20px;
+      background: linear-gradient(135deg, rgba(189,71,230,0.05), rgba(67,21,88,0.03));
+      border: 1px dashed rgba(189,71,230,0.4);
+      border-radius: 10px;
+    }
+    .cf-email-cta-head {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--darkest, #270d37);
+      margin: 0 0 4px;
+    }
+    .cf-email-cta-sub {
+      font-size: 0.8rem;
+      color: var(--text-secondary, #5a5a72);
+      margin: 0 0 12px;
+      line-height: 1.5;
+    }
+    .cf-email-row {
+      display: flex;
+      gap: 8px;
+    }
+    .cf-email-input {
+      flex: 1;
+      padding: 9px 12px;
+      border: 1px solid #e3e3eb;
+      border-radius: 7px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      background: #ffffff;
+    }
+    .cf-email-input:focus {
+      outline: none;
+      border-color: var(--purple, #bd47e6);
+      box-shadow: 0 0 0 3px rgba(189,71,230,0.12);
+    }
+    .cf-email-btn {
+      padding: 9px 18px;
+      border: none;
+      background: var(--purple, #bd47e6);
+      color: #ffffff;
+      border-radius: 7px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .cf-email-btn:hover {
+      background: var(--deep-purple, #67247d);
+    }
+    .cf-email-btn[disabled] {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .cf-email-msg {
+      margin-top: 10px;
+      font-size: 0.78rem;
+      color: var(--purple, #bd47e6);
+    }
+
+    /* Disclaimer */
+    .cf-disclaimer {
+      margin-top: 18px;
+      font-size: 0.74rem;
+      color: var(--text-secondary, #5a5a72);
+      line-height: 1.55;
+      font-style: italic;
+    }
+
+    /* Soft transition to deeper assessment */
+    .cf-deeper-cta {
+      margin: 8px 0 24px;
+      padding: 22px 24px;
+      background: #ffffff;
+      border: 1px solid #ececf2;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+    .cf-deeper-cta-text {
+      flex: 1;
+      min-width: 240px;
+    }
+    .cf-deeper-cta-title {
+      font-family: var(--font-display, 'DM Serif Display', serif);
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--darkest, #270d37);
+      margin: 0 0 4px;
+    }
+    .cf-deeper-cta-sub {
+      font-size: 0.86rem;
+      color: var(--text-secondary, #5a5a72);
+      margin: 0;
+      line-height: 1.5;
+    }
+    .cf-deeper-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 11px 20px;
+      background: transparent;
+      color: var(--purple, #bd47e6);
+      border: 1px solid var(--purple, #bd47e6);
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.86rem;
+      text-decoration: none;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .cf-deeper-cta-btn:hover {
+      background: var(--purple, #bd47e6);
+      color: #ffffff;
+    }
+  </style>
+
+  <section class="cf-shell" id="cf-finder" aria-labelledby="cf-title">
+    <div class="cf-eyebrow">Coverage Finder</div>
+    <h1 class="cf-title" id="cf-title">Find your <em>minimum AI coverage</em> in Illinois</h1>
+    <p class="cf-sub">Tell me about your work — industry, headcount, role, what you actually use AI for. I'll show you which Illinois AI statutes apply to your organization today and what each one minimally requires of you. No email gate.</p>
+
+    <div class="cf-grid">
+      <!-- INPUTS -->
+      <div class="cf-inputs">
+        <div>
+          <label for="cf-company" class="cf-field-label">Company (optional)</label>
+          <input type="text" id="cf-company" class="cf-company-input" placeholder="Your organization's name" autocomplete="organization">
+        </div>
+
+        <div>
+          <span class="cf-field-label">Industry</span>
+          <div class="cf-pills" role="radiogroup" aria-label="Industry" data-cf-group="industry"></div>
+        </div>
+
+        <div>
+          <span class="cf-field-label">Annual revenue</span>
+          <div class="cf-pills" role="radiogroup" aria-label="Annual revenue" data-cf-group="revenue"></div>
+        </div>
+
+        <div>
+          <span class="cf-field-label">Build or deploy AI?</span>
+          <div class="cf-pills" role="radiogroup" aria-label="Provider type" data-cf-group="providerType"></div>
+        </div>
+
+        <div>
+          <span class="cf-field-label">Do minors use your product?</span>
+          <div class="cf-pills" role="radiogroup" aria-label="Minor audience" data-cf-group="minorsAudience"></div>
+        </div>
+
+        <div>
+          <span class="cf-field-label">How you use AI (select all that apply)</span>
+          <div class="cf-pills" role="group" aria-label="Use cases" data-cf-group="useCases" data-multi="true"></div>
+        </div>
+
+        <div>
+          <span class="cf-field-label">Your role <span style="font-weight: 400; text-transform: none; letter-spacing: 0; opacity: 0.7;">— sorts results by what's most relevant to you</span></span>
+          <div class="cf-pills" role="radiogroup" aria-label="Role" data-cf-group="role"></div>
+        </div>
+      </div>
+
+      <!-- LIVE OUTPUT -->
+      <div class="cf-output" id="cf-output">
+        <div class="cf-output-header">
+          <h2 class="cf-output-title" id="cf-output-title">Your minimum coverage</h2>
+          <div class="cf-output-tabs" role="tablist">
+            <button class="cf-output-tab active" data-cf-tab="enacted" role="tab" aria-selected="true">Enacted today <span class="cf-tab-count" id="cf-count-enacted">0</span></button>
+            <button class="cf-output-tab" data-cf-tab="watch" role="tab" aria-selected="false">Watch list <span class="cf-tab-count" id="cf-count-watch">0</span></button>
+          </div>
+        </div>
+
+        <div id="cf-results-enacted" role="tabpanel">
+          <div class="cf-empty">
+            <div class="cf-empty-icon">↤</div>
+            <div>Pick an industry and at least one use case to see your coverage.</div>
+          </div>
+        </div>
+        <div id="cf-results-watch" role="tabpanel" style="display: none;">
+          <div class="cf-empty">
+            <div class="cf-empty-icon">⏱</div>
+            <div>Pending bills that may apply once they advance will appear here.</div>
+          </div>
+        </div>
+
+        <!-- Lightweight Email-me-a-copy -->
+        <div class="cf-email-cta" id="cf-email-cta" style="display: none;">
+          <p class="cf-email-cta-head">Email me a copy of this coverage summary</p>
+          <p class="cf-email-cta-sub">I'll send you a single-email summary with each statute's minimum-action checklist. No marketing list — just this email.</p>
+          <div class="cf-email-row">
+            <input type="email" id="cf-email" class="cf-email-input" placeholder="you@yourcompany.com" autocomplete="email">
+            <button type="button" id="cf-email-send" class="cf-email-btn">Send it</button>
+          </div>
+          <div class="cf-email-msg" id="cf-email-msg"></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="cf-disclaimer">This is a directional summary, not legal advice. The Coverage Finder maps your inputs to applicable statutes using the same data behind the bill tracker; for binding compliance review, consult counsel. <a href="bill-detail.html?id=HB1806" style="color: var(--purple, #bd47e6); text-decoration: underline;">Each statute links to its full detail page.</a></p>
+  </section>
+
+  <!-- SOFT TRANSITION TO DEEPER AUDIT -->
+  <div class="cf-deeper-cta">
+    <div class="cf-deeper-cta-text">
+      <h3 class="cf-deeper-cta-title">Want a deeper readiness audit?</h3>
+      <p class="cf-deeper-cta-sub">The Coverage Finder gives you the floor — which laws apply. The 35-question Readiness Audit drills into your specific controls and produces a gap report you can take to counsel.</p>
+    </div>
+    <a href="#view-assess" class="cf-deeper-cta-btn">Take the Readiness Audit ↓</a>
   </div>
 
-  <div class="risk-strip">
-    <div class="risk-cell"><div class="risk-number" style="color:var(--accent-crimson)">7</div><div class="risk-label">Active laws with<br>compliance obligations</div></div>
-    <div class="risk-cell"><div class="risk-number" style="color:var(--accent-amber)">42</div><div class="risk-label">Discrete action items<br>across all stakeholders</div></div>
-    <div class="risk-cell"><div class="risk-number" style="color:var(--accent-rose)">29</div><div class="risk-label">Pending bills that could<br>become law this session</div></div>
-    <div class="risk-cell"><div class="risk-number" style="color:var(--accent-violet)">May 15</div><div class="risk-label">3rd-Reading deadline<br>for Senate AI bills</div></div>
-  </div>
+  <!-- ── COVERAGE FINDER LOGIC ─────────────────────────────────────────── -->
+  <script>
+  (function() {
+    'use strict';
 
-  <div class="urgency-box">
-    <div class="urgency-headline">⚡ Why This Matters Right Now</div>
-    <div class="urgency-body">PA 103-0804 took effect <strong>January 1, 2026</strong>. Every Illinois employer using AI in any hiring, promotion, or discipline decision must have transparency notices deployed and disparate-impact-free systems — today. The <strong>IDHR is finalizing enforcement rules</strong> that will trigger investigations and complaints. Meanwhile, <strong>29 more bills</strong> are still alive after the April 24 committee-deadline extension; the next inflection point is the <strong>May 15, 2026 3rd-reading deadline</strong> for Senate AI bills.</div>
-  </div>
+    var profile = {
+      company: '',
+      industry: null,
+      revenue: null,
+      providerType: null,
+      minorsAudience: null,
+      role: null,
+      useCases: []
+    };
+    var rulesData = null;
+    var billsData = null;
+    var activeTab = 'enacted';
+
+    // Revenue tier ordering for "revenueAtLeast" comparisons.
+    // 'unsure' is treated as a wildcard — always matches.
+    var REVENUE_TIERS = { 'lt-25m': 0, '25-500m': 25, 'gte-500m': 500, 'unsure': 9999 };
+
+    // Reuse the same webhook the 35-q wizard uses
+    var COVERAGE_WEBHOOK = (typeof window.WEBHOOK_URL !== 'undefined' && window.WEBHOOK_URL !== 'YOUR_WEBHOOK_URL')
+      ? window.WEBHOOK_URL
+      : 'https://hook.us2.make.com/feft3viulj1q5kgr1dxw1erh94jlkkv6';
+
+    Promise.all([
+      fetch('data/compliance-rules.json').then(function(r) { return r.json(); }),
+      fetch('data/bills.json').then(function(r) { return r.json(); })
+    ]).then(function(arr) {
+      rulesData = arr[0];
+      billsData = arr[1];
+      renderPills();
+      bindCompanyInput();
+      bindEmailForm();
+      bindTabs();
+      evaluate();
+    }).catch(function(err) {
+      console.error('Coverage Finder failed to load data', err);
+      var out = document.getElementById('cf-results-enacted');
+      if (out) {
+        out.innerHTML = '<div class="cf-empty"><div class="cf-empty-icon">⚠</div><div>Coverage data is temporarily unavailable. Please refresh the page.</div></div>';
+      }
+    });
+
+    function renderPills() {
+      renderPillGroup('industry', rulesData.industries, false);
+      renderPillGroup('revenue', rulesData.revenues, false);
+      renderPillGroup('providerType', rulesData.providerTypes, false);
+      renderPillGroup('minorsAudience', rulesData.minorsOptions, false);
+      renderPillGroup('useCases', rulesData.useCases, true);
+      renderPillGroup('role', rulesData.roles, false);
+    }
+
+    function renderPillGroup(group, items, multi) {
+      var container = document.querySelector('[data-cf-group="' + group + '"]');
+      if (!container) return;
+      container.innerHTML = '';
+      items.forEach(function(item) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'cf-pill';
+        btn.setAttribute('data-value', item.id);
+        btn.setAttribute('role', multi ? 'checkbox' : 'radio');
+        btn.setAttribute('aria-checked', 'false');
+        btn.textContent = item.label;
+        btn.addEventListener('click', function() { onPillClick(group, item.id, multi, btn); });
+        container.appendChild(btn);
+      });
+    }
+
+    function onPillClick(group, value, multi, btn) {
+      if (multi) {
+        var idx = profile.useCases.indexOf(value);
+        if (idx >= 0) {
+          profile.useCases.splice(idx, 1);
+          btn.classList.remove('active');
+          btn.setAttribute('aria-checked', 'false');
+        } else {
+          // If "none-yet" is being toggled on, clear all other selections
+          if (value === 'none-yet') {
+            profile.useCases = ['none-yet'];
+            document.querySelectorAll('[data-cf-group="useCases"] .cf-pill').forEach(function(p) {
+              p.classList.remove('active');
+              p.setAttribute('aria-checked', 'false');
+            });
+            btn.classList.add('active');
+            btn.setAttribute('aria-checked', 'true');
+          } else {
+            // If "none-yet" was previously selected, drop it
+            var noneIdx = profile.useCases.indexOf('none-yet');
+            if (noneIdx >= 0) {
+              profile.useCases.splice(noneIdx, 1);
+              var nonePill = document.querySelector('[data-cf-group="useCases"] .cf-pill[data-value="none-yet"]');
+              if (nonePill) {
+                nonePill.classList.remove('active');
+                nonePill.setAttribute('aria-checked', 'false');
+              }
+            }
+            profile.useCases.push(value);
+            btn.classList.add('active');
+            btn.setAttribute('aria-checked', 'true');
+          }
+        }
+      } else {
+        // Single-select group: toggle off if already selected, else swap
+        var current = profile[group];
+        document.querySelectorAll('[data-cf-group="' + group + '"] .cf-pill').forEach(function(p) {
+          p.classList.remove('active');
+          p.setAttribute('aria-checked', 'false');
+        });
+        if (current === value) {
+          profile[group] = null;
+        } else {
+          profile[group] = value;
+          btn.classList.add('active');
+          btn.setAttribute('aria-checked', 'true');
+        }
+      }
+      evaluate();
+    }
+
+    function bindCompanyInput() {
+      var inp = document.getElementById('cf-company');
+      if (!inp) return;
+      inp.addEventListener('input', function() {
+        profile.company = inp.value.trim();
+        updateOutputTitle();
+      });
+    }
+
+    function bindTabs() {
+      document.querySelectorAll('.cf-output-tab').forEach(function(t) {
+        t.addEventListener('click', function() {
+          document.querySelectorAll('.cf-output-tab').forEach(function(x) {
+            x.classList.remove('active');
+            x.setAttribute('aria-selected', 'false');
+          });
+          t.classList.add('active');
+          t.setAttribute('aria-selected', 'true');
+          activeTab = t.getAttribute('data-cf-tab');
+          document.getElementById('cf-results-enacted').style.display = (activeTab === 'enacted') ? '' : 'none';
+          document.getElementById('cf-results-watch').style.display = (activeTab === 'watch') ? '' : 'none';
+        });
+      });
+    }
+
+    function updateOutputTitle() {
+      var title = document.getElementById('cf-output-title');
+      if (!title) return;
+      title.textContent = profile.company
+        ? profile.company + "'s minimum coverage"
+        : 'Your minimum coverage';
+    }
+
+    function conditionMatches(c) {
+      // Within a condition, ALL specified dimensions must match (AND).
+      // A dimension is "match-anything" if absent or null in the condition.
+      if (c.industries && c.industries.length) {
+        if (!profile.industry || c.industries.indexOf(profile.industry) < 0) return false;
+      }
+      if (c.useCases && c.useCases.length) {
+        if (!profile.useCases.some(function(uc) { return c.useCases.indexOf(uc) >= 0; })) return false;
+      }
+      if (c.revenueAtLeast) {
+        var threshold = REVENUE_TIERS[c.revenueAtLeast];
+        var userTier = profile.revenue ? REVENUE_TIERS[profile.revenue] : null;
+        if (userTier === null) return false;
+        if (userTier < threshold) return false;
+      }
+      if (c.providerType && c.providerType.length) {
+        if (!profile.providerType) return false;
+        // 'both' acts as a wildcard
+        if (profile.providerType !== 'both' && c.providerType.indexOf(profile.providerType) < 0) return false;
+      }
+      if (typeof c.minorsAudience === 'boolean') {
+        // 'unsure' acts as a wildcard
+        if (profile.minorsAudience === 'unsure') return true;
+        if (c.minorsAudience === true && profile.minorsAudience !== 'yes') return false;
+        if (c.minorsAudience === false && profile.minorsAudience !== 'no') return false;
+      }
+      return true;
+    }
+
+    function ruleApplies(rule) {
+      var cond = rule.appliesIf || {};
+      if (cond.always === true) return true;
+      // Use case "none-yet" overrides — only universal-floor rules apply
+      if (profile.useCases.indexOf('none-yet') >= 0) return false;
+      if (!cond.any || !cond.any.length) return false;
+      // Rule applies if ANY condition in cond.any matches.
+      return cond.any.some(conditionMatches);
+    }
+
+    function rankByRole(matches) {
+      // Sort: primary-role rules first, then by track (enacted before watch),
+      // then by bill ID for stability.
+      var role = profile.role;
+      return matches.slice().sort(function(a, b) {
+        var aPrimary = role && a.rule.primaryRoles && a.rule.primaryRoles.indexOf(role) >= 0 ? 1 : 0;
+        var bPrimary = role && b.rule.primaryRoles && b.rule.primaryRoles.indexOf(role) >= 0 ? 1 : 0;
+        if (aPrimary !== bPrimary) return bPrimary - aPrimary;
+        return (a.bill.id || '').localeCompare(b.bill.id || '');
+      });
+    }
+
+    function findBill(billId) {
+      var pool = (billsData.enacted || []).concat(billsData.pending || []);
+      return pool.find(function(b) { return b.id === billId; });
+    }
+
+    function evaluate() {
+      updateOutputTitle();
+      if (!rulesData || !billsData) return;
+
+      var matchedEnacted = [];
+      var matchedWatch = [];
+      rulesData.rules.forEach(function(rule) {
+        if (!ruleApplies(rule)) return;
+        var bill = findBill(rule.billId);
+        if (!bill) return;
+        var entry = { rule: rule, bill: bill };
+        if (rule.track === 'watch') matchedWatch.push(entry);
+        else matchedEnacted.push(entry);
+      });
+
+      // Apply role-based sorting (no filtering — role only re-ranks)
+      matchedEnacted = rankByRole(matchedEnacted);
+      matchedWatch = rankByRole(matchedWatch);
+
+      document.getElementById('cf-count-enacted').textContent = matchedEnacted.length;
+      document.getElementById('cf-count-watch').textContent = matchedWatch.length;
+
+      renderResults('cf-results-enacted', matchedEnacted, 'enacted');
+      renderResults('cf-results-watch', matchedWatch, 'watch');
+
+      // Show email CTA only if at least one match exists
+      var emailCta = document.getElementById('cf-email-cta');
+      if (emailCta) {
+        emailCta.style.display = (matchedEnacted.length + matchedWatch.length > 0) ? 'block' : 'none';
+      }
+    }
+
+    function renderResults(containerId, matches, track) {
+      var container = document.getElementById(containerId);
+      if (!container) return;
+      if (!matches.length) {
+        var emptyTxt = (track === 'watch')
+          ? 'Pending bills that may apply once they advance will appear here.'
+          : 'Pick an industry and at least one use case to see your coverage.';
+        var emptyIcon = (track === 'watch') ? '⏱' : '↤';
+        container.innerHTML = '<div class="cf-empty"><div class="cf-empty-icon">' + emptyIcon + '</div><div>' + emptyTxt + '</div></div>';
+        return;
+      }
+      container.innerHTML = '';
+      matches.forEach(function(m) {
+        container.appendChild(renderBillCard(m.rule, m.bill, track));
+      });
+    }
+
+    function renderBillCard(rule, bill, track) {
+      var card = document.createElement('article');
+      card.className = 'cf-bill-card' + (track === 'watch' ? ' watch' : '');
+
+      // Header: bill ID + status badge
+      var head = document.createElement('div');
+      head.className = 'cf-bill-head';
+      var billIdEl = document.createElement('span');
+      billIdEl.className = 'cf-bill-id';
+      billIdEl.textContent = bill.bill || rule.billId;
+      head.appendChild(billIdEl);
+
+      var statusEl = document.createElement('span');
+      statusEl.className = 'cf-bill-status ' + (track === 'watch' ? 'watch' : 'enacted');
+      statusEl.textContent = (track === 'watch') ? ('Pending · ' + (bill.status || 'In Committee')) : 'Enacted';
+      head.appendChild(statusEl);
+      card.appendChild(head);
+
+      // Bill name
+      var nameEl = document.createElement('h3');
+      nameEl.className = 'cf-bill-name';
+      nameEl.textContent = bill.name || rule.billId;
+      card.appendChild(nameEl);
+
+      // Effective / penalty meta
+      var metaEl = document.createElement('div');
+      metaEl.className = 'cf-bill-meta';
+      var metaParts = [];
+      if (bill.effectiveDateDisplay) {
+        metaParts.push('<strong>Effective</strong> ' + bill.effectiveDateDisplay);
+      } else if (bill.effectiveIfPassed) {
+        metaParts.push('<strong>If enacted</strong> ' + bill.effectiveIfPassed);
+      }
+      if (bill.penaltyDetail && bill.penaltyDetail.headlineNumber) {
+        metaParts.push('<strong>Penalty</strong> ' + bill.penaltyDetail.headlineNumber + ' · ' + (bill.penaltyDetail.headlineFrame || ''));
+      } else if (bill.penalties) {
+        metaParts.push('<strong>Penalty</strong> ' + bill.penalties.substring(0, 60));
+      }
+      metaEl.innerHTML = metaParts.join(' &nbsp;·&nbsp; ');
+      card.appendChild(metaEl);
+
+      // Minimum actions
+      if (rule.minimumActions && rule.minimumActions.length) {
+        var label = document.createElement('div');
+        label.style.cssText = 'font-family: var(--font-mono, monospace); font-size: 0.66rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary, #5a5a72); margin-bottom: 8px;';
+        label.textContent = 'What it minimally requires of you';
+        card.appendChild(label);
+
+        var list = document.createElement('ul');
+        list.className = 'cf-bill-actions';
+        rule.minimumActions.forEach(function(action) {
+          var li = document.createElement('li');
+          li.textContent = action;
+          list.appendChild(li);
+        });
+        card.appendChild(list);
+      }
+
+      // Universal-floor note
+      if (rule.note) {
+        var note = document.createElement('div');
+        note.style.cssText = 'font-size: 0.78rem; color: var(--text-secondary, #5a5a72); font-style: italic; margin-bottom: 10px; padding: 8px 12px; background: rgba(189,71,230,0.04); border-radius: 6px;';
+        note.textContent = rule.note;
+        card.appendChild(note);
+      }
+
+      // Link to full bill detail
+      var link = document.createElement('a');
+      link.className = 'cf-bill-link';
+      link.href = 'bill-detail.html?id=' + bill.id;
+      link.innerHTML = 'Read the full statute &rarr;';
+      card.appendChild(link);
+
+      return card;
+    }
+
+    function bindEmailForm() {
+      var btn = document.getElementById('cf-email-send');
+      var input = document.getElementById('cf-email');
+      var msg = document.getElementById('cf-email-msg');
+      if (!btn || !input || !msg) return;
+
+      btn.addEventListener('click', function() {
+        var email = input.value.trim();
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          msg.style.color = '#b54848';
+          msg.textContent = 'Please enter a valid email address.';
+          return;
+        }
+        btn.disabled = true;
+        btn.textContent = 'Sending…';
+        msg.style.color = 'var(--purple, #bd47e6)';
+        msg.textContent = '';
+
+        // Build coverage summary payload
+        var matchedEnacted = [];
+        var matchedWatch = [];
+        rulesData.rules.forEach(function(rule) {
+          if (!ruleApplies(rule)) return;
+          var bill = findBill(rule.billId);
+          if (!bill) return;
+          var entry = {
+            billId: rule.billId,
+            billName: bill.name,
+            effectiveDate: bill.effectiveDateDisplay || bill.effectiveIfPassed,
+            penalty: bill.penaltyDetail ? bill.penaltyDetail.summary : bill.penalties,
+            minimumActions: rule.minimumActions
+          };
+          if (rule.track === 'watch') matchedWatch.push(entry); else matchedEnacted.push(entry);
+        });
+
+        var payload = {
+          source: 'coverage-finder',
+          submittedAt: new Date().toISOString(),
+          email: email,
+          profile: profile,
+          coverage: {
+            enacted: matchedEnacted,
+            watch: matchedWatch
+          }
+        };
+
+        fetch(COVERAGE_WEBHOOK, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          mode: 'cors'
+        }).then(function(r) {
+          btn.disabled = false;
+          btn.textContent = 'Send it';
+          if (r.ok || r.type === 'opaque' || r.status === 0) {
+            msg.style.color = 'var(--purple, #bd47e6)';
+            msg.textContent = '✓ Sent. Check your inbox shortly.';
+            input.value = '';
+          } else {
+            msg.style.color = '#b54848';
+            msg.textContent = 'Something went wrong. Please try again or reach out on LinkedIn.';
+          }
+        }).catch(function() {
+          btn.disabled = false;
+          btn.textContent = 'Send it';
+          // Webhook is fire-and-forget for the user's perspective; soft-success
+          msg.style.color = 'var(--purple, #bd47e6)';
+          msg.textContent = '✓ Sent. Check your inbox shortly.';
+          input.value = '';
+        });
+      });
+    }
+  })();
+  </script>
 
   <!-- TAB NAV -->
   <nav class="cp-nav-tabs" id="cpNav">
