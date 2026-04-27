@@ -871,14 +871,11 @@ body{background:#0c0a0f !important}
           </div>
         </div>
 
-        <!-- Lightweight Email-me-a-copy -->
+        <!-- Email-me-a-copy — opens the same lead gate as the deep wizard -->
         <div class="cf-email-cta" id="cf-email-cta" style="display: none;">
           <p class="cf-email-cta-head">Email me a copy of this coverage summary</p>
-          <p class="cf-email-cta-sub">I'll send you a single-email summary with each statute's minimum-action checklist. No marketing list — just this email.</p>
-          <div class="cf-email-row">
-            <input type="email" id="cf-email" class="cf-email-input" placeholder="you@yourcompany.com" autocomplete="email">
-            <button type="button" id="cf-email-send" class="cf-email-btn">Send it</button>
-          </div>
+          <p class="cf-email-cta-sub">Includes each statute's minimum-action checklist, formatted for forwarding to your team. <strong>Work email only</strong> — Gmail / Yahoo / Outlook etc. not accepted.</p>
+          <button type="button" id="cf-email-open" class="cf-email-btn" style="width: auto;">Email me a copy →</button>
           <div class="cf-email-msg" id="cf-email-msg"></div>
         </div>
       </div>
@@ -1234,76 +1231,225 @@ body{background:#0c0a0f !important}
     }
 
     function bindEmailForm() {
-      var btn = document.getElementById('cf-email-send');
-      var input = document.getElementById('cf-email');
+      var btn = document.getElementById('cf-email-open');
       var msg = document.getElementById('cf-email-msg');
-      if (!btn || !input || !msg) return;
+      if (!btn || !msg) return;
 
       btn.addEventListener('click', function() {
-        var email = input.value.trim();
-        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        // Re-use the same modal the deep wizard uses (firstName/lastName/company/workEmail
+        // with free-domain blocking + role-prefix blocking + work-email enforcement).
+        if (typeof window.openLeadGate !== 'function') {
           msg.style.color = '#b54848';
-          msg.textContent = 'Please enter a valid email address.';
+          msg.textContent = 'Lead form is loading. Please try again in a moment.';
           return;
         }
-        btn.disabled = true;
-        btn.textContent = 'Sending…';
-        msg.style.color = 'var(--purple, #bd47e6)';
-        msg.textContent = '';
+        window.openLeadGate('coverage-finder');
+      });
+    }
 
-        // Build coverage summary payload
-        var matchedEnacted = [];
-        var matchedWatch = [];
-        rulesData.rules.forEach(function(rule) {
-          if (!ruleApplies(rule)) return;
-          var bill = findBill(rule.billId);
-          if (!bill) return;
-          var entry = {
-            billId: rule.billId,
-            billName: bill.name,
-            effectiveDate: bill.effectiveDateDisplay || bill.effectiveIfPassed,
-            penalty: bill.penaltyDetail ? bill.penaltyDetail.summary : bill.penalties,
-            minimumActions: rule.minimumActions
-          };
-          if (rule.track === 'watch') matchedWatch.push(entry); else matchedEnacted.push(entry);
-        });
+    // ──────────────────────────────────────────────────────────────
+    // Bridge to the deep-wizard lead gate.
+    //
+    // submitLeadGate() (the deep wizard's handler) checks gateMode and, when it
+    // sees 'coverage-finder', calls window.coverageFinderSubmitFromGate(leadInfo).
+    // We build the payload here using the deep wizard's own shape — same lead{},
+    // a profile{} object, a detailHTML / gapSummaryHTML pair — so the existing
+    // Make.com flow handles both flows identically.
+    // ──────────────────────────────────────────────────────────────
+    window.coverageFinderSubmitFromGate = function(leadInfo) {
+      var msg = document.getElementById('cf-email-msg');
+      var btn = document.getElementById('cf-email-open');
 
-        var payload = {
-          source: 'coverage-finder',
-          submittedAt: new Date().toISOString(),
-          email: email,
-          profile: profile,
-          coverage: {
-            enacted: matchedEnacted,
-            watch: matchedWatch
-          }
+      // Build the matched lists fresh
+      var matchedEnacted = [];
+      var matchedWatch = [];
+      rulesData.rules.forEach(function(rule) {
+        if (!ruleApplies(rule)) return;
+        var bill = findBill(rule.billId);
+        if (!bill) return;
+        var entry = {
+          billId: rule.billId,
+          billName: bill.name,
+          status: rule.track === 'watch' ? 'Pending' : 'Enacted',
+          effectiveDate: bill.effectiveDateDisplay || bill.effectiveIfPassed || '',
+          penalty: bill.penaltyDetail ? bill.penaltyDetail.summary : (bill.penalties || ''),
+          minimumActions: rule.minimumActions || []
         };
+        if (rule.track === 'watch') matchedWatch.push(entry); else matchedEnacted.push(entry);
+      });
 
-        fetch(COVERAGE_WEBHOOK, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-          mode: 'cors'
-        }).then(function(r) {
-          btn.disabled = false;
-          btn.textContent = 'Send it';
-          if (r.ok || r.type === 'opaque' || r.status === 0) {
-            msg.style.color = 'var(--purple, #bd47e6)';
-            msg.textContent = '✓ Sent. Check your inbox shortly.';
-            input.value = '';
-          } else {
-            msg.style.color = '#b54848';
-            msg.textContent = 'Something went wrong. Please try again or reach out on LinkedIn.';
-          }
-        }).catch(function() {
-          btn.disabled = false;
-          btn.textContent = 'Send it';
-          // Webhook is fire-and-forget for the user's perspective; soft-success
-          msg.style.color = 'var(--purple, #bd47e6)';
-          msg.textContent = '✓ Sent. Check your inbox shortly.';
-          input.value = '';
+      // detailHTML — formatted for the email body. Mirrors the deep wizard's structure
+      // so the Make.com email template can render either flow with the same fields.
+      var detailHTML = '<h2 style="font-family:Georgia,serif;color:#270d37;margin:0 0 6px;">Your Illinois AI Coverage Summary</h2>';
+      detailHTML += '<p style="font-size:13px;color:#5a5a72;margin:0 0 18px;">Generated ' + new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) + ' for ' + escapeHtml(leadInfo.firstName + ' ' + leadInfo.lastName) + ' at ' + escapeHtml(leadInfo.company) + '.</p>';
+
+      detailHTML += '<h3 style="margin:24px 0 8px;color:#431558;border-bottom:1px solid #e4e4e4;padding-bottom:6px;">Profile</h3>';
+      detailHTML += '<table style="border-collapse:collapse;width:100%;max-width:700px;font-size:13px;">';
+      var profileRows = [
+        ['Industry', labelFor('industries', profile.industry)],
+        ['Annual revenue', labelFor('revenues', profile.revenue)],
+        ['Provider type', labelFor('providerTypes', profile.providerType)],
+        ['Minors use product', labelFor('minorsOptions', profile.minorsAudience)],
+        ['Use cases', (profile.useCases || []).map(function(u) { return labelFor('useCases', u); }).filter(Boolean).join(', ')],
+        ['Role', labelFor('roles', profile.role)]
+      ];
+      profileRows.forEach(function(r) {
+        detailHTML += '<tr style="border-bottom:1px solid #e4e4e4;"><td style="padding:6px 10px;color:#5a5a72;font-weight:600;width:160px;">' + r[0] + '</td><td style="padding:6px 10px;">' + (r[1] ? escapeHtml(r[1]) : '<span style="color:#969696;">—</span>') + '</td></tr>';
+      });
+      detailHTML += '</table>';
+
+      detailHTML += '<h3 style="margin:24px 0 8px;color:#431558;border-bottom:1px solid #e4e4e4;padding-bottom:6px;">Enacted today (' + matchedEnacted.length + ')</h3>';
+      if (!matchedEnacted.length) {
+        detailHTML += '<p style="color:#5a5a72;font-size:13px;">No enacted statutes apply based on these inputs.</p>';
+      } else {
+        matchedEnacted.forEach(function(s) {
+          detailHTML += renderStatuteHTML(s, '#1e7340');
+        });
+      }
+
+      detailHTML += '<h3 style="margin:24px 0 8px;color:#67247d;border-bottom:1px solid #e4e4e4;padding-bottom:6px;">Watch list (' + matchedWatch.length + ')</h3>';
+      if (!matchedWatch.length) {
+        detailHTML += '<p style="color:#5a5a72;font-size:13px;">No pending bills currently flagged for this profile.</p>';
+      } else {
+        matchedWatch.forEach(function(s) {
+          detailHTML += renderStatuteHTML(s, '#67247d');
+        });
+      }
+
+      // gapSummaryHTML — a flat priority list of all minimum actions, useful in the email
+      var gapSummaryHTML = '<h3 style="margin:24px 0 8px;color:#c0392b;">Minimum-action checklist</h3><ol style="font-size:13px;color:#2b2b3a;line-height:1.6;padding-left:20px;">';
+      matchedEnacted.concat(matchedWatch).forEach(function(s) {
+        s.minimumActions.forEach(function(a) {
+          gapSummaryHTML += '<li><strong>' + escapeHtml(s.billId) + ':</strong> ' + escapeHtml(a) + '</li>';
         });
       });
+      gapSummaryHTML += '</ol>';
+
+      // Compatibility shims so the deep-wizard's Make.com email template renders
+      // populated fields for Coverage Finder leads too (template references
+      // profile.orgSize, results.overallScore, results.riskTier, etc.).
+      var totalEnactedInIL = (billsData.enacted || []).length || 7;
+      var pctOfEnactedThatApply = totalEnactedInIL > 0
+        ? Math.round((matchedEnacted.length / totalEnactedInIL) * 100)
+        : 0;
+      var totalActions = matchedEnacted.concat(matchedWatch).reduce(function(sum, s) {
+        return sum + (s.minimumActions ? s.minimumActions.length : 0);
+      }, 0);
+      var hasCriminalFloor = matchedEnacted.some(function(s) { return s.billId === 'HB4623'; });
+      var enactedCount = matchedEnacted.length;
+      var riskTier, riskLabel;
+      if (enactedCount === 0) {
+        riskTier = 'minimal';
+        riskLabel = 'Coverage Finder · only the IL universal floor applies';
+      } else if (enactedCount <= 2) {
+        riskTier = 'light';
+        riskLabel = 'Coverage Finder · light coverage (' + enactedCount + ' enacted statutes apply)';
+      } else if (enactedCount <= 4) {
+        riskTier = 'standard';
+        riskLabel = 'Coverage Finder · standard coverage (' + enactedCount + ' enacted statutes apply)';
+      } else {
+        riskTier = 'heavy';
+        riskLabel = 'Coverage Finder · heavy coverage (' + enactedCount + ' enacted statutes apply)';
+      }
+
+      var payload = {
+        timestamp: new Date().toISOString(),
+        source: 'coverage-finder',
+        lead: {
+          firstName: leadInfo.firstName,
+          lastName: leadInfo.lastName,
+          company: leadInfo.company,
+          email: leadInfo.email
+        },
+        profile: {
+          industry: profile.industry,
+          // orgSize is a deep-wizard field; map to the revenue label so the
+          // existing Make.com email template ('Org Size') renders something useful.
+          orgSize: labelFor('revenues', profile.revenue),
+          revenue: profile.revenue,
+          providerType: profile.providerType,
+          minorsAudience: profile.minorsAudience,
+          role: profile.role,
+          useCases: profile.useCases,
+          companyName: profile.company || leadInfo.company
+        },
+        results: {
+          // Coverage-Finder-native fields
+          enactedCount: matchedEnacted.length,
+          watchCount: matchedWatch.length,
+          totalApplicable: matchedEnacted.length + matchedWatch.length,
+          // Compat shims for deep-wizard email template
+          overallScore: pctOfEnactedThatApply,
+          riskTier: riskTier,
+          riskLabel: riskLabel,
+          totalGaps: totalActions,
+          criticalGaps: hasCriminalFloor ? 1 : 0
+        },
+        coverage: { enacted: matchedEnacted, watch: matchedWatch },
+        detailHTML: detailHTML,
+        gapSummaryHTML: gapSummaryHTML,
+        isPersonalEmail: false
+      };
+
+      fetch(COVERAGE_WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        mode: 'cors'
+      }).then(function() {
+        showSuccess(msg, btn);
+      }).catch(function() {
+        // Webhook is fire-and-forget on the client side; treat any non-throw as success.
+        showSuccess(msg, btn);
+      });
+
+      return true; // signals the gate it can close
+    };
+
+    function showSuccess(msg, btn) {
+      if (msg) {
+        msg.style.color = 'var(--cf-purple-deep, #67247d)';
+        msg.textContent = '✓ Sent. Check your inbox shortly.';
+      }
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = '✓ Sent';
+        btn.style.background = '#1e7340';
+      }
+    }
+
+    function escapeHtml(s) {
+      if (s === null || s === undefined) return '';
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function labelFor(group, id) {
+      if (!id || !rulesData) return '';
+      var list = rulesData[group] || [];
+      var item = list.find(function(x) { return x.id === id; });
+      return item ? item.label : id;
+    }
+
+    function renderStatuteHTML(s, accent) {
+      var html = '<div style="border-left:3px solid ' + accent + ';padding:10px 14px;margin:10px 0;background:#fafafd;">';
+      html += '<div style="font-family:monospace;font-size:11px;color:' + accent + ';font-weight:700;letter-spacing:0.05em;">' + escapeHtml(s.billId) + ' · ' + escapeHtml(s.status) + '</div>';
+      html += '<div style="font-family:Georgia,serif;font-size:15px;color:#270d37;font-weight:500;margin:4px 0;">' + escapeHtml(s.billName) + '</div>';
+      if (s.effectiveDate) {
+        html += '<div style="font-size:12px;color:#5a5a72;margin-bottom:4px;"><strong>Effective:</strong> ' + escapeHtml(s.effectiveDate) + '</div>';
+      }
+      if (s.penalty) {
+        html += '<div style="font-size:12px;color:#5a5a72;margin-bottom:8px;"><strong>Penalty:</strong> ' + escapeHtml(s.penalty) + '</div>';
+      }
+      if (s.minimumActions && s.minimumActions.length) {
+        html += '<div style="font-size:11px;color:#5a5a72;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;margin-top:6px;">Minimum actions</div>';
+        html += '<ul style="font-size:13px;color:#2b2b3a;line-height:1.55;margin:4px 0 0;padding-left:18px;">';
+        s.minimumActions.forEach(function(a) {
+          html += '<li>' + escapeHtml(a) + '</li>';
+        });
+        html += '</ul>';
+      }
+      html += '</div>';
+      return html;
     }
   })();
   </script>
@@ -2181,6 +2327,10 @@ function openLeadGate(mode) {
     title.textContent = 'Download your compliance report';
     sub.textContent = 'Confirm your details to generate and download your personalized PDF compliance report.';
     btn.textContent = 'Generate & Download Report →';
+  } else if (mode === 'coverage-finder') {
+    title.textContent = 'Email me my coverage summary';
+    sub.textContent = 'I\'ll send your personalized Illinois AI coverage summary to your work email and a copy to my inbox so I can follow up if useful. Work email required.';
+    btn.textContent = 'Send the Summary →';
   } else {
     title.textContent = 'Start your compliance assessment';
     sub.textContent = 'Tell us who you are so we can deliver your personalized compliance report. Takes 30 seconds.';
@@ -2211,6 +2361,28 @@ function submitLeadGate() {
   sessionStorage.setItem('cp_lead', JSON.stringify(leadInfo));
 
   const btn = document.getElementById('gateSubmit');
+
+  if (gateMode === 'coverage-finder') {
+    // Hand off to the Coverage Finder's submission function. It builds the
+    // detailHTML / gapSummaryHTML / payload using the same shape as the deep
+    // wizard, and POSTs to the same webhook — so Make.com handles both flows
+    // identically (lead notification + visitor email).
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    if (typeof window.coverageFinderSubmitFromGate === 'function') {
+      try {
+        window.coverageFinderSubmitFromGate(info);
+      } catch (e) {
+        console.error('Coverage Finder submit error:', e);
+      }
+    }
+    setTimeout(function() {
+      btn.disabled = false;
+      btn.textContent = '✓ Sent';
+      closeEmailGate();
+    }, 600);
+    return;
+  }
 
   if (gateMode === 'pdf') {
     // Generate and download PDF
