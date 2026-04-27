@@ -1336,20 +1336,26 @@ body{background:#0c0a0f !important}
         return sum + (s.minimumActions ? s.minimumActions.length : 0);
       }, 0);
       var hasCriminalFloor = matchedEnacted.some(function(s) { return s.billId === 'HB4623'; });
+      // Risk tier — uses the same vocabulary as the deep wizard
+      // ('Low Risk' / 'Moderate Risk' / 'High Risk' / 'Critical Risk') so the
+      // Make.com routes that filter on results.riskTier fire correctly for
+      // Coverage Finder leads too. Tier scales with how many enacted IL AI
+      // statutes apply to the visitor's profile (more statutes apply -> more
+      // compliance surface area -> higher risk tier).
       var enactedCount = matchedEnacted.length;
       var riskTier, riskLabel;
-      if (enactedCount === 0) {
-        riskTier = 'minimal';
-        riskLabel = 'Coverage Finder · only the IL universal floor applies';
-      } else if (enactedCount <= 2) {
-        riskTier = 'light';
-        riskLabel = 'Coverage Finder · light coverage (' + enactedCount + ' enacted statutes apply)';
-      } else if (enactedCount <= 4) {
-        riskTier = 'standard';
-        riskLabel = 'Coverage Finder · standard coverage (' + enactedCount + ' enacted statutes apply)';
+      if (enactedCount >= 5) {
+        riskTier = 'Critical Risk';
+        riskLabel = 'Critical — ' + enactedCount + ' enacted IL AI statutes apply to this profile';
+      } else if (enactedCount >= 3) {
+        riskTier = 'High Risk';
+        riskLabel = 'High — ' + enactedCount + ' enacted IL AI statutes apply to this profile';
+      } else if (enactedCount >= 1) {
+        riskTier = 'Moderate Risk';
+        riskLabel = 'Moderate — ' + enactedCount + ' enacted IL AI ' + (enactedCount === 1 ? 'statute applies' : 'statutes apply') + ' to this profile';
       } else {
-        riskTier = 'heavy';
-        riskLabel = 'Coverage Finder · heavy coverage (' + enactedCount + ' enacted statutes apply)';
+        riskTier = 'Low Risk';
+        riskLabel = 'Low — only the IL universal floor (HB 4623) applies';
       }
 
       var payload = {
