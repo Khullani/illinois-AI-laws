@@ -1,0 +1,258 @@
+{
+  "_meta": {
+    "purpose": "Coverage Finder applicability matrix. Maps an organization's profile to the IL AI statutes that apply and the minimum compliance actions each requires.",
+    "lastUpdated": "2026-04-26",
+    "sourceOfTruth": "data/bills.json (penaltyDetail, effectiveDate, summary)",
+    "schema": {
+      "appliesIf.always": "If true, the rule applies to every organization regardless of inputs. Used for criminal floors like HB 4623.",
+      "appliesIf.any": "Array of conditions. The rule applies if any condition matches. Within a condition, all specified dimensions must match (AND).",
+      "condition.industries": "Array of industry IDs. User matches if profile.industry is in this list.",
+      "condition.useCases": "Array of use-case IDs. User matches if ANY of profile.useCases is in this list.",
+      "condition.revenueAtLeast": "Minimum revenue tier ID. User matches if profile.revenue tier >= this. Tiers: lt-25m < 25-500m < gte-500m. 'unsure' always matches.",
+      "condition.providerType": "Array of provider-type IDs (builder | deployer). User matches if profile.providerType is in the list, OR if profile.providerType is 'both'.",
+      "condition.minorsAudience": "Boolean. User matches if profile.minorsAudience matches this value, OR if profile.minorsAudience is 'unsure'.",
+      "primaryRoles": "Array of role IDs for whom this statute is most operationally relevant. Used to sort output."
+    }
+  },
+  "industries": [
+    {"id": "healthcare",   "label": "Healthcare / mental-health"},
+    {"id": "education",    "label": "Education / K-12 / higher ed"},
+    {"id": "employment",   "label": "Staffing / HR / recruiting"},
+    {"id": "marketing",    "label": "Marketing / media / entertainment"},
+    {"id": "tech",         "label": "AI / model developer / SaaS"},
+    {"id": "finance",      "label": "Financial services / insurance"},
+    {"id": "real-estate",  "label": "Real estate / lending / housing"},
+    {"id": "public-sector","label": "Government / public sector"},
+    {"id": "general",      "label": "Other / general business"}
+  ],
+  "revenues": [
+    {"id": "lt-25m",   "label": "Under $25M",         "tier": 0},
+    {"id": "25-500m",  "label": "$25M – $500M",       "tier": 25},
+    {"id": "gte-500m", "label": "$500M+",             "tier": 500},
+    {"id": "unsure",   "label": "Unsure / N/A",       "tier": 9999}
+  ],
+  "providerTypes": [
+    {"id": "builder",  "label": "Build / train AI models"},
+    {"id": "deployer", "label": "Deploy off-the-shelf AI"},
+    {"id": "both",     "label": "Both"}
+  ],
+  "minorsOptions": [
+    {"id": "yes",    "label": "Yes — minors use our product"},
+    {"id": "no",     "label": "No — adults only"},
+    {"id": "unsure", "label": "Mixed / unsure"}
+  ],
+  "roles": [
+    {"id": "hr",        "label": "HR / People / talent"},
+    {"id": "legal",     "label": "Legal / compliance / risk"},
+    {"id": "exec",      "label": "Executive / founder"},
+    {"id": "product",   "label": "Product / engineering"},
+    {"id": "marketing", "label": "Marketing / comms"},
+    {"id": "ops",       "label": "Operations / general"}
+  ],
+  "useCases": [
+    {"id": "ai-hiring",            "label": "AI in hiring or HR decisions"},
+    {"id": "ai-video-interview",   "label": "AI-analyzed video interviews"},
+    {"id": "chatbot",              "label": "Customer-facing chatbot"},
+    {"id": "marketing-content",    "label": "AI-generated marketing or media content"},
+    {"id": "voice-likeness",       "label": "AI voice or likeness cloning"},
+    {"id": "clinical-ai",          "label": "AI in clinical or mental-health settings"},
+    {"id": "lending-housing",      "label": "AI in lending, housing, or credit decisions"},
+    {"id": "education-ai",         "label": "AI in K-12 or higher education"},
+    {"id": "frontier-model",       "label": "Building or training large AI models"},
+    {"id": "workplace-surveillance","label": "Algorithmic workplace surveillance"},
+    {"id": "none-yet",             "label": "We don't deploy AI yet"}
+  ],
+  "rules": [
+    {
+      "billId": "HB1806",
+      "track": "enacted",
+      "appliesIf": {
+        "any": [
+          {"industries": ["healthcare"]},
+          {"useCases": ["clinical-ai"]}
+        ]
+      },
+      "primaryRoles": ["legal", "product", "exec"],
+      "minimumActions": [
+        "AI cannot act as an independent therapist; only licensed humans can deliver mental-health treatment.",
+        "Disable any 'emotion detection' or affective-computing features in clinical workflows.",
+        "Designate a licensed clinician as accountable for every AI-assisted clinical tool you deploy.",
+        "Document patient consent and clinical-oversight protocols whenever AI is in the loop."
+      ]
+    },
+    {
+      "billId": "PA103-0804",
+      "track": "enacted",
+      "appliesIf": {
+        "any": [
+          {"industries": ["employment"]},
+          {"useCases": ["ai-hiring", "ai-video-interview", "workplace-surveillance"]}
+        ]
+      },
+      "primaryRoles": ["hr", "legal", "exec"],
+      "minimumActions": [
+        "Audit every AI hiring or HR tool for disparate impact across protected classes.",
+        "Notify applicants and employees in writing whenever AI is used in hiring, promotion, discipline, or discharge decisions.",
+        "Eliminate ZIP codes (and other protected-class proxies) from AI training and decision inputs.",
+        "Document your bias-testing methodology and retain results for IDHR review."
+      ]
+    },
+    {
+      "billId": "AIVI",
+      "track": "enacted",
+      "appliesIf": {
+        "any": [
+          {"useCases": ["ai-video-interview"]}
+        ]
+      },
+      "primaryRoles": ["hr", "legal"],
+      "minimumActions": [
+        "Provide written notice to every applicant before AI analyzes their video interview.",
+        "Explain in plain language how the AI tool works and what characteristics it evaluates.",
+        "Obtain explicit written consent before any AI analysis takes place.",
+        "Offer applicants the option to opt out and request a human review instead."
+      ]
+    },
+    {
+      "billId": "HB4762",
+      "track": "enacted",
+      "appliesIf": {
+        "any": [
+          {"industries": ["marketing", "tech"]},
+          {"useCases": ["voice-likeness", "marketing-content"]}
+        ]
+      },
+      "primaryRoles": ["marketing", "legal", "product"],
+      "minimumActions": [
+        "Review existing performer, contributor, and likeness contracts for AI-cloning provisions.",
+        "Re-paper any non-compliant likeness contracts with explicit explanation of AI-cloning rights and the right to counsel.",
+        "Add a 'no AI cloning without separate written consent' clause to all new performer contracts.",
+        "Maintain a documented record of consent for any AI-generated voice or likeness use."
+      ]
+    },
+    {
+      "billId": "HB4875",
+      "track": "enacted",
+      "appliesIf": {
+        "any": [
+          {"industries": ["marketing"]},
+          {"useCases": ["voice-likeness", "marketing-content"]}
+        ]
+      },
+      "primaryRoles": ["marketing", "legal"],
+      "minimumActions": [
+        "Get explicit written consent before any AI-generated voice, image, or likeness goes into commercial content.",
+        "Train marketing and creative teams on the IL Right-of-Publicity Act's AI amendments.",
+        "Document clear exceptions for news, documentary, and satire uses with legal-review sign-off.",
+        "Maintain provenance metadata for every AI-generated talent likeness in production."
+      ]
+    },
+    {
+      "billId": "HB4623",
+      "track": "enacted",
+      "appliesIf": {"always": true},
+      "primaryRoles": ["legal", "product", "exec"],
+      "minimumActions": [
+        "Implement filters that prevent any AI tool from generating sexual imagery of minors (criminal exposure: Class 1 / Class 4 felony).",
+        "Train staff on recognition and reporting of AI-generated CSAM.",
+        "Configure customer-facing AI products with abuse-detection guardrails on input and output.",
+        "Document an incident-response procedure for AI-CSAM discovery, preservation, and law-enforcement reporting."
+      ],
+      "note": "Universal floor — applies regardless of industry, size, or use case. Criminal liability."
+    },
+    {
+      "billId": "PA104-0399",
+      "track": "enacted",
+      "appliesIf": {
+        "any": [
+          {"industries": ["education", "public-sector"]},
+          {"useCases": ["education-ai"]}
+        ]
+      },
+      "primaryRoles": ["legal", "exec", "ops"],
+      "minimumActions": [
+        "Adopt or adapt curriculum that teaches students to recognize deepfakes and AI-generated content.",
+        "Align district / institutional AI use policies with Illinois State Board of Education (ISBE) guidance as it is published.",
+        "Train educators on responsible AI use in classroom settings.",
+        "Document a school-level policy on which AI tools are permitted for student work."
+      ]
+    },
+    {
+      "billId": "SB3261",
+      "track": "watch",
+      "appliesIf": {
+        "any": [
+          {"useCases": ["frontier-model"], "providerType": ["builder"], "revenueAtLeast": "gte-500m"},
+          {"useCases": ["chatbot"], "providerType": ["builder", "deployer"], "revenueAtLeast": "25-500m"},
+          {"useCases": ["chatbot"], "minorsAudience": true}
+        ]
+      },
+      "primaryRoles": ["legal", "product", "exec"],
+      "minimumActions": [
+        "Pending: begin drafting a public safety and child-protection plan in case SB 3261 advances after the May 15 third-reading deadline.",
+        "Pending: prepare AG-reporting and incident-reporting capability scoped to large chatbot ($25M+ revenue, 1M+ users) and frontier developer ($500M+ revenue) thresholds.",
+        "Pending: track co-sponsor and amendment activity through committee."
+      ]
+    },
+    {
+      "billId": "SB3262",
+      "track": "watch",
+      "appliesIf": {
+        "any": [
+          {"useCases": ["chatbot"]},
+          {"useCases": ["chatbot"], "minorsAudience": true}
+        ]
+      },
+      "primaryRoles": ["product", "legal", "exec"],
+      "minimumActions": [
+        "Pending: audit any companion-AI features for crisis-detection and user safeguards.",
+        "Pending: prepare 'I am not a human' machine-disclosure flows that show every session.",
+        "Pending: prepare parental-consent flows if minors can access companion-AI features."
+      ]
+    },
+    {
+      "billId": "SB3444",
+      "track": "watch",
+      "appliesIf": {
+        "any": [
+          {"useCases": ["frontier-model"], "providerType": ["builder"]}
+        ]
+      },
+      "primaryRoles": ["legal", "exec", "product"],
+      "minimumActions": [
+        "Pending: track the OpenAI-backed catastrophe-liability framework (covers any system trained with $100M+ in compute).",
+        "Pending: begin drafting a critical-harm safety framework if your training spend approaches the threshold.",
+        "Pending: watch the OpenAI / Anthropic split — the liability-shield provision is the wedge issue and likely to be amended."
+      ]
+    },
+    {
+      "billId": "SB3312",
+      "track": "watch",
+      "appliesIf": {
+        "any": [
+          {"useCases": ["frontier-model"], "providerType": ["builder"], "revenueAtLeast": "25-500m"}
+        ]
+      },
+      "primaryRoles": ["legal", "product", "exec"],
+      "minimumActions": [
+        "Pending: build internal incident-reporting capability for catastrophic AI risk events.",
+        "Pending: track ILCompute / public-cloud framework for any state-funded research access."
+      ]
+    },
+    {
+      "billId": "HB4980",
+      "track": "watch",
+      "appliesIf": {
+        "any": [
+          {"industries": ["public-sector"], "useCases": ["workplace-surveillance"]},
+          {"industries": ["public-sector"], "useCases": ["ai-hiring"]}
+        ]
+      },
+      "primaryRoles": ["hr", "legal", "ops"],
+      "minimumActions": [
+        "Pending: begin documenting human-review procedures for any automated decision system in public-employer contexts.",
+        "Pending: prepare impact assessments for ADS deployments. The bill stalled at the April 17 floor deadline but is expected to return in May."
+      ]
+    }
+  ]
+}
